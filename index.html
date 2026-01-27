@@ -21,7 +21,7 @@
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             
-            /* Gradiente Arco-íris Animado (Mesmo do título) */
+            /* Gradiente Arco-íris Animado */
             --rainbow-gradient: linear-gradient(90deg, #facc15, #8b5cf6, #ec4899, #06b6d4, #22c55e, #ef4444, #f59e0b, #ffffff, #facc15);
         }
 
@@ -142,20 +142,21 @@
             user-select: none;
         }
 
+        /* NOVO ÍCONE ESPECIAL (INFINITO) */
         .logo-icon-special {
             font-size: 1.4rem;
-            /* Ícone do logo também com gradiente */
             background: var(--rainbow-gradient);
             background-size: 200% auto;
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.6));
+            /* A animação de rotação faz o símbolo de infinito parecer um vortex */
             animation: specialPulse 3s infinite ease-in-out, colorCycle 6s linear infinite;
         }
 
         @keyframes specialPulse {
             0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(10deg); }
+            50% { transform: scale(1.1) rotate(15deg); }
         }
 
         .clock { background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; font-size: 0.9rem; color: var(--accent-cyan); backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); font-weight: 600; letter-spacing: 1px; user-select: none;}
@@ -201,19 +202,38 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transform-style: preserve-3d;
+            transform-style: preserve-3d; /* Para o Tilt 3D funcionar */
             will-change: transform;
             user-select: none;
             text-align: center;
             cursor: pointer;
         }
 
+        /* --- EFEITO REFLEXO (SWEEP) --- */
+        .hub-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            transition: 0.6s;
+            pointer-events: none;
+            z-index: 2; 
+        }
+        .hub-card:hover::after {
+            left: 150%;
+            transition: 0.8s ease-in-out;
+        }
+
+        /* --- APROXIMAÇÃO DA TELA (HOVER GERAL) --- */
         .hub-card:hover { 
             background: rgba(30, 30, 35, 0.8); 
             border-color: rgba(255,255, 255, 0.4);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
         }
         
-        /* --- ANIMAÇÃO RIPPLE (DO CÓDIGO FORNECIDO) --- */
+        /* --- ANIMAÇÃO RIPPLE (DO CLIQUE) --- */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -257,16 +277,15 @@
         .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
         .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
 
-        /* --- EFEITO ARCO-ÍRIS UNIFICADO (MESMO DO TÍTULO) --- */
-        
+        /* --- EFEITO ARCO-ÍRIS NO ÍCONE --- */
         .hub-card:hover .hub-icon {
             background: var(--rainbow-gradient);
-            background-size: 400% auto; /* Tamanho maior para animação suave */
+            background-size: 400% auto;
             background-clip: border-box;
             border-color: transparent;
-            animation: colorCycle 4s linear infinite; /* Animação das cores */
+            animation: colorCycle 4s linear infinite;
             transform: translateY(-8px) scale(1.1);
-            box-shadow: 0 0 60px rgba(255, 255, 255, 0.3); /* Brilho branco suave para destacar */
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.3);
         }
 
         .hub-card:hover .hub-icon i {
@@ -274,7 +293,6 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
         
-        /* Opcional: Texto H2 também brilhando levemente */
         .hub-card:hover h2 {
             color: #fff;
             text-shadow: 0 0 20px rgba(255,255,255,0.2);
@@ -294,11 +312,6 @@
             .hub-card h2 { font-size: 1.25rem; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem; margin: 0; }
             .hub-bg-icon { display: none; }
-            
-            /* No mobile, ajusta a escala do hover */
-            .hub-card:hover .hub-icon {
-                transform: scale(1.1) translateY(-2px);
-            }
         }
     </style>
 </head>
@@ -323,8 +336,9 @@
 
     <div class="container">
         <header>
+            <!-- ÍCONE TROCAADO PARA fa-infinity -->
             <div class="logo">
-                <i class="fa-solid fa-compass logo-icon-special"></i> LDX
+                <i class="fa-solid fa-infinity logo-icon-special"></i> LDX
             </div>
             <div class="clock" id="clock">00:00</div>
         </header>
@@ -412,11 +426,11 @@
         setInterval(updateTimeAndGreeting, 1000);
         updateTimeAndGreeting();
 
-        /* --- TILT3D & RIPPLE CLICK --- */
+        /* --- TILT3D (SE APROXIMA DA TELA) & RIPPLE CLICK --- */
         const hubCards = document.querySelectorAll('.hub-card');
         
         hubCards.forEach(card => {
-            // Efeito 3D Tilt (Só visual)
+            // Efeito 3D Tilt (Aproximação da tela)
             card.addEventListener('mousemove', (e) => {
                 if(window.innerWidth > 768) {
                     const rect = card.getBoundingClientRect();

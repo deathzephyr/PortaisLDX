@@ -16,7 +16,7 @@
         /* --- DESIGN SYSTEM --- */
         :root {
             --bg-dark: #050507;
-            --glass-bg: rgba(20, 20, 25, 0.6); 
+            --glass-bg: rgba(20, 20, 25, 0.7); 
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
             --text-muted: #94a3b8;
@@ -38,6 +38,29 @@
         }
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
+
+        /* --- BACKGROUND LAYER SYSTEM --- */
+        #custom-bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        /* Sempre que tiver fundo customizado, esconde as orbs */
+        body.has-custom-bg .ambient-light {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.has-custom-bg #custom-bg-layer {
+            opacity: 1;
+        }
 
         /* --- LOADING SCREEN --- */
         #loader {
@@ -108,6 +131,7 @@
             z-index: -1;
             overflow: hidden;
             pointer-events: none;
+            transition: opacity 0.5s ease;
         }
 
         .orb {
@@ -129,8 +153,10 @@
         .loaded .container { opacity: 1; }
 
         /* --- HEADER --- */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; gap: 15px; flex-wrap: wrap; }
         
+        .header-right { display: flex; align-items: center; gap: 12px; }
+
         .logo { 
             font-size: 1.6rem; 
             font-weight: 700; 
@@ -142,7 +168,6 @@
             user-select: none;
         }
 
-        /* NOVO ÍCONE ESPECIAL (INFINITO) */
         .logo-icon-special {
             font-size: 1.4rem;
             background: var(--rainbow-gradient);
@@ -150,7 +175,6 @@
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.6));
-            /* A animação de rotação faz o símbolo de infinito parecer um vortex */
             animation: specialPulse 3s infinite ease-in-out, colorCycle 6s linear infinite;
         }
 
@@ -159,7 +183,36 @@
             50% { transform: scale(1.1) rotate(15deg); }
         }
 
-        .clock { background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; font-size: 0.9rem; color: var(--accent-cyan); backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); font-weight: 600; letter-spacing: 1px; user-select: none;}
+        .clock, .bg-settings-btn {
+            background: rgba(20, 20, 25, 0.8); 
+            border: 1px solid rgba(255,255,255,0.15); 
+            padding: 8px 18px; 
+            border-radius: 100px; 
+            font-family: 'Space Grotesk', monospace; 
+            font-size: 0.9rem; 
+            color: #fff;
+            backdrop-filter: blur(20px); 
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); 
+            font-weight: 600; 
+            letter-spacing: 1px; 
+            user-select: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .bg-settings-btn {
+            color: #06b6d4;
+            padding: 8px 14px; 
+            font-size: 1rem;
+        }
+
+        .bg-settings-btn:hover {
+            border-color: #06b6d4;
+            background: rgba(6, 182, 212, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
+        }
 
         /* --- HERO --- */
         .hero { text-align: center; margin: 4rem 0 4rem; position: relative; }
@@ -202,14 +255,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transform-style: preserve-3d; /* Para o Tilt 3D funcionar */
+            transform-style: preserve-3d;
             will-change: transform;
             user-select: none;
             text-align: center;
             cursor: pointer;
         }
 
-        /* --- EFEITO REFLEXO (SWEEP) --- */
         .hub-card::after {
             content: "";
             position: absolute;
@@ -221,19 +273,14 @@
             pointer-events: none;
             z-index: 2; 
         }
-        .hub-card:hover::after {
-            left: 150%;
-            transition: 0.8s ease-in-out;
-        }
+        .hub-card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
 
-        /* --- APROXIMAÇÃO DA TELA (HOVER GERAL) --- */
         .hub-card:hover { 
             background: rgba(30, 30, 35, 0.8); 
             border-color: rgba(255,255, 255, 0.4);
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
         }
         
-        /* --- ANIMAÇÃO RIPPLE (DO CLIQUE) --- */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -244,9 +291,7 @@
             z-index: 1;
         }
 
-        @keyframes ripple-anim {
-            to { transform: scale(4); opacity: 0; }
-        }
+        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
 
         .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
         .hub-card:hover .hub-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.1); }
@@ -266,18 +311,11 @@
             overflow: hidden;
         }
 
-        /* Ícone dentro do container */
-        .hub-icon i {
-            position: relative;
-            z-index: 2;
-            color: rgba(255,255,255,0.8);
-            transition: color 0.3s;
-        }
+        .hub-icon i { position: relative; z-index: 2; color: rgba(255,255,255,0.8); transition: color 0.3s; }
 
         .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
         .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
 
-        /* --- EFEITO ARCO-ÍRIS NO ÍCONE --- */
         .hub-card:hover .hub-icon {
             background: var(--rainbow-gradient);
             background-size: 400% auto;
@@ -288,18 +326,150 @@
             box-shadow: 0 0 60px rgba(255, 255, 255, 0.3);
         }
 
-        .hub-card:hover .hub-icon i {
-            color: #ffffff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        
-        .hub-card:hover h2 {
-            color: #fff;
-            text-shadow: 0 0 20px rgba(255,255,255,0.2);
-        }
+        .hub-card:hover .hub-icon i { color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .hub-card:hover h2 { color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
         /* --- FOOTER --- */
         footer { text-align: center; padding: 3rem 0; color: var(--text-muted); border-top: 1px solid var(--glass-border); margin-top: 5rem; font-size: 0.8rem; position: relative; z-index: 2; user-select: none; }
+
+        /* --- BG SETTINGS MODAL --- */
+        #bgModal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        #bgModal.active { opacity: 1; visibility: visible; }
+
+        .modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: -1;
+        }
+
+        .modal-content {
+            background: rgba(15, 15, 20, 0.98);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 85vh; /* Limite de altura */
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow-y: auto; /* Scroll interno se precisar */
+        }
+        
+        /* Scrollbar fina para o modal */
+        .modal-content::-webkit-scrollbar { width: 6px; }
+        .modal-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+        #bgModal.active .modal-content { transform: scale(1); }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky; /* Cabeçalho fixo ao rolar */
+            top: 0;
+            background: rgba(15, 15, 20, 0.98);
+            z-index: 10;
+        }
+
+        .modal-header h3 { font-size: 1.2rem; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .close-modal {
+            background: none; border: none; color: var(--text-muted);
+            font-size: 1.2rem; cursor: pointer; transition: color 0.2s;
+        }
+        .close-modal:hover { color: #fff; }
+
+        .section-title {
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--text-muted); margin: 15px 0 10px 0; display: block; font-weight: 600;
+        }
+
+        /* CORES / GRADIENTES */
+        .color-options {
+            display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .color-btn:hover { transform: scale(1.1); border-color: #fff; }
+        .color-btn.active { border-color: #06b6d4; box-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
+
+        /* Presets de Imagem */
+        .preset-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;
+        }
+
+        .preset-item {
+            aspect-ratio: 16/9;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-item:hover { transform: scale(1.05); }
+        .preset-item.active { border-color: #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
+
+        /* Upload */
+        .custom-upload-btn {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed rgba(255,255,255,0.2);
+            color: var(--text-muted);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .custom-upload-btn:hover { border-color: #06b6d4; color: #fff; background: rgba(6, 182, 212, 0.1); }
+        
+        .reset-btn {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .reset-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        input[type="file"] { display: none; }
 
         /* --- MOBILE --- */
         @media (max-width: 768px) { 
@@ -312,10 +482,15 @@
             .hub-card h2 { font-size: 1.25rem; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem; margin: 0; }
             .hub-bg-icon { display: none; }
+            .clock { font-size: 0.8rem; padding: 6px 14px; }
+            .header-right { gap: 8px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- CAMADA DE FUNDO PERSONALIZADO -->
+    <div id="custom-bg-layer"></div>
 
     <!-- LOADING SCREEN -->
     <div id="loader">
@@ -336,11 +511,17 @@
 
     <div class="container">
         <header>
-            <!-- ÍCONE TROCAADO PARA fa-infinity -->
             <div class="logo">
                 <i class="fa-solid fa-infinity logo-icon-special"></i> LDX
             </div>
-            <div class="clock" id="clock">00:00</div>
+            
+            <div class="header-right">
+                <div class="clock" id="clock">00:00</div>
+                <!-- BOTÃO DE FUNDO -->
+                <button class="bg-settings-btn" id="bgSettingsBtn" title="Personalizar Fundo">
+                    <i class="fa-solid fa-palette"></i>
+                </button>
+            </div>
         </header>
 
         <section class="hero">
@@ -393,6 +574,61 @@
         </footer>
     </div>
 
+    <!-- MODAL DE CONFIGURAÇÃO DE FUNDO -->
+    <div id="bgModal">
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-palette" style="color: #06b6d4;"></i> Personalizar</h3>
+                <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- SEÇÃO 1: CORES -->
+            <span class="section-title">Cores Sólidas & Gradientes</span>
+            <div class="color-options">
+                <!-- Preto Puro (Original) -->
+                <div class="color-btn" style="background-color: #050507;" data-type="color" data-value="#050507"></div>
+                <!-- Azul Profundo -->
+                <div class="color-btn" style="background: linear-gradient(135deg, #0f172a, #1e3a8a);" data-type="color" data-value="linear-gradient(135deg, #0f172a, #1e3a8a)"></div>
+                <!-- Roxo Nebulosa -->
+                <div class="color-btn" style="background: linear-gradient(135deg, #2e1065, #581c87);" data-type="color" data-value="linear-gradient(135deg, #2e1065, #581c87)"></div>
+                <!-- Laranja Queimado -->
+                <div class="color-btn" style="background: linear-gradient(135deg, #431407, #9a3412);" data-type="color" data-value="linear-gradient(135deg, #431407, #9a3412)"></div>
+                <!-- Cinza Metal -->
+                <div class="color-btn" style="background: linear-gradient(135deg, #18181b, #27272a);" data-type="color" data-value="linear-gradient(135deg, #18181b, #27272a)"></div>
+            </div>
+
+            <!-- SEÇÃO 2: IMAGENS (AUMENTADO) -->
+            <span class="section-title">Imagens Preset</span>
+            <div class="preset-grid">
+                <!-- Preset 1 -->
+                <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=1920&auto=format&fit=crop"></div>
+                <!-- Preset 2 -->
+                <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1920&auto=format&fit=crop"></div>
+                <!-- Preset 3 -->
+                <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1920&auto=format&fit=crop"></div>
+                <!-- Preset 4 -->
+                <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop"></div>
+                <!-- Preset 5 -->
+                <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=1920&auto=format&fit=crop"></div>
+                <!-- Preset 6 -->
+                <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1920&auto=format&fit=crop"></div>
+            </div>
+
+            <!-- SEÇÃO 3: UPLOAD -->
+            <span class="section-title">Arquivo do Dispositivo</span>
+            <label for="bgFileInput" class="custom-upload-btn">
+                <i class="fa-solid fa-cloud-arrow-up" style="margin-bottom: 5px; display: block; font-size: 1.5rem;"></i>
+                Escolher Foto
+            </label>
+            <input type="file" id="bgFileInput" accept="image/*">
+
+            <button class="reset-btn" id="resetBgBtn">
+                <i class="fa-solid fa-rotate-left"></i> Restaurar Padrão
+            </button>
+        </div>
+    </div>
+
     <script>
         /* --- LOADER SYSTEM --- */
         window.addEventListener('load', () => {
@@ -426,11 +662,10 @@
         setInterval(updateTimeAndGreeting, 1000);
         updateTimeAndGreeting();
 
-        /* --- TILT3D (SE APROXIMA DA TELA) & RIPPLE CLICK --- */
+        /* --- TILT3D & RIPPLE CLICK --- */
         const hubCards = document.querySelectorAll('.hub-card');
         
         hubCards.forEach(card => {
-            // Efeito 3D Tilt (Aproximação da tela)
             card.addEventListener('mousemove', (e) => {
                 if(window.innerWidth > 768) {
                     const rect = card.getBoundingClientRect();
@@ -448,38 +683,27 @@
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
 
-            // --- EFEITO RIPPLE DE CLIQUE ---
             card.addEventListener('click', function(e) {
                 if(e.button === 0) {
                     e.preventDefault(); 
-
                     const ripple = document.createElement('span');
                     ripple.classList.add('ripple');
-                    
                     const rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                    
                     const size = Math.max(rect.width, rect.height);
                     ripple.style.width = ripple.style.height = `${size}px`;
                     ripple.style.left = `${x - size / 2}px`;
                     ripple.style.top = `${y - size / 2}px`;
-                    
                     card.appendChild(ripple);
-                    
-                    setTimeout(() => {
-                        ripple.remove();
-                    }, 600);
+                    setTimeout(() => { ripple.remove(); }, 600);
 
                     const href = this.getAttribute('href');
                     const target = this.getAttribute('target');
                     setTimeout(() => {
                         if (href) {
-                            if (target === '_blank') {
-                                window.open(href, '_blank');
-                            } else {
-                                window.location.href = href;
-                            }
+                            if (target === '_blank') window.open(href, '_blank');
+                            else window.location.href = href;
                         }
                     }, 300);
                 }
@@ -508,6 +732,121 @@
                 loadSavedGrid();
             }
         });
+
+        /* --- BACKGROUND CUSTOMIZATION SYSTEM --- */
+        const bgSettingsBtn = document.getElementById('bgSettingsBtn');
+        const bgModal = document.getElementById('bgModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const bgFileInput = document.getElementById('bgFileInput');
+        const resetBgBtn = document.getElementById('resetBgBtn');
+        const customBgLayer = document.getElementById('custom-bg-layer');
+        const presetItems = document.querySelectorAll('.preset-item');
+        const colorBtns = document.querySelectorAll('.color-btn');
+
+        // Abrir Modal
+        bgSettingsBtn.addEventListener('click', () => {
+            bgModal.classList.add('active');
+        });
+
+        // Fechar Modal
+        function closeModal() {
+            bgModal.classList.remove('active');
+        }
+        closeModalBtn.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', closeModal);
+
+        // Função principal de aplicar fundo
+        function setBackground(value, type) {
+            // Limpa seleções visuais
+            document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+
+            if (type === 'image') {
+                // É imagem
+                customBgLayer.style.backgroundImage = `url('${value}')`;
+                document.body.style.backgroundImage = 'none'; // Remove background do body para usar o layer
+                document.body.classList.add('has-custom-bg');
+                localStorage.setItem('ldx_custom_bg', value);
+                localStorage.setItem('ldx_bg_type', 'image');
+                
+                // Tenta marcar o preset se existir na lista
+                presetItems.forEach(item => {
+                    if(item.getAttribute('data-url') === value) item.classList.add('active');
+                });
+
+            } else if (type === 'color') {
+                // É cor/gradiente
+                customBgLayer.style.backgroundImage = 'none'; // Limpa a imagem layer
+                document.body.style.backgroundImage = value; // Aplica gradiente direto no body
+                document.body.classList.add('has-custom-bg');
+                localStorage.setItem('ldx_custom_bg', value);
+                localStorage.setItem('ldx_bg_type', 'color');
+
+                colorBtns.forEach(btn => {
+                    if(btn.getAttribute('data-value') === value) btn.classList.add('active');
+                });
+            }
+            closeModal();
+        }
+
+        // Carregar fundo salvo
+        const savedBg = localStorage.getItem('ldx_custom_bg');
+        const savedType = localStorage.getItem('ldx_bg_type');
+
+        if (savedBg) {
+            if(savedType === 'image') {
+                customBgLayer.style.backgroundImage = `url('${savedBg}')`;
+            } else {
+                document.body.style.backgroundImage = savedBg;
+            }
+            document.body.classList.add('has-custom-bg');
+        }
+
+        // Lidar com Presets (Imagens)
+        presetItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const url = item.getAttribute('data-url');
+                setBackground(url, 'image');
+            });
+        });
+
+        // Lidar com Cores
+        colorBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const val = btn.getAttribute('data-value');
+                setBackground(val, 'color');
+            });
+        });
+
+        // Lidar com Upload de Arquivo
+        bgFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert("A imagem é muito grande! Escolha uma imagem menor que 5MB.");
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const base64String = event.target.result;
+                    setBackground(base64String, 'image');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Resetar para Padrão
+        resetBgBtn.addEventListener('click', () => {
+            localStorage.removeItem('ldx_custom_bg');
+            localStorage.removeItem('ldx_bg_type');
+            customBgLayer.style.backgroundImage = 'none';
+            document.body.style.backgroundImage = 'none';
+            document.body.classList.remove('has-custom-bg');
+            document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+            bgFileInput.value = '';
+            closeModal();
+        });
+
     </script>
 </body>
 </html>

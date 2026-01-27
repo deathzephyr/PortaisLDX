@@ -18,10 +18,13 @@
             --bg-dark: #050507;
             --glass-bg: rgba(20, 20, 25, 0.6); 
             --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-primary: #8b5cf6; 
+            --accent-secondary: #ec4899; 
+            --accent-cyan: #06b6d4; 
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             
-            /* Cores Vibrantes */
+            /* Cores Vibrantes para os Portais */
             --color-gamehub: #06b6d4; 
             --color-nexushub: #ec4899; 
             --color-centralhub: #facc15;
@@ -37,16 +40,6 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            /* Transição leve no body para o blur de navegação */
-            transition: filter 0.4s ease, transform 0.4s ease;
-            overflow-y: auto;
-        }
-
-        /* Estado durante navegação */
-        body.is-navigating {
-            filter: blur(5px) brightness(0.6);
-            transform: scale(0.98);
-            overflow: hidden; /* Trava scroll */
         }
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
@@ -138,42 +131,6 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; opacity: 0; transition: opacity 1s ease 1s; }
         .loaded .container { opacity: 1; }
 
-        /* --- CURTAIN TRANSITION (A cortina colorida) --- */
-        .page-curtain {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 99999;
-            background: var(--bg-dark); /* Começa escuro, mudará via JS */
-            transform: translateY(100%); /* Escondido em baixo */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-            /* Curta rápida para subir */
-            transition: transform 0.5s cubic-bezier(0.87, 0, 0.13, 1);
-        }
-
-        .page-curtain.active {
-            transform: translateY(0);
-        }
-
-        .curtain-text {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            color: rgba(255,255,255,0.9);
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s ease 0.1s; /* Delay pequeno */
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .page-curtain.active .curtain-text {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
         /* --- HEADER --- */
         header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
         
@@ -245,13 +202,14 @@
             color: white;
             position: relative;
             overflow: hidden; 
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
+            transition: transform 0.1s linear, box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
             backdrop-filter: blur(25px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             transform-style: preserve-3d;
+            will-change: transform;
             user-select: none;
             text-align: center;
             cursor: pointer;
@@ -259,9 +217,24 @@
 
         .hub-card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255, 255, 0.4); }
         
-        /* Feedback ao clicar */
-        .hub-card:active { transform: scale(0.96); }
-        
+        /* --- ANIMAÇÃO RIPPLE (DO CÓDIGO FORNECIDO) --- */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple-anim 0.6s ease-out;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes ripple-anim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
         .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
         .hub-card:hover .hub-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.1); }
         
@@ -305,17 +278,10 @@
             .hub-card h2 { font-size: 1.25rem; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem; margin: 0; }
             .hub-bg-icon { display: none; }
-            
-            .curtain-text { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
-
-    <!-- ELEMENTO DE TRANSIÇÃO (CORTINA) -->
-    <div id="page-curtain" class="page-curtain">
-        <div class="curtain-text" id="curtain-text">Acessando...</div>
-    </div>
 
     <!-- LOADING SCREEN -->
     <div id="loader">
@@ -350,7 +316,7 @@
         <div class="hubs-grid" id="bentoGrid">
             
             <!-- CARD: GAMEHUB -->
-            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card card-gamehub" data-color="#06b6d4" data-name="GameHub">
+            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card card-gamehub">
                 <div class="hub-bg-icon"><i class="fa-solid fa-gamepad"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-gamepad"></i></div>
@@ -362,7 +328,7 @@
             </a>
 
             <!-- CARD: NEXUSHUB -->
-            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card card-nexushub" data-color="#ec4899" data-name="NexusHub">
+            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card card-nexushub">
                 <div class="hub-bg-icon"><i class="fa-solid fa-layer-group"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-layer-group"></i></div>
@@ -374,7 +340,7 @@
             </a>
 
             <!-- CARD: CENTRALHUB -->
-            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub" data-color="#facc15" data-name="CentralHub">
+            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub">
                 <div class="hub-bg-icon"><i class="fa-solid fa-globe"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-globe"></i></div>
@@ -425,10 +391,8 @@
         setInterval(updateTimeAndGreeting, 1000);
         updateTimeAndGreeting();
 
-        /* --- TILT3D & LEAN CURTAIN TRANSITION --- */
+        /* --- TILT3D & RIPPLE CLICK (CÓDIGO DO NEXUSHUB) --- */
         const hubCards = document.querySelectorAll('.hub-card');
-        const curtain = document.getElementById('page-curtain');
-        const curtainText = document.getElementById('curtain-text');
         
         hubCards.forEach(card => {
             // Efeito 3D Tilt (Só visual)
@@ -449,30 +413,48 @@
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
 
-            // --- EFEITO CURTAIN LEVE ---
+            // --- EFEITO RIPPLE DE CLIQUE (IGUAL AO NEXUSHUB) ---
             card.addEventListener('click', function(e) {
-                e.preventDefault();
+                // Se for clique com o botão esquerdo (0)
+                if(e.button === 0) {
+                    e.preventDefault(); // Impede a abertura imediata para ver a animação
 
-                const targetUrl = this.getAttribute('href');
-                const color = this.getAttribute('data-color');
-                const name = this.getAttribute('data-name');
+                    // Cria o elemento do ripple
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    
+                    // Posiciona o ripple onde o mouse clicou, relativo ao card
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Define tamanho e posição
+                    const size = Math.max(rect.width, rect.height);
+                    ripple.style.width = ripple.style.height = `${size}px`;
+                    ripple.style.left = `${x - size / 2}px`;
+                    ripple.style.top = `${y - size / 2}px`;
+                    
+                    // Adiciona ao card
+                    card.appendChild(ripple);
+                    
+                    // Remove após a animação
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
 
-                // 1. Configurar a Cortina
-                curtain.style.backgroundColor = color;
-                curtainText.textContent = "Acessando " + name.toUpperCase();
-
-                // 2. Ativar visualmente
-                document.body.classList.add('is-navigating');
-                
-                // Pequeno delay para o navegador processar o blur do body antes da cortina subir
-                setTimeout(() => {
-                    curtain.classList.add('active');
-                }, 50);
-
-                // 3. Navegar após a cortina cobrir (550ms é seguro para transição de 500ms)
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 550);
+                    // Abre o link após um pequeno delay (300ms)
+                    const href = this.getAttribute('href');
+                    const target = this.getAttribute('target');
+                    setTimeout(() => {
+                        if (href) {
+                            if (target === '_blank') {
+                                window.open(href, '_blank');
+                            } else {
+                                window.location.href = href;
+                            }
+                        }
+                    }, 300);
+                }
             });
         });
 

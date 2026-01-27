@@ -24,7 +24,7 @@
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             
-            /* Cores Vibrantes para as 3 Páginas */
+            /* Cores Vibrantes para as 3 Páginas (Cards) */
             --color-gamehub: #06b6d4; 
             --color-nexushub: #ec4899; 
             --color-centralhub: #facc15;
@@ -71,21 +71,19 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; }
 
         /* --- HEADER --- */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; height: 60px; /* Altura fixa para evitar corte */ }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
         
         .logo { 
             font-size: 1.6rem; 
             font-weight: 700; 
-            color: #ffffff;
+            color: #ffffff; 
             text-shadow: 0 0 20px rgba(255,255,255,0.1);
             display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            /* Alinhamento perfeito para não cortar o ícone */
-            white-space: nowrap; 
+            align-items: center; /* Alinhamento Perfeito */
+            gap: 15px; /* Espaçamento generoso */
         }
 
-        /* ÍCONE ESPECIAL */
+        /* ÍCONE ESPECIAL (Bússola) */
         .logo-icon-special {
             font-size: 1.4rem;
             /* Gradiente Colorido no Ícone */
@@ -98,18 +96,13 @@
             
             /* Animação Suave de Vida */
             animation: specialPulse 3s infinite ease-in-out;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px; /* Largura fixa para layout */
-            height: 40px;
         }
 
         @keyframes specialPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(10deg); }
         }
-        
+
         .clock { background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; font-size: 0.9rem; color: var(--accent-cyan); backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); font-weight: 600; letter-spacing: 1px; }
 
         /* --- HERO --- */
@@ -137,7 +130,7 @@
         /* --- HUBS GRID --- */
         .hubs-grid {
             display: grid;
-            /* Força 3 colunas lado a lado */
+            /* Padrão: 3 colunas (PC e Mobile por JS) */
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             padding: 2rem 0;
@@ -166,14 +159,13 @@
             text-align: center;
         }
 
-        /* Brilho interno */
         .hub-card::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
             transform: skewX(-25deg); transition: 0.6s; pointer-events: none; z-index: 2; 
         }
         .hub-card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
-        .hub-card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255,255, 0.4); }
+        .hub-card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255, 255, 0.4); }
         
         .hub-card.clicked { transform: scale(0.96); opacity: 0.8; }
         
@@ -205,7 +197,7 @@
         .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
         .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
 
-        /* --- ESPECÍFICO COLORIDO POR CARD --- */
+        /* --- ESPECÍFICO COLORIDO POR CARD (HOVER) --- */
 
         /* GameHub */
         .card-gamehub .hub-icon { 
@@ -275,34 +267,17 @@
             background: transparent; 
         }
 
-        /* --- MOBILE (Ajustes de Layout) --- */
+        /* --- MOBILE (AJUSTES FINOS DE LAYOUT) --- */
         @media (max-width: 600px) { 
             .hero h1 { font-size: 2.5rem; } 
             .hero p { font-size: 1rem; }
             
-            /* ALTERADO: Agora 2 colunas lado a lado no mobile */
-            .hubs-grid { grid-template-columns: repeat(2, 1fr); padding: 1rem 0; gap: 1.5rem; }
+            /* REMOVIDO o grid-template-columns for permitir controle total via JS */
+            .hubs-grid { padding: 1rem 0; gap: 1rem; }
             
-            /* Reduz altura dos cards para caberem na tela verticalmente */
             .hub-card { min-height: 280px; padding: 2rem 1.5rem; }
-            
-            /* HEADER FIX: Ajuste o Logo para não cortar o ícone e alinhar */
-            .logo { 
-                font-size: 1.4rem; 
-                gap: 10px;
-                height: 50px; /* Altura fixa para alinhar */
-                display: flex;
-                align-items: center;
-                white-space: nowrap;
-            }
-            .logo-icon-special { 
-                font-size: 1.2rem; /* Ícone menor no mobile */
-                width: 30px; height: 30px;
-                display: inline-flex; align-items: center; justify-content: center;
-            }
-            
-            .hub-icon { width: 60px; height: 60px; font-size: 2rem; }
-            .hub-card h2 { font-size: 1.5rem; }
+            .hub-icon { width: 60px; height: 60px; font-size: 1.8rem; } /* Ícones menores para 3 colunas no celular */
+            .hub-card h2 { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -316,10 +291,9 @@
 
     <div class="container">
         <header>
-            <!-- ÍCONE ESPECIAL (Bússola) + Texto LDX -->
+            <!-- ÍCONE ESPECIAL (BÚSSOLA) + Texto LDX -->
             <div class="logo">
-                <i class="fa-solid fa-compass logo-icon-special"></i> 
-                LDX
+                <i class="fa-solid fa-compass logo-icon-special"></i> LDX
             </div>
             <div class="clock" id="clock">00:00</div>
         </header>
@@ -383,6 +357,7 @@
         const hubCards = document.querySelectorAll('.hub-card');
         
         hubCards.forEach(card => {
+            // Efeito 3D Tilt
             card.addEventListener('mousemove', (e) => {
                 if(window.innerWidth > 768) {
                     const rect = card.getBoundingClientRect();
@@ -400,6 +375,7 @@
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
 
+            // Efeito Ripple
             card.addEventListener('click', function(e) {
                 if (e.button === 0) {
                     const ripple = card.querySelector('.ripple');
@@ -421,6 +397,78 @@
                     }, 150);
                 }
             });
+        });
+
+        /* --- CONTROLE DE GRID (MOBILE E PC) --- */
+        const gridBtn = document.getElementById('gridBtn');
+        const gridDropdown = document.getElementById('gridDropdown');
+        const gridOptions = document.querySelectorAll('#gridDropdown .dropdown-option');
+        const bentoGrid = document.getElementById('bentoGrid');
+
+        gridBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            gridDropdown.classList.toggle('active');
+        });
+
+        gridOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const cols = option.getAttribute('data-cols');
+                applyGrid(cols);
+                gridOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                gridDropdown.classList.remove('active');
+            });
+        });
+
+        function applyGrid(cols) {
+            bentoGrid.classList.remove('cols-2', 'cols-3', 'cols-5');
+            if (cols === 'auto') {
+                bentoGrid.style.gridTemplateColumns = '';
+                saveGridPreference('auto');
+            } else {
+                bentoGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+                bentoGrid.classList.add(`cols-${cols}`);
+                saveGridPreference(cols);
+            }
+        }
+
+        function saveGridPreference(value) {
+            if (window.innerWidth <= 600) localStorage.setItem('nexusHub_mobileCols', value);
+            else localStorage.setItem('nexusHub_desktopCols', value);
+        }
+
+        function loadSavedGrid() {
+            let savedCols;
+            let key;
+            /* Lógica Mobile: Default agora é 3 colunas */
+            if (window.innerWidth <= 600) {
+                key = 'nexusHub_mobileCols';
+                savedCols = localStorage.getItem(key);
+                /* MUDANÇA DO DEFAULT DE 2 PARA 3 */
+                if(!savedCols) savedCols = '3';
+            } else {
+                key = 'nexusHub_desktopCols';
+                savedCols = localStorage.getItem(key);
+                if(!savedCols) savedCols = 'auto';
+            }
+            const optToSelect = document.querySelector(`#gridDropdown .dropdown-option[data-cols="${savedCols}"]`);
+            if(optToSelect) optToSelect.classList.add('selected');
+            applyGrid(savedCols);
+        }
+        loadSavedGrid();
+
+        let lastWidth = window.innerWidth;
+        window.addEventListener('resize', () => {
+            if (window.innerWidth !== lastWidth) {
+                lastWidth = window.innerWidth;
+                loadSavedGrid();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!gridBtn.contains(e.target) && !gridDropdown.contains(e.target)) {
+                gridDropdown.classList.remove('active');
+            }
         });
 
     </script>

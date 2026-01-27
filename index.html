@@ -24,10 +24,10 @@
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             
-            /* Gradientes Vibrantes */
-            --gamehub-gradient: linear-gradient(135deg, #06b6d4, #3b82f6); /* Azul (Antigo Nexus) */
-            --nexushub-gradient: linear-gradient(135deg, #ec4899, #8b5cf6); /* Rosa (Antigo Game) */
-            --centralhub-gradient: linear-gradient(135deg, #facc15, #f97316);
+            /* Cores Vibrantes para as 3 Páginas (Utilizadas no Header e Cards) */
+            --color-gamehub: #06b6d4; 
+            --color-nexushub: #ec4899; 
+            --color-centralhub: #facc15;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -72,7 +72,36 @@
 
         /* --- HEADER --- */
         header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
-        .logo { font-size: 1.6rem; font-weight: 700; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 12px; text-shadow: 0 0 30px rgba(255,255,255,0.1); }
+        
+        .logo { 
+            font-size: 1.6rem; 
+            font-weight: 700; 
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+            display: flex; 
+            align-items: center; 
+            gap: 15px; /* Espaçamento generoso para o ícone especial */
+        }
+
+        /* ÍCONE ESPECIAL (Bússola) */
+        .logo-icon-special {
+            font-size: 1.4rem;
+            /* Gradiente Colorido no Ícone */
+            background: linear-gradient(135deg, #06b6d4, #ec4899);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            
+            /* Efeito de Brilho (Glow) Neon */
+            filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.6));
+            
+            /* Animação Suave de Vida */
+            animation: specialPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes specialPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.15) rotate(10deg); }
+        }
         
         .clock { background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; font-size: 0.9rem; color: var(--accent-cyan); backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); font-weight: 600; letter-spacing: 1px; }
 
@@ -157,7 +186,6 @@
             width: 90px; height: 90px;
             border-radius: 20px;
             background: rgba(255,255,255,0.05);
-            color: var(--text-muted); /* Neutro por padrão */
             display: flex; justify-content: center; align-items: center;
             font-size: 2.5rem;
             border: 1px solid rgba(255,255,255,0.1);
@@ -168,11 +196,16 @@
         .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
         .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
 
-        /* --- ESPECÍFICO COLORIDO POR CARD (HOVER) --- */
+        /* --- ESPECÍFICO COLORIDO POR CARD --- */
 
-        /* GameHub - AZUL/CIANO (Antigo Nexus) */
+        /* GameHub */
+        .card-gamehub .hub-icon { 
+            color: var(--color-gamehub); 
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
         .card-gamehub:hover .hub-icon { 
-            background: var(--nexushub-gradient); 
+            background: var(--color-gamehub); 
             color: white;
             transform: translateY(-8px) scale(1.1) rotate(-5deg); 
             border-color: transparent; 
@@ -180,12 +213,17 @@
         }
         .card-gamehub:hover { 
             box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3), 0 30px 60px -15px rgba(6, 182, 212, 0.4); 
-            border-color: rgba(6, 182, 212, 0.4); 
+            border-color: rgba(6, 182, 212, 0.5); 
         }
 
-        /* NexusHub - ROSA/ROXO (Antigo Game) */
+        /* NexusHub */
+        .card-nexushub .hub-icon { 
+            color: var(--color-nexushub); 
+            text-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+            border-color: rgba(236, 72, 153, 0.3);
+        }
         .card-nexushub:hover .hub-icon { 
-            background: var(--gamehub-gradient); 
+            background: var(--color-nexushub); 
             color: white;
             transform: translateY(-8px) scale(1.1) rotate(5deg); 
             border-color: transparent; 
@@ -193,12 +231,17 @@
         }
         .card-nexushub:hover { 
             box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3), 0 30px 60px -15px rgba(236, 72, 153, 0.4); 
-            border-color: rgba(236, 72, 153, 0.4); 
+            border-color: rgba(236, 72, 153, 0.5); 
         }
 
-        /* CentralHub - LARANJA */
+        /* CentralHub */
+        .card-centralhub .hub-icon { 
+            color: var(--color-centralhub); 
+            text-shadow: 0 0 30px rgba(250, 204, 21, 0.5);
+            border-color: rgba(250, 204, 21, 0.3);
+        }
         .card-centralhub:hover .hub-icon { 
-            background: var(--centralhub-gradient); 
+            background: var(--color-centralhub); 
             color: white;
             transform: translateY(-8px) scale(1.1); 
             border-color: transparent; 
@@ -206,7 +249,7 @@
         }
         .card-centralhub:hover { 
             box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.3), 0 30px 60px -15px rgba(250, 204, 21, 0.4); 
-            border-color: rgba(250, 204, 21, 0.4); 
+            border-color: rgba(250, 204, 21, 0.5); 
         }
 
         /* --- FOOTER --- */
@@ -244,8 +287,11 @@
 
     <div class="container">
         <header>
-            <!-- Ícone do CentralHub (Building Columns) + Nome LDX -->
-            <div class="logo"><i class="fa-solid fa-building-columns"></i> LDX</div>
+            <!-- ÍCONE ESPECIAL: BÚSSOLA COM EFEITOS DE BRILHO E VIDA -->
+            <div class="logo">
+                <i class="fa-solid fa-compass logo-icon-special"></i> 
+                LDX
+            </div>
             <div class="clock" id="clock">00:00</div>
         </header>
 
@@ -280,9 +326,9 @@
 
             <!-- CARD: CENTRALHUB -->
             <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub">
-                <div class="hub-bg-icon"><i class="fa-solid fa-building-columns"></i></div>
+                <div class="hub-bg-icon"><i class="fa-solid fa-globe"></i></div>
                 <div class="hub-content">
-                    <div class="hub-icon"><i class="fa-solid fa-building-columns"></i></div>
+                    <div class="hub-icon"><i class="fa-solid fa-globe"></i></div>
                     <h2>CentralHub</h2>
                     <p>Serviços digitais oficiais e essenciais.</p>
                 </div>

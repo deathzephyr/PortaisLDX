@@ -20,6 +20,7 @@
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
             --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
             
             /* Gradiente Arco-íris Animado */
             --rainbow-gradient: linear-gradient(90deg, #facc15, #8b5cf6, #ec4899, #06b6d4, #22c55e, #ef4444, #f59e0b, #ffffff, #facc15);
@@ -103,8 +104,8 @@
         .loader-bar {
             width: 0%;
             height: 100%;
-            background: #06b6d4;
-            box-shadow: 0 0 15px #06b6d4;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 15px var(--accent-cyan);
             animation: loadProgress 1.5s ease-in-out forwards 0.6s;
         }
 
@@ -143,7 +144,7 @@
         }
 
         .orb-1 { width: 500px; height: 500px; background: #ec4899; top: -150px; left: -150px; animation-duration: 30s; }
-        .orb-2 { width: 600px; height: 600px; background: #06b6d4; bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
+        .orb-2 { width: 600px; height: 600px; background: var(--accent-cyan); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
         .orb-3 { width: 350px; height: 350px; background: #facc15; top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.25; animation: pulseOrb 12s infinite ease-in-out; }
 
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
@@ -202,13 +203,13 @@
         }
 
         .bg-settings-btn {
-            color: #06b6d4;
+            color: var(--accent-cyan);
             padding: 8px 14px; 
             font-size: 1rem;
         }
 
         .bg-settings-btn:hover {
-            border-color: #06b6d4;
+            border-color: var(--accent-cyan);
             background: rgba(6, 182, 212, 0.1);
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
@@ -362,16 +363,15 @@
             border-radius: 24px;
             width: 100%;
             max-width: 480px;
-            max-height: 85vh; /* Limite de altura */
+            max-height: 85vh;
             padding: 2rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             transform: scale(0.95);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
-            overflow-y: auto; /* Scroll interno se precisar */
+            overflow-y: auto;
         }
         
-        /* Scrollbar fina para o modal */
         .modal-content::-webkit-scrollbar { width: 6px; }
         .modal-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
 
@@ -384,7 +384,7 @@
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky; /* Cabeçalho fixo ao rolar */
+            position: sticky;
             top: 0;
             background: rgba(15, 15, 20, 0.98);
             z-index: 10;
@@ -402,7 +402,7 @@
             color: var(--text-muted); margin: 15px 0 10px 0; display: block; font-weight: 600;
         }
 
-        /* CORES / GRADIENTES */
+        /* CORES */
         .color-options {
             display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;
         }
@@ -417,11 +417,11 @@
         }
 
         .color-btn:hover { transform: scale(1.1); border-color: #fff; }
-        .color-btn.active { border-color: #06b6d4; box-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
+        .color-btn.active { border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
 
-        /* Presets de Imagem */
+        /* PRESETS */
         .preset-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px;
         }
 
         .preset-item {
@@ -435,25 +435,41 @@
         }
 
         .preset-item:hover { transform: scale(1.05); }
-        .preset-item.active { border-color: #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
+        .preset-item.active { border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
 
-        /* Upload */
-        .custom-upload-btn {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 2px dashed rgba(255,255,255,0.2);
-            color: var(--text-muted);
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
+        /* NOVO BOTÃO DE UPLOAD - Robusto e LIMPO */
+        .upload-container {
+            margin-bottom: 20px;
         }
 
-        .custom-upload-btn:hover { border-color: #06b6d4; color: #fff; background: rgba(6, 182, 212, 0.1); }
+        .upload-btn {
+            width: 100%;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: rgba(6, 182, 212, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.2);
+        }
         
+        .upload-btn i { font-size: 1.1rem; color: var(--accent-cyan); }
+
+        input[type="file"] { display: none; }
+
         .reset-btn {
             width: 100%;
             background: rgba(255,255,255,0.05);
@@ -469,7 +485,33 @@
         }
         .reset-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
-        input[type="file"] { display: none; }
+        /* --- TOAST NOTIFICATION --- */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            background: rgba(6, 182, 212, 0.9);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
 
         /* --- MOBILE --- */
         @media (max-width: 768px) { 
@@ -574,12 +616,15 @@
         </footer>
     </div>
 
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast"><i class="fa-solid fa-check-circle"></i> <span>Imagem carregada com sucesso!</span></div>
+
     <!-- MODAL DE CONFIGURAÇÃO DE FUNDO -->
     <div id="bgModal">
         <div class="modal-backdrop" id="modalBackdrop"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-palette" style="color: #06b6d4;"></i> Personalizar</h3>
+                <h3><i class="fa-solid fa-palette" style="color: var(--accent-cyan);"></i> Personalizar</h3>
                 <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
@@ -598,30 +643,26 @@
                 <div class="color-btn" style="background: linear-gradient(135deg, #18181b, #27272a);" data-type="color" data-value="linear-gradient(135deg, #18181b, #27272a)"></div>
             </div>
 
-            <!-- SEÇÃO 2: IMAGENS (AUMENTADO) -->
+            <!-- SEÇÃO 2: IMAGENS -->
             <span class="section-title">Imagens Preset</span>
             <div class="preset-grid">
-                <!-- Preset 1 -->
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=1920&auto=format&fit=crop"></div>
-                <!-- Preset 2 -->
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1920&auto=format&fit=crop"></div>
-                <!-- Preset 3 -->
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1920&auto=format&fit=crop"></div>
-                <!-- Preset 4 -->
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop"></div>
-                <!-- Preset 5 -->
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=1920&auto=format&fit=crop"></div>
-                <!-- Preset 6 -->
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1920&auto=format&fit=crop"></div>
             </div>
 
-            <!-- SEÇÃO 3: UPLOAD -->
+            <!-- SEÇÃO 3: UPLOAD (CORRIGIDO) -->
             <span class="section-title">Arquivo do Dispositivo</span>
-            <label for="bgFileInput" class="custom-upload-btn">
-                <i class="fa-solid fa-cloud-arrow-up" style="margin-bottom: 5px; display: block; font-size: 1.5rem;"></i>
-                Escolher Foto
-            </label>
-            <input type="file" id="bgFileInput" accept="image/*">
+            <div class="upload-container">
+                <input type="file" id="bgFileInput" accept="image/*">
+                <button type="button" class="upload-btn" id="uploadTriggerBtn">
+                    <i class="fa-solid fa-upload"></i>
+                    <span>Carregar Foto</span>
+                </button>
+            </div>
 
             <button class="reset-btn" id="resetBgBtn">
                 <i class="fa-solid fa-rotate-left"></i> Restaurar Padrão
@@ -739,10 +780,21 @@
         const closeModalBtn = document.getElementById('closeModalBtn');
         const modalBackdrop = document.getElementById('modalBackdrop');
         const bgFileInput = document.getElementById('bgFileInput');
+        const uploadTriggerBtn = document.getElementById('uploadTriggerBtn');
         const resetBgBtn = document.getElementById('resetBgBtn');
         const customBgLayer = document.getElementById('custom-bg-layer');
         const presetItems = document.querySelectorAll('.preset-item');
         const colorBtns = document.querySelectorAll('.color-btn');
+        const toast = document.getElementById('toast');
+
+        // Toast Function
+        function showToast(message) {
+            toast.querySelector('span').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
 
         // Abrir Modal
         bgSettingsBtn.addEventListener('click', () => {
@@ -756,28 +808,29 @@
         closeModalBtn.addEventListener('click', closeModal);
         modalBackdrop.addEventListener('click', closeModal);
 
+        // Trigger Upload via Button (Correção do bug)
+        uploadTriggerBtn.addEventListener('click', () => {
+            bgFileInput.click();
+        });
+
         // Função principal de aplicar fundo
         function setBackground(value, type) {
-            // Limpa seleções visuais
             document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
 
             if (type === 'image') {
-                // É imagem
                 customBgLayer.style.backgroundImage = `url('${value}')`;
-                document.body.style.backgroundImage = 'none'; // Remove background do body para usar o layer
+                document.body.style.backgroundImage = 'none';
                 document.body.classList.add('has-custom-bg');
                 localStorage.setItem('ldx_custom_bg', value);
                 localStorage.setItem('ldx_bg_type', 'image');
                 
-                // Tenta marcar o preset se existir na lista
                 presetItems.forEach(item => {
                     if(item.getAttribute('data-url') === value) item.classList.add('active');
                 });
 
             } else if (type === 'color') {
-                // É cor/gradiente
-                customBgLayer.style.backgroundImage = 'none'; // Limpa a imagem layer
-                document.body.style.backgroundImage = value; // Aplica gradiente direto no body
+                customBgLayer.style.backgroundImage = 'none';
+                document.body.style.backgroundImage = value;
                 document.body.classList.add('has-custom-bg');
                 localStorage.setItem('ldx_custom_bg', value);
                 localStorage.setItem('ldx_bg_type', 'color');
@@ -802,7 +855,7 @@
             document.body.classList.add('has-custom-bg');
         }
 
-        // Lidar com Presets (Imagens)
+        // Presets
         presetItems.forEach(item => {
             item.addEventListener('click', () => {
                 const url = item.getAttribute('data-url');
@@ -810,7 +863,7 @@
             });
         });
 
-        // Lidar com Cores
+        // Cores
         colorBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const val = btn.getAttribute('data-value');
@@ -823,19 +876,20 @@
             const file = e.target.files[0];
             if (file) {
                 if (file.size > 5 * 1024 * 1024) {
-                    alert("A imagem é muito grande! Escolha uma imagem menor que 5MB.");
+                    showToast("Imagem muito grande! (Max 5MB)");
                     return;
                 }
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const base64String = event.target.result;
                     setBackground(base64String, 'image');
+                    showToast("Imagem carregada com sucesso!");
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        // Resetar para Padrão
+        // Resetar
         resetBgBtn.addEventListener('click', () => {
             localStorage.removeItem('ldx_custom_bg');
             localStorage.removeItem('ldx_bg_type');
@@ -845,6 +899,7 @@
             document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
             bgFileInput.value = '';
             closeModal();
+            showToast("Fundo restaurado.");
         });
 
     </script>

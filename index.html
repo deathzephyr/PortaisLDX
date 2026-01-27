@@ -40,10 +40,13 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND LAYER SYSTEM --- */
+        /* --- BACKGROUND LAYER SYSTEM (FIXO PARA MOBILE) --- */
         #custom-bg-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; /* Fixa na janela de visualização */
+            top: 0; 
+            left: 0; 
+            width: 100vw; /* Largura total da viewport */
+            height: 100vh; /* Altura total da viewport */
             z-index: -2;
             background-size: cover;
             background-position: center;
@@ -51,6 +54,8 @@
             opacity: 0;
             transition: opacity 0.5s ease;
             pointer-events: none;
+            /* Hack para garantir que fique fixo no iOS/Safari */
+            -webkit-transform: translate3d(0,0,0);
         }
 
         /* Sempre que tiver fundo customizado, esconde as orbs */
@@ -539,7 +544,7 @@
 </head>
 <body>
 
-    <!-- CAMADA DE FUNDO PERSONALIZADO -->
+    <!-- CAMADA DE FUNDO PERSONALIZADO (FIXO) -->
     <div id="custom-bg-layer"></div>
 
     <!-- LOADING SCREEN -->
@@ -680,8 +685,6 @@
 
     <script>
         /* --- LÓGICA DE FUNDO PADRÃO (img2.jpg) --- */
-        // Verifica se o usuário já escolheu um fundo antes.
-        // Se NÃO, define 'img2.jpg' como o padrão inicial.
         const defaultBackground = 'img2.jpg';
         if (!localStorage.getItem('ldx_custom_bg')) {
             localStorage.setItem('ldx_custom_bg', defaultBackground);
@@ -910,12 +913,7 @@
         resetBgBtn.addEventListener('click', () => {
             localStorage.removeItem('ldx_custom_bg');
             localStorage.removeItem('ldx_bg_type');
-            // Recarrega a página para aplicar a lógica de padrão novamente ou limpa visualmente
             location.reload(); 
-            /* 
-               Nota: Se você preferir não recarregar, poderíamos limpar as variáveis,
-               mas recarregar garante que o script inicial (que define img2.jpg) rode de novo.
-            */
         });
 
     </script>

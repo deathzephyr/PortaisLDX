@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LDX | Portais LDX</title>
+    <link rel="icon" type="image/png" href="img.png">
+    
+    <!-- Fontes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- DESIGN SYSTEM --- */
+        :root {
+            --bg-dark: #050507;
+            --glass-bg: rgba(20, 20, 25, 0.6); 
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-primary: #8b5cf6; 
+            --accent-secondary: #ec4899; 
+            --accent-cyan: #06b6d4; 
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            
+            /* Gradientes Vibrantes */
+            --gamehub-gradient: linear-gradient(135deg, #06b6d4, #3b82f6); /* Azul (Antigo Nexus) */
+            --nexushub-gradient: linear-gradient(135deg, #ec4899, #8b5cf6); /* Rosa (Antigo Game) */
+            --centralhub-gradient: linear-gradient(135deg, #facc15, #f97316);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
+
+        /* --- BACKGROUND --- */
+        .ambient-light {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.4;
+            animation: floatOrb 25s infinite alternate ease-in-out;
+        }
+
+        .orb-1 { width: 500px; height: 500px; background: #ec4899; top: -150px; left: -150px; animation-duration: 30s; }
+        .orb-2 { width: 600px; height: 600px; background: #06b6d4; bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
+        .orb-3 { width: 350px; height: 350px; background: #facc15; top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.25; animation: pulseOrb 12s infinite ease-in-out; }
+
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
+        @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(1.1); } }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; }
+
+        /* --- HEADER --- */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
+        .logo { font-size: 1.6rem; font-weight: 700; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 12px; text-shadow: 0 0 30px rgba(255,255,255,0.1); }
+        
+        .clock { background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; font-size: 0.9rem; color: var(--accent-cyan); backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); font-weight: 600; letter-spacing: 1px; }
+
+        /* --- HERO --- */
+        .hero { text-align: center; margin: 4rem 0 4rem; position: relative; }
+        
+        @keyframes colorCycle {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero h1 { 
+            font-size: 4rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
+            background: linear-gradient(90deg, #facc15, #8b5cf6, #ec4899, #06b6d4, #22c55e, #ef4444, #f59e0b, #ffffff, #facc15);
+            background-size: 300% auto;
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            animation: colorCycle 6s linear infinite;
+            letter-spacing: -2px; 
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.5)); 
+        }
+        
+        .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; }
+
+        /* --- HUBS GRID --- */
+        .hubs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        /* --- HUB CARD STYLE --- */
+        .hub-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            overflow: hidden; 
+            transition: transform 0.1s linear, box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
+            backdrop-filter: blur(25px);
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            will-change: transform;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .hub-card::after {
+            content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg); transition: 0.6s; pointer-events: none; z-index: 2; 
+        }
+        .hub-card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
+        .hub-card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255,255, 0.4); }
+        
+        .hub-card.clicked { transform: scale(0.96); opacity: 0.8; }
+        
+        .ripple {
+            position: absolute; border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: scale(0);
+            animation: ripple-anim 0.6s ease-out;
+            pointer-events: none; z-index: 1; 
+        }
+        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+
+        .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
+        .hub-card:hover .hub-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.1); }
+        
+        .hub-content { position: relative; z-index: 10 !important; transform: translateZ(30px); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; pointer-events: none; }
+
+        .hub-icon {
+            width: 90px; height: 90px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted); /* Neutro por padrão */
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
+        .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
+
+        /* --- ESPECÍFICO COLORIDO POR CARD (HOVER) --- */
+
+        /* GameHub - AZUL/CIANO (Antigo Nexus) */
+        .card-gamehub:hover .hub-icon { 
+            background: var(--nexushub-gradient); 
+            color: white;
+            transform: translateY(-8px) scale(1.1) rotate(-5deg); 
+            border-color: transparent; 
+            box-shadow: 0 0 60px rgba(6, 182, 212, 0.6); 
+        }
+        .card-gamehub:hover { 
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3), 0 30px 60px -15px rgba(6, 182, 212, 0.4); 
+            border-color: rgba(6, 182, 212, 0.4); 
+        }
+
+        /* NexusHub - ROSA/ROXO (Antigo Game) */
+        .card-nexushub:hover .hub-icon { 
+            background: var(--gamehub-gradient); 
+            color: white;
+            transform: translateY(-8px) scale(1.1) rotate(5deg); 
+            border-color: transparent; 
+            box-shadow: 0 0 60px rgba(236, 72, 153, 0.6); 
+        }
+        .card-nexushub:hover { 
+            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3), 0 30px 60px -15px rgba(236, 72, 153, 0.4); 
+            border-color: rgba(236, 72, 153, 0.4); 
+        }
+
+        /* CentralHub - LARANJA */
+        .card-centralhub:hover .hub-icon { 
+            background: var(--centralhub-gradient); 
+            color: white;
+            transform: translateY(-8px) scale(1.1); 
+            border-color: transparent; 
+            box-shadow: 0 0 60px rgba(250, 204, 21, 0.6); 
+        }
+        .card-centralhub:hover { 
+            box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.3), 0 30px 60px -15px rgba(250, 204, 21, 0.4); 
+            border-color: rgba(250, 204, 21, 0.4); 
+        }
+
+        /* --- FOOTER --- */
+        footer { 
+            text-align: center; 
+            padding: 3rem 0; 
+            color: var(--text-muted); 
+            border-top: 1px solid var(--glass-border); 
+            margin-top: 5rem; 
+            font-size: 0.8rem; 
+            letter-spacing: 0.5px; 
+            position: relative; 
+            z-index: 2; 
+            background: transparent; 
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 600px) { 
+            .hero h1 { font-size: 2.5rem; } 
+            .hero p { font-size: 1rem; }
+            .hubs-grid { grid-template-columns: 1fr; padding: 1rem 0; gap: 1.5rem; }
+            .hub-card { min-height: 300px; padding: 2rem 1.5rem; }
+            .hub-icon { width: 70px; height: 70px; font-size: 2rem; }
+            .hub-card h2 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <!-- Ícone do CentralHub (Building Columns) + Nome LDX -->
+            <div class="logo"><i class="fa-solid fa-building-columns"></i> LDX</div>
+            <div class="clock" id="clock">00:00</div>
+        </header>
+
+        <section class="hero">
+            <h1>Portais LDX.</h1>
+            <p>Selecione seu destino e acesse o melhor conteúdo.</p>
+        </section>
+
+        <div class="hubs-grid">
+            
+            <!-- CARD: GAMEHUB -->
+            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card card-gamehub">
+                <div class="hub-bg-icon"><i class="fa-solid fa-gamepad"></i></div>
+                <div class="hub-content">
+                    <div class="hub-icon"><i class="fa-solid fa-gamepad"></i></div>
+                    <h2>GameHub</h2>
+                    <p>O universo dos jogos ao seu alcance.</p>
+                </div>
+                <span class="ripple"></span>
+            </a>
+
+            <!-- CARD: NEXUSHUB -->
+            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card card-nexushub">
+                <div class="hub-bg-icon"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="hub-content">
+                    <div class="hub-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <h2>NexusHub</h2>
+                    <p>Tecnologia e entretenimento conectados.</p>
+                </div>
+                <span class="ripple"></span>
+            </a>
+
+            <!-- CARD: CENTRALHUB -->
+            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub">
+                <div class="hub-bg-icon"><i class="fa-solid fa-building-columns"></i></div>
+                <div class="hub-content">
+                    <div class="hub-icon"><i class="fa-solid fa-building-columns"></i></div>
+                    <h2>CentralHub</h2>
+                    <p>Serviços digitais oficiais e essenciais.</p>
+                </div>
+                <span class="ripple"></span>
+            </a>
+
+        </div>
+
+        <footer>
+            <p>DESIGN BY LDX © 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        /* --- RELÓGIO --- */
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        /* --- TILT3D & RIPPLE EFFECT --- */
+        const hubCards = document.querySelectorAll('.hub-card');
+        
+        hubCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                if(window.innerWidth > 768) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+
+            card.addEventListener('click', function(e) {
+                if (e.button === 0) {
+                    const ripple = card.querySelector('.ripple');
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const size = Math.max(rect.width, rect.height);
+                    
+                    ripple.style.width = ripple.style.height = `${size}px`;
+                    ripple.style.left = `${x - size / 2}px`;
+                    ripple.style.top = `${y - size / 2}px`;
+                    ripple.style.animation = 'none';
+                    void ripple.offsetWidth;
+                    ripple.style.animation = 'ripple-anim 0.6s ease-out';
+
+                    this.classList.add('clicked');
+                    setTimeout(() => {
+                        this.classList.remove('clicked');
+                    }, 150);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

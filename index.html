@@ -18,13 +18,10 @@
             --bg-dark: #050507;
             --glass-bg: rgba(20, 20, 25, 0.6); 
             --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-primary: #8b5cf6; 
-            --accent-secondary: #ec4899; 
-            --accent-cyan: #06b6d4; 
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             
-            /* Cores Vibrantes para as 3 Páginas (Cards) */
+            /* Cores Vibrantes para os Portais */
             --color-gamehub: #06b6d4; 
             --color-nexushub: #ec4899; 
             --color-centralhub: #facc15;
@@ -40,6 +37,15 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            /* Prevenir rolagem durante animação */
+            transition: filter 0.5s ease;
+        }
+
+        /* Estado de navegação (ativa blur no fundo) */
+        body.is-navigating .container {
+            filter: blur(10px) brightness(0.3);
+            transform: scale(0.95);
+            transition: all 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045);
         }
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
@@ -128,7 +134,7 @@
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
         @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(1.1); } }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; opacity: 0; /* Esconde conteúdo inicialmente */ transition: opacity 1s ease 1s; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; opacity: 0; transition: opacity 1s ease 1s; }
         .loaded .container { opacity: 1; }
 
         /* --- HEADER --- */
@@ -145,7 +151,6 @@
             user-select: none;
         }
 
-        /* ÍCONE ESPECIAL (Bússola) */
         .logo-icon-special {
             font-size: 1.4rem;
             background: linear-gradient(135deg, #06b6d4, #ec4899);
@@ -183,7 +188,7 @@
             user-select: none;
         }
         
-        .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; /* Reserva espaço para o texto */ }
+        .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
 
         /* --- HUBS GRID --- */
         .hubs-grid {
@@ -191,7 +196,6 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             padding: 2rem 0;
-            transition: all 0.3s ease;
         }
 
         /* --- HUB CARD STYLE --- */
@@ -217,25 +221,8 @@
             cursor: pointer;
         }
 
-        .hub-card::after {
-            content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg); transition: 0.6s; pointer-events: none; z-index: 2; 
-        }
-        .hub-card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
         .hub-card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255, 255, 0.4); }
         
-        .hub-card.clicked { transform: scale(0.96); opacity: 0.8; }
-        
-        .ripple {
-            position: absolute; border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: scale(0);
-            animation: ripple-anim 0.6s ease-out;
-            pointer-events: none; z-index: 1; 
-        }
-        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
-
         .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
         .hub-card:hover .hub-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.1); }
         
@@ -255,135 +242,63 @@
         .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
         .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
 
-        /* --- ESPECÍFICO COLORIDO POR CARD (HOVER) --- */
+        /* Específicos das Cores (Hover) */
+        .card-gamehub .hub-icon { color: var(--color-gamehub); border-color: rgba(6, 182, 212, 0.3); text-shadow: 0 0 30px rgba(6, 182, 212, 0.5); }
+        .card-gamehub:hover .hub-icon { background: var(--color-gamehub); color: white; transform: translateY(-8px) scale(1.1) rotate(-5deg); box-shadow: 0 0 60px rgba(6, 182, 212, 0.6); }
+        
+        .card-nexushub .hub-icon { color: var(--color-nexushub); border-color: rgba(236, 72, 153, 0.3); text-shadow: 0 0 30px rgba(236, 72, 153, 0.5); }
+        .card-nexushub:hover .hub-icon { background: var(--color-nexushub); color: white; transform: translateY(-8px) scale(1.1) rotate(5deg); box-shadow: 0 0 60px rgba(236, 72, 153, 0.6); }
 
-        /* GameHub */
-        .card-gamehub .hub-icon { 
-            color: var(--color-gamehub); 
-            text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
-            border-color: rgba(6, 182, 212, 0.3);
-        }
-        .card-gamehub:hover .hub-icon { 
-            background: var(--color-gamehub); 
-            color: white;
-            transform: translateY(-8px) scale(1.1) rotate(-5deg); 
-            border-color: transparent; 
-            box-shadow: 0 0 60px rgba(6, 182, 212, 0.6); 
-        }
-        .card-gamehub:hover { 
-            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3), 0 30px 60px -15px rgba(6, 182, 212, 0.4); 
-            border-color: rgba(6, 182, 212, 0.5); 
-        }
+        .card-centralhub .hub-icon { color: var(--color-centralhub); border-color: rgba(250, 204, 21, 0.3); text-shadow: 0 0 30px rgba(250, 204, 21, 0.5); }
+        .card-centralhub:hover .hub-icon { background: var(--color-centralhub); color: white; transform: translateY(-8px) scale(1.1); box-shadow: 0 0 60px rgba(250, 204, 21, 0.6); }
 
-        /* NexusHub */
-        .card-nexushub .hub-icon { 
-            color: var(--color-nexushub); 
-            text-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
-            border-color: rgba(236, 72, 153, 0.3);
-        }
-        .card-nexushub:hover .hub-icon { 
-            background: var(--color-nexushub); 
-            color: white;
-            transform: translateY(-8px) scale(1.1) rotate(5deg); 
-            border-color: transparent; 
-            box-shadow: 0 0 60px rgba(236, 72, 153, 0.6); 
-        }
-        .card-nexushub:hover { 
-            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3), 0 30px 60px -15px rgba(236, 72, 153, 0.4); 
-            border-color: rgba(236, 72, 153, 0.5); 
-        }
-
-        /* CentralHub */
-        .card-centralhub .hub-icon { 
-            color: var(--color-centralhub); 
-            text-shadow: 0 0 30px rgba(250, 204, 21, 0.5);
-            border-color: rgba(250, 204, 21, 0.3);
-        }
-        .card-centralhub:hover .hub-icon { 
-            background: var(--color-centralhub); 
-            color: white;
-            transform: translateY(-8px) scale(1.1); 
-            border-color: transparent; 
-            box-shadow: 0 0 60px rgba(250, 204, 21, 0.6); 
-        }
-        .card-centralhub:hover { 
-            box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.3), 0 30px 60px -15px rgba(250, 204, 21, 0.4); 
-            border-color: rgba(250, 204, 21, 0.5); 
-        }
-
-        /* --- TRANSITION OVERLAY (NOVA ANIMAÇÃO) --- */
-        .page-transition-overlay {
+        /* --- WARP CLONE (O Elemento que voa até a tela) --- */
+        .warp-clone {
             position: fixed;
+            z-index: 99999;
             top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: transparent;
-            z-index: 99999; /* Acima de tudo */
             pointer-events: none;
-            transform: translate(-50%, -50%) scale(0);
-            border-radius: 50%;
+            /* Sombras intensas para parecer uma porta */
+            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 24px;
         }
         
-        /* Classe adicionada via JS para iniciar animação */
-        .animating-overlay {
-            transition: transform 0.7s cubic-bezier(0.6, 0, 0.2, 1); /* Curva suave e "rápida" no final */
+        /* Classe para animação do clone */
+        .warp-clone.zooming {
+            transition: all 0.7s cubic-bezier(0.6, -0.28, 0.735, 0.045); /* Efeito 'Bouncy' rápido */
+            border-radius: 0; /* Fica quadrado no final */
+        }
+
+        .warp-clone .warp-icon {
+            font-size: 8rem;
+            transition: transform 0.6s ease-out, opacity 0.6s ease;
+            transform: scale(1);
+            opacity: 1;
+            filter: drop-shadow(0 0 50px rgba(255,255,255,0.5));
+        }
+
+        .warp-clone.zooming .warp-icon {
+            transform: scale(4); /* O ícone vem em sua direção */
+            opacity: 0; /* Some ao entrar na 'câmera' */
         }
 
         /* --- FOOTER --- */
-        footer { 
-            text-align: center; 
-            padding: 3rem 0; 
-            color: var(--text-muted); 
-            border-top: 1px solid var(--glass-border); 
-            margin-top: 5rem; 
-            font-size: 0.8rem; 
-            letter-spacing: 0.5px; 
-            position: relative; 
-            z-index: 2; 
-            background: transparent; 
-            user-select: none;
-        }
+        footer { text-align: center; padding: 3rem 0; color: var(--text-muted); border-top: 1px solid var(--glass-border); margin-top: 5rem; font-size: 0.8rem; position: relative; z-index: 2; user-select: none; }
 
-        /* --- MOBILE LAYOUT --- */
+        /* --- MOBILE --- */
         @media (max-width: 768px) { 
             .hero h1 { font-size: 2.5rem; } 
             .hero p { font-size: 1rem; }
-            
-            .hubs-grid { 
-                grid-template-columns: 1fr !important; 
-                gap: 1rem;
-                padding: 1rem 0;
-            }
-            
-            .hub-card { 
-                flex-direction: row; 
-                justify-content: flex-start; 
-                align-items: center;
-                text-align: left; 
-                padding: 1.25rem 1.5rem;
-                min-height: auto; 
-                height: auto;
-                gap: 1.5rem;
-            }
-
-            .hub-content {
-                flex-direction: row;
-                align-items: center;
-                gap: 1.25rem;
-                width: 100%;
-            }
-
-            .hub-icon { 
-                width: 55px; 
-                height: 55px; 
-                font-size: 1.5rem; 
-                flex-shrink: 0; 
-                margin-bottom: 0;
-            }
-
+            .hubs-grid { grid-template-columns: 1fr !important; gap: 1rem; padding: 1rem 0; }
+            .hub-card { flex-direction: row; justify-content: flex-start; align-items: center; text-align: left; padding: 1.25rem 1.5rem; min-height: auto; height: auto; gap: 1.5rem; }
+            .hub-content { flex-direction: row; align-items: center; gap: 1.25rem; width: 100%; }
+            .hub-icon { width: 55px; height: 55px; font-size: 1.5rem; flex-shrink: 0; margin-bottom: 0; }
             .hub-card h2 { font-size: 1.25rem; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem; margin: 0; }
-
             .hub-bg-icon { display: none; }
         }
     </style>
@@ -409,7 +324,6 @@
 
     <div class="container">
         <header>
-            <!-- ÍCONE ESPECIAL (BÚSSOLA) + Texto LDX -->
             <div class="logo">
                 <i class="fa-solid fa-compass logo-icon-special"></i> LDX
             </div>
@@ -424,7 +338,7 @@
         <div class="hubs-grid" id="bentoGrid">
             
             <!-- CARD: GAMEHUB -->
-            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card card-gamehub" data-color="#06b6d4">
+            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card card-gamehub" data-color="#06b6d4" data-icon="fa-gamepad">
                 <div class="hub-bg-icon"><i class="fa-solid fa-gamepad"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-gamepad"></i></div>
@@ -433,11 +347,10 @@
                         <p>O universo dos jogos ao seu alcance.</p>
                     </div>
                 </div>
-                <span class="ripple"></span>
             </a>
 
             <!-- CARD: NEXUSHUB -->
-            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card card-nexushub" data-color="#ec4899">
+            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card card-nexushub" data-color="#ec4899" data-icon="fa-layer-group">
                 <div class="hub-bg-icon"><i class="fa-solid fa-layer-group"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-layer-group"></i></div>
@@ -446,11 +359,10 @@
                         <p>Tecnologia e entretenimento.</p>
                     </div>
                 </div>
-                <span class="ripple"></span>
             </a>
 
             <!-- CARD: CENTRALHUB -->
-            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub" data-color="#facc15">
+            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub" data-color="#facc15" data-icon="fa-globe">
                 <div class="hub-bg-icon"><i class="fa-solid fa-globe"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-globe"></i></div>
@@ -459,7 +371,6 @@
                         <p>Serviços digitais oficiais e essenciais.</p>
                     </div>
                 </div>
-                <span class="ripple"></span>
             </a>
 
         </div>
@@ -473,7 +384,6 @@
         /* --- LOADER SYSTEM --- */
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
-            // Tempo mínimo de 1.8s para o usuário ver a animação
             setTimeout(() => {
                 document.body.classList.add('loaded');
             }, 1800);
@@ -485,22 +395,15 @@
             const hours = now.getHours();
             const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             
-            // Atualiza Relógio
             document.getElementById('clock').textContent = timeString;
 
-            // Atualiza Saudação
             const greetingEl = document.getElementById('greeting-text');
             let greeting = "Seja bem-vindo.";
             
-            if (hours >= 5 && hours < 12) {
-                greeting = "Bom dia, viajante.";
-            } else if (hours >= 12 && hours < 18) {
-                greeting = "Boa tarde, viajante.";
-            } else if (hours >= 18 && hours < 24) {
-                greeting = "Boa noite, viajante.";
-            } else {
-                greeting = "Boa madrugada, insone.";
-            }
+            if (hours >= 5 && hours < 12) greeting = "Bom dia, viajante.";
+            else if (hours >= 12 && hours < 18) greeting = "Boa tarde, viajante.";
+            else if (hours >= 18 && hours < 24) greeting = "Boa noite, viajante.";
+            else greeting = "Boa madrugada, insone.";
             
             if (greetingEl.textContent !== greeting + " Selecione seu destino e acesse o melhor conteúdo.") {
                 greetingEl.textContent = greeting + " Selecione seu destino e acesse o melhor conteúdo.";
@@ -508,13 +411,13 @@
         }
         
         setInterval(updateTimeAndGreeting, 1000);
-        updateTimeAndGreeting(); // Executa na carga
+        updateTimeAndGreeting();
 
-        /* --- TILT3D, RIPPLE & PAGE TRANSITION --- */
+        /* --- TILT3D & WARP ZOOM EFFECT --- */
         const hubCards = document.querySelectorAll('.hub-card');
         
         hubCards.forEach(card => {
-            // Efeito 3D Tilt (Apenas Desktop)
+            // Efeito 3D Tilt
             card.addEventListener('mousemove', (e) => {
                 if(window.innerWidth > 768) {
                     const rect = card.getBoundingClientRect();
@@ -532,73 +435,63 @@
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
 
-            // --- MELHORIA: ANIMAÇÃO DE NAVEGAÇÃO ---
+            // --- NOVO EFEITO: WARP ZOOM (SITE APROXIMANDO-SE) ---
             card.addEventListener('click', function(e) {
-                // Previne a navegação imediata para podermos animar
-                e.preventDefault();
-                
+                e.preventDefault(); // Para o link imediato
+
                 const targetUrl = this.getAttribute('href');
                 const color = this.getAttribute('data-color');
+                const iconClass = this.getAttribute('data-icon');
+                const rect = this.getBoundingClientRect();
+
+                // 1. Criar o Clone do Portal
+                const warpClone = document.createElement('div');
+                warpClone.classList.add('warp-clone');
                 
-                // 1. Efeito visual de clique imediato (Scale down)
-                this.classList.add('clicked');
-                setTimeout(() => this.classList.remove('clicked'), 200);
-
-                // 2. Efeito Ripple (Ondinha) existente
-                const ripple = this.querySelector('.ripple');
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const size = Math.max(rect.width, rect.height);
+                // Configurar estilo inicial (exatamente onde o card está)
+                warpClone.style.width = `${rect.width}px`;
+                warpClone.style.height = `${rect.height}px`;
+                warpClone.style.top = `${rect.top}px`;
+                warpClone.style.left = `${rect.left}px`;
+                warpClone.style.backgroundColor = color;
                 
-                ripple.style.width = ripple.style.height = `${size}px`;
-                ripple.style.left = `${x - size / 2}px`;
-                ripple.style.top = `${y - size / 2}px`;
-                ripple.style.animation = 'none';
-                void ripple.offsetWidth; // Trigger reflow
-                ripple.style.animation = 'ripple-anim 0.6s ease-out';
+                // Adicionar ícone gigante dentro do clone
+                const warpIcon = document.createElement('i');
+                warpIcon.className = `fa-solid ${iconClass} warp-icon`;
+                warpIcon.style.color = 'white';
+                warpClone.appendChild(warpIcon);
 
-                // 3. Criar Overlay de Transição (O "Curtain" colorido)
-                const overlay = document.createElement('div');
-                overlay.classList.add('page-transition-overlay', 'animating-overlay');
-                overlay.style.backgroundColor = color;
-                
-                // Posiciona o overlay exatamente onde o mouse clicou (em relação ao viewport)
-                overlay.style.left = `${e.clientX}px`;
-                overlay.style.top = `${e.clientY}px`;
-                
-                document.body.appendChild(overlay);
+                document.body.appendChild(warpClone);
 
-                // Força o navegador a processar a posição inicial antes de animar
-                void overlay.offsetWidth;
+                // 2. Iniciar a animação (Frame seguinte para garantir o navegador renderizou a posição inicial)
+                requestAnimationFrame(() => {
+                    // Adiciona classe que ativa a transição
+                    warpClone.classList.add('zooming');
+                    document.body.classList.add('is-navigating');
 
-                // Expande o overlay até cobrir a tela (valor de scale alto garante cobertura)
-                // Usamos um scale grande (ex: 50 ou 100) para cobrir qualquer resolução
-                overlay.style.transform = 'translate(-50%, -50%) scale(60)';
+                    // Define o estado final: Cobrir a tela inteira
+                    warpClone.style.top = '0';
+                    warpClone.style.left = '0';
+                    warpClone.style.width = '100vw';
+                    warpClone.style.height = '100vh';
+                    
+                    // Opcional: Ajustar cor do fundo suavemente
+                    warpClone.style.boxShadow = 'inset 0 0 100px rgba(0,0,0,0.8)';
+                });
 
-                // 4. Navega após a animação (700ms)
+                // 3. Navegar quando a tela estiver coberta (após 650ms)
                 setTimeout(() => {
                     window.location.href = targetUrl;
-                }, 700);
+                }, 650);
             });
         });
 
-        /* --- CONTROLE DE GRID (MOBILE E PC) --- */
+        /* --- GRID CONTROL --- */
         const bentoGrid = document.getElementById('bentoGrid');
-
         function loadSavedGrid() {
             let savedCols;
-            let key;
-            
-            if (window.innerWidth <= 768) {
-                key = 'nexusHub_mobileCols';
-                savedCols = localStorage.getItem(key);
-                if(!savedCols) savedCols = '1'; 
-            } else {
-                key = 'nexusHub_desktopCols';
-                savedCols = localStorage.getItem(key);
-                if(!savedCols) savedCols = '3';
-            }
+            let key = window.innerWidth <= 768 ? 'nexusHub_mobileCols' : 'nexusHub_desktopCols';
+            savedCols = localStorage.getItem(key) || (window.innerWidth <= 768 ? '1' : '3');
             
             if (window.innerWidth > 768) {
                 bentoGrid.style.gridTemplateColumns = savedCols === 'auto' ? '' : `repeat(${savedCols}, 1fr)`;
@@ -606,7 +499,6 @@
                 bentoGrid.style.gridTemplateColumns = '1fr';
             }
         }
-        
         loadSavedGrid();
 
         let lastWidth = window.innerWidth;

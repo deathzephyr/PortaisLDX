@@ -24,7 +24,7 @@
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             
-            /* Cores Vibrantes para as 3 Páginas (Utilizadas no Header e Cards) */
+            /* Cores Vibrantes para as 3 Páginas */
             --color-gamehub: #06b6d4; 
             --color-nexushub: #ec4899; 
             --color-centralhub: #facc15;
@@ -71,7 +71,7 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; }
 
         /* --- HEADER --- */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; height: 60px; /* Altura fixa para evitar corte */ }
         
         .logo { 
             font-size: 1.6rem; 
@@ -80,10 +80,12 @@
             text-shadow: 0 0 20px rgba(255,255,255,0.1);
             display: flex; 
             align-items: center; 
-            gap: 15px; /* Espaçamento generoso para o ícone especial */
+            gap: 15px; 
+            /* Alinhamento perfeito para não cortar o ícone */
+            white-space: nowrap; 
         }
 
-        /* ÍCONE ESPECIAL (Bússola) */
+        /* ÍCONE ESPECIAL */
         .logo-icon-special {
             font-size: 1.4rem;
             /* Gradiente Colorido no Ícone */
@@ -96,11 +98,16 @@
             
             /* Animação Suave de Vida */
             animation: specialPulse 3s infinite ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px; /* Largura fixa para layout */
+            height: 40px;
         }
 
         @keyframes specialPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.15) rotate(10deg); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
         
         .clock { background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; font-size: 0.9rem; color: var(--accent-cyan); backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); font-weight: 600; letter-spacing: 1px; }
@@ -130,6 +137,7 @@
         /* --- HUBS GRID --- */
         .hubs-grid {
             display: grid;
+            /* Força 3 colunas lado a lado */
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             padding: 2rem 0;
@@ -158,6 +166,7 @@
             text-align: center;
         }
 
+        /* Brilho interno */
         .hub-card::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
@@ -266,13 +275,33 @@
             background: transparent; 
         }
 
-        /* --- MOBILE --- */
+        /* --- MOBILE (Ajustes de Layout) --- */
         @media (max-width: 600px) { 
             .hero h1 { font-size: 2.5rem; } 
             .hero p { font-size: 1rem; }
-            .hubs-grid { grid-template-columns: 1fr; padding: 1rem 0; gap: 1.5rem; }
-            .hub-card { min-height: 300px; padding: 2rem 1.5rem; }
-            .hub-icon { width: 70px; height: 70px; font-size: 2rem; }
+            
+            /* ALTERADO: Agora 2 colunas lado a lado no mobile */
+            .hubs-grid { grid-template-columns: repeat(2, 1fr); padding: 1rem 0; gap: 1.5rem; }
+            
+            /* Reduz altura dos cards para caberem na tela verticalmente */
+            .hub-card { min-height: 280px; padding: 2rem 1.5rem; }
+            
+            /* HEADER FIX: Ajuste o Logo para não cortar o ícone e alinhar */
+            .logo { 
+                font-size: 1.4rem; 
+                gap: 10px;
+                height: 50px; /* Altura fixa para alinhar */
+                display: flex;
+                align-items: center;
+                white-space: nowrap;
+            }
+            .logo-icon-special { 
+                font-size: 1.2rem; /* Ícone menor no mobile */
+                width: 30px; height: 30px;
+                display: inline-flex; align-items: center; justify-content: center;
+            }
+            
+            .hub-icon { width: 60px; height: 60px; font-size: 2rem; }
             .hub-card h2 { font-size: 1.5rem; }
         }
     </style>
@@ -287,7 +316,7 @@
 
     <div class="container">
         <header>
-            <!-- ÍCONE ESPECIAL: BÚSSOLA COM EFEITOS DE BRILHO E VIDA -->
+            <!-- ÍCONE ESPECIAL (Bússola) + Texto LDX -->
             <div class="logo">
                 <i class="fa-solid fa-compass logo-icon-special"></i> 
                 LDX

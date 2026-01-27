@@ -18,16 +18,11 @@
             --bg-dark: #050507;
             --glass-bg: rgba(20, 20, 25, 0.6); 
             --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-primary: #8b5cf6; 
-            --accent-secondary: #ec4899; 
-            --accent-cyan: #06b6d4; 
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             
-            /* Cores Vibrantes para os Portais */
-            --color-gamehub: #06b6d4; 
-            --color-nexushub: #ec4899; 
-            --color-centralhub: #facc15;
+            /* Gradiente Arco-íris Animado (Mesmo do título) */
+            --rainbow-gradient: linear-gradient(90deg, #facc15, #8b5cf6, #ec4899, #06b6d4, #22c55e, #ef4444, #f59e0b, #ffffff, #facc15);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -63,7 +58,8 @@
             font-size: 3rem; 
             font-weight: 700; 
             font-family: 'Space Grotesk', sans-serif;
-            background: linear-gradient(90deg, #facc15, #8b5cf6);
+            background: var(--rainbow-gradient);
+            background-size: 300% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
@@ -101,6 +97,7 @@
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
+        @keyframes colorCycle { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         .loaded #loader { opacity: 0; visibility: hidden; }
 
@@ -147,11 +144,13 @@
 
         .logo-icon-special {
             font-size: 1.4rem;
-            background: linear-gradient(135deg, #06b6d4, #ec4899);
+            /* Ícone do logo também com gradiente */
+            background: var(--rainbow-gradient);
+            background-size: 200% auto;
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.6));
-            animation: specialPulse 3s infinite ease-in-out;
+            animation: specialPulse 3s infinite ease-in-out, colorCycle 6s linear infinite;
         }
 
         @keyframes specialPulse {
@@ -164,15 +163,9 @@
         /* --- HERO --- */
         .hero { text-align: center; margin: 4rem 0 4rem; position: relative; }
         
-        @keyframes colorCycle {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         .hero h1 { 
             font-size: 4rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
-            background: linear-gradient(90deg, #facc15, #8b5cf6, #ec4899, #06b6d4, #22c55e, #ef4444, #f59e0b, #ffffff, #facc15);
+            background: var(--rainbow-gradient);
             background-size: 300% auto;
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
@@ -215,7 +208,10 @@
             cursor: pointer;
         }
 
-        .hub-card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255, 255, 0.4); }
+        .hub-card:hover { 
+            background: rgba(30, 30, 35, 0.8); 
+            border-color: rgba(255,255, 255, 0.4);
+        }
         
         /* --- ANIMAÇÃO RIPPLE (DO CÓDIGO FORNECIDO) --- */
         .ripple {
@@ -229,10 +225,7 @@
         }
 
         @keyframes ripple-anim {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
+            to { transform: scale(4); opacity: 0; }
         }
 
         .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
@@ -249,20 +242,43 @@
             border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ícone dentro do container */
+        .hub-icon i {
+            position: relative;
+            z-index: 2;
+            color: rgba(255,255,255,0.8);
+            transition: color 0.3s;
         }
 
         .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
         .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
 
-        /* Específicos das Cores (Hover) */
-        .card-gamehub .hub-icon { color: var(--color-gamehub); border-color: rgba(6, 182, 212, 0.3); text-shadow: 0 0 30px rgba(6, 182, 212, 0.5); }
-        .card-gamehub:hover .hub-icon { background: var(--color-gamehub); color: white; transform: translateY(-8px) scale(1.1) rotate(-5deg); box-shadow: 0 0 60px rgba(6, 182, 212, 0.6); }
+        /* --- EFEITO ARCO-ÍRIS UNIFICADO (MESMO DO TÍTULO) --- */
         
-        .card-nexushub .hub-icon { color: var(--color-nexushub); border-color: rgba(236, 72, 153, 0.3); text-shadow: 0 0 30px rgba(236, 72, 153, 0.5); }
-        .card-nexushub:hover .hub-icon { background: var(--color-nexushub); color: white; transform: translateY(-8px) scale(1.1) rotate(5deg); box-shadow: 0 0 60px rgba(236, 72, 153, 0.6); }
+        .hub-card:hover .hub-icon {
+            background: var(--rainbow-gradient);
+            background-size: 400% auto; /* Tamanho maior para animação suave */
+            background-clip: border-box;
+            border-color: transparent;
+            animation: colorCycle 4s linear infinite; /* Animação das cores */
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.3); /* Brilho branco suave para destacar */
+        }
 
-        .card-centralhub .hub-icon { color: var(--color-centralhub); border-color: rgba(250, 204, 21, 0.3); text-shadow: 0 0 30px rgba(250, 204, 21, 0.5); }
-        .card-centralhub:hover .hub-icon { background: var(--color-centralhub); color: white; transform: translateY(-8px) scale(1.1); box-shadow: 0 0 60px rgba(250, 204, 21, 0.6); }
+        .hub-card:hover .hub-icon i {
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        /* Opcional: Texto H2 também brilhando levemente */
+        .hub-card:hover h2 {
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
 
         /* --- FOOTER --- */
         footer { text-align: center; padding: 3rem 0; color: var(--text-muted); border-top: 1px solid var(--glass-border); margin-top: 5rem; font-size: 0.8rem; position: relative; z-index: 2; user-select: none; }
@@ -278,6 +294,11 @@
             .hub-card h2 { font-size: 1.25rem; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem; margin: 0; }
             .hub-bg-icon { display: none; }
+            
+            /* No mobile, ajusta a escala do hover */
+            .hub-card:hover .hub-icon {
+                transform: scale(1.1) translateY(-2px);
+            }
         }
     </style>
 </head>
@@ -316,7 +337,7 @@
         <div class="hubs-grid" id="bentoGrid">
             
             <!-- CARD: GAMEHUB -->
-            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card card-gamehub">
+            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card">
                 <div class="hub-bg-icon"><i class="fa-solid fa-gamepad"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-gamepad"></i></div>
@@ -328,7 +349,7 @@
             </a>
 
             <!-- CARD: NEXUSHUB -->
-            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card card-nexushub">
+            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card">
                 <div class="hub-bg-icon"><i class="fa-solid fa-layer-group"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-layer-group"></i></div>
@@ -340,7 +361,7 @@
             </a>
 
             <!-- CARD: CENTRALHUB -->
-            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub">
+            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card">
                 <div class="hub-bg-icon"><i class="fa-solid fa-globe"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-globe"></i></div>
@@ -391,7 +412,7 @@
         setInterval(updateTimeAndGreeting, 1000);
         updateTimeAndGreeting();
 
-        /* --- TILT3D & RIPPLE CLICK (CÓDIGO DO NEXUSHUB) --- */
+        /* --- TILT3D & RIPPLE CLICK --- */
         const hubCards = document.querySelectorAll('.hub-card');
         
         hubCards.forEach(card => {
@@ -413,36 +434,29 @@
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
 
-            // --- EFEITO RIPPLE DE CLIQUE (IGUAL AO NEXUSHUB) ---
+            // --- EFEITO RIPPLE DE CLIQUE ---
             card.addEventListener('click', function(e) {
-                // Se for clique com o botão esquerdo (0)
                 if(e.button === 0) {
-                    e.preventDefault(); // Impede a abertura imediata para ver a animação
+                    e.preventDefault(); 
 
-                    // Cria o elemento do ripple
                     const ripple = document.createElement('span');
                     ripple.classList.add('ripple');
                     
-                    // Posiciona o ripple onde o mouse clicou, relativo ao card
                     const rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
                     
-                    // Define tamanho e posição
                     const size = Math.max(rect.width, rect.height);
                     ripple.style.width = ripple.style.height = `${size}px`;
                     ripple.style.left = `${x - size / 2}px`;
                     ripple.style.top = `${y - size / 2}px`;
                     
-                    // Adiciona ao card
                     card.appendChild(ripple);
                     
-                    // Remove após a animação
                     setTimeout(() => {
                         ripple.remove();
                     }, 600);
 
-                    // Abre o link após um pequeno delay (300ms)
                     const href = this.getAttribute('href');
                     const target = this.getAttribute('target');
                     setTimeout(() => {

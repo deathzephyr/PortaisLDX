@@ -214,6 +214,7 @@
             will-change: transform;
             user-select: none;
             text-align: center;
+            cursor: pointer;
         }
 
         .hub-card::after {
@@ -308,6 +309,24 @@
         .card-centralhub:hover { 
             box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.3), 0 30px 60px -15px rgba(250, 204, 21, 0.4); 
             border-color: rgba(250, 204, 21, 0.5); 
+        }
+
+        /* --- TRANSITION OVERLAY (NOVA ANIMAÇÃO) --- */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            z-index: 99999; /* Acima de tudo */
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+        }
+        
+        /* Classe adicionada via JS para iniciar animação */
+        .animating-overlay {
+            transition: transform 0.7s cubic-bezier(0.6, 0, 0.2, 1); /* Curva suave e "rápida" no final */
         }
 
         /* --- FOOTER --- */
@@ -405,7 +424,7 @@
         <div class="hubs-grid" id="bentoGrid">
             
             <!-- CARD: GAMEHUB -->
-            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card card-gamehub">
+            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card card-gamehub" data-color="#06b6d4">
                 <div class="hub-bg-icon"><i class="fa-solid fa-gamepad"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-gamepad"></i></div>
@@ -418,7 +437,7 @@
             </a>
 
             <!-- CARD: NEXUSHUB -->
-            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card card-nexushub">
+            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card card-nexushub" data-color="#ec4899">
                 <div class="hub-bg-icon"><i class="fa-solid fa-layer-group"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-layer-group"></i></div>
@@ -431,7 +450,7 @@
             </a>
 
             <!-- CARD: CENTRALHUB -->
-            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub">
+            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card card-centralhub" data-color="#facc15">
                 <div class="hub-bg-icon"><i class="fa-solid fa-globe"></i></div>
                 <div class="hub-content">
                     <div class="hub-icon"><i class="fa-solid fa-globe"></i></div>
@@ -491,7 +510,7 @@
         setInterval(updateTimeAndGreeting, 1000);
         updateTimeAndGreeting(); // Executa na carga
 
-        /* --- TILT3D & RIPPLE EFFECT --- */
+        /* --- TILT3D, RIPPLE & PAGE TRANSITION --- */
         const hubCards = document.querySelectorAll('.hub-card');
         
         hubCards.forEach(card => {
@@ -513,27 +532,54 @@
                 card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
 
-            // Efeito Ripple
+            // --- MELHORIA: ANIMAÇÃO DE NAVEGAÇÃO ---
             card.addEventListener('click', function(e) {
-                if (e.button === 0) {
-                    const ripple = card.querySelector('.ripple');
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const size = Math.max(rect.width, rect.height);
-                    
-                    ripple.style.width = ripple.style.height = `${size}px`;
-                    ripple.style.left = `${x - size / 2}px`;
-                    ripple.style.top = `${y - size / 2}px`;
-                    ripple.style.animation = 'none';
-                    void ripple.offsetWidth;
-                    ripple.style.animation = 'ripple-anim 0.6s ease-out';
+                // Previne a navegação imediata para podermos animar
+                e.preventDefault();
+                
+                const targetUrl = this.getAttribute('href');
+                const color = this.getAttribute('data-color');
+                
+                // 1. Efeito visual de clique imediato (Scale down)
+                this.classList.add('clicked');
+                setTimeout(() => this.classList.remove('clicked'), 200);
 
-                    this.classList.add('clicked');
-                    setTimeout(() => {
-                        this.classList.remove('clicked');
-                    }, 150);
-                }
+                // 2. Efeito Ripple (Ondinha) existente
+                const ripple = this.querySelector('.ripple');
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const size = Math.max(rect.width, rect.height);
+                
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${x - size / 2}px`;
+                ripple.style.top = `${y - size / 2}px`;
+                ripple.style.animation = 'none';
+                void ripple.offsetWidth; // Trigger reflow
+                ripple.style.animation = 'ripple-anim 0.6s ease-out';
+
+                // 3. Criar Overlay de Transição (O "Curtain" colorido)
+                const overlay = document.createElement('div');
+                overlay.classList.add('page-transition-overlay', 'animating-overlay');
+                overlay.style.backgroundColor = color;
+                
+                // Posiciona o overlay exatamente onde o mouse clicou (em relação ao viewport)
+                overlay.style.left = `${e.clientX}px`;
+                overlay.style.top = `${e.clientY}px`;
+                
+                document.body.appendChild(overlay);
+
+                // Força o navegador a processar a posição inicial antes de animar
+                void overlay.offsetWidth;
+
+                // Expande o overlay até cobrir a tela (valor de scale alto garante cobertura)
+                // Usamos um scale grande (ex: 50 ou 100) para cobrir qualquer resolução
+                overlay.style.transform = 'translate(-50%, -50%) scale(60)';
+
+                // 4. Navega após a animação (700ms)
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 700);
             });
         });
 

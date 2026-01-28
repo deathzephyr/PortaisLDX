@@ -211,9 +211,24 @@
         }
 
         .dropdown-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-        .dropdown-item i { width: 20px; text-align: center; }
+        
+        /* AJUSTE DE TAMANHO E COR DOS ÍCONES */
+        .dropdown-item i { 
+            width: 24px; /* Largura aumentada para acomodar o ícone maior */
+            text-align: center; 
+            font-size: 1.1rem; /* Tamanho do ícone aumentado */
+        }
 
-        .music-indicator.playing i { color: var(--accent-cyan); animation: bounceIcon 1s infinite ease-in-out; }
+        /* O ícone tocando agora segue a cor padrão (cinza -> branco no hover) */
+        .music-indicator.playing i { 
+            animation: bounceIcon 1s infinite ease-in-out; 
+        }
+
+        /* Desabilitar animação para o ícone X, pois ele representa parada */
+        .music-indicator.playing i.fa-xmark {
+            animation: none;
+        }
+
         @keyframes bounceIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
         /* --- HERO --- */
@@ -431,10 +446,10 @@
                         <!-- OPÇÃO MÚSICA -->
                         <button class="dropdown-item" id="musicToggleBtn">
                             <span class="music-indicator" id="musicIconContainer">
-                                <!-- O ícone será definido pelo JS, inicia como 'fa-music-slash' (tocando) -->
-                                <i class="fa-solid fa-music-slash" id="musicStateIcon"></i>
+                                <!-- O ícone inicial será definido pelo JS -->
+                                <i class="fa-solid fa-music" id="musicStateIcon"></i>
                             </span>
-                            <span id="musicLabel">Desligar</span>
+                            <span id="musicLabel">Parar Música</span>
                         </button>
 
                         <!-- OPÇÃO TEMA DE FUNDO -->
@@ -548,17 +563,15 @@
         // Função para atualizar a UI baseada no estado real de reprodução
         function updateMusicUI() {
             if (!audio.paused) {
-                // Tocando -> Mostrar Ícone "Com Traço" e Texto "Desligar"
-                musicStateIcon.classList.remove('fa-music');
-                musicStateIcon.classList.add('fa-music-slash');
+                // Tocando -> Mostrar Ícone "X" e Texto "Parar Música"
+                musicStateIcon.className = "fa-solid fa-xmark";
                 musicIconContainer.classList.add('playing');
-                musicLabel.textContent = "Desligar";
+                musicLabel.textContent = "Parar Música";
             } else {
-                // Pausado -> Mostrar Ícone "Somente Colcheia" e Texto "Ligar"
-                musicStateIcon.classList.remove('fa-music-slash');
-                musicStateIcon.classList.add('fa-music');
+                // Pausado -> Mostrar Ícone "Colcheia" e Texto "Ligar Música"
+                musicStateIcon.className = "fa-solid fa-music";
                 musicIconContainer.classList.remove('playing');
-                musicLabel.textContent = "Ligar";
+                musicLabel.textContent = "Ligar Música";
             }
         }
 
@@ -641,7 +654,7 @@
             const loader = document.getElementById('loader');
             setTimeout(() => {
                 document.body.classList.add('loaded');
-                // Tentar iniciar a música APÓS o loader sair, pois alguns navegadores exigem interação após o load completo
+                // Tentar iniciar a música APÓS o loader sair
                 attemptAutoplay();
             }, 1800);
         });

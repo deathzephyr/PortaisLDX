@@ -40,13 +40,10 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND LAYER SYSTEM (FIXO PARA MOBILE) --- */
+        /* --- BACKGROUND LAYER SYSTEM --- */
         #custom-bg-layer {
             position: fixed;
-            top: 0; 
-            left: 0; 
-            width: 100vw; 
-            height: 100vh; 
+            top: 0; left: 0; width: 100vw; height: 100vh; 
             z-index: -2;
             background-size: cover;
             background-position: center;
@@ -57,14 +54,8 @@
             -webkit-transform: translate3d(0,0,0);
         }
 
-        body.has-custom-bg .ambient-light {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        body.has-custom-bg #custom-bg-layer {
-            opacity: 1;
-        }
+        body.has-custom-bg .ambient-light { opacity: 0; transition: opacity 0.5s ease; }
+        body.has-custom-bg #custom-bg-layer { opacity: 1; }
 
         /* --- LOADING SCREEN --- */
         #loader {
@@ -82,9 +73,7 @@
         .loader-content { text-align: center; position: relative; }
         
         .loader-logo { 
-            font-size: 3rem; 
-            font-weight: 700; 
-            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif;
             background: var(--rainbow-gradient);
             background-size: 300% auto;
             -webkit-background-clip: text;
@@ -105,20 +94,16 @@
         }
 
         .loader-bar {
-            width: 0%;
-            height: 100%;
+            width: 0%; height: 100%;
             background: var(--accent-cyan);
             box-shadow: 0 0 15px var(--accent-cyan);
             animation: loadProgress 1.5s ease-in-out forwards 0.6s;
         }
 
         .loader-text {
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            opacity: 0;
+            margin-top: 10px; font-size: 0.8rem;
+            color: var(--text-muted); letter-spacing: 2px;
+            text-transform: uppercase; opacity: 0;
             animation: fadeUp 0.8s forwards 0.5s;
         }
 
@@ -130,19 +115,13 @@
 
         /* --- BACKGROUND --- */
         .ambient-light {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none; transition: opacity 0.5s ease;
         }
 
         .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.4;
+            position: absolute; border-radius: 50%;
+            filter: blur(90px); opacity: 0.4;
             animation: floatOrb 25s infinite alternate ease-in-out;
         }
 
@@ -156,72 +135,47 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; opacity: 0; transition: opacity 1s ease 1s; }
         .loaded .container { opacity: 1; }
 
-        /* --- HEADER & SETTINGS DROPDOWN --- */
+        /* --- HEADER --- */
         header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; gap: 15px; flex-wrap: wrap; }
         
         .header-right { display: flex; align-items: center; gap: 12px; }
 
         .logo { 
-            font-size: 1.6rem; 
-            font-weight: 700; 
-            color: #ffffff; 
+            font-size: 1.6rem; font-weight: 700; color: #ffffff; 
             text-shadow: 0 0 20px rgba(255,255,255,0.1);
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            user-select: none;
+            display: flex; align-items: center; gap: 15px; user-select: none;
         }
 
         .logo-icon-special {
             font-size: 1.4rem;
             background: var(--rainbow-gradient);
             background-size: 200% auto;
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.6));
             animation: specialPulse 3s infinite ease-in-out, colorCycle 6s linear infinite;
         }
 
-        @keyframes specialPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(15deg); }
-        }
+        @keyframes specialPulse { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(15deg); } }
 
         .clock {
-            background: rgba(20, 20, 25, 0.8); 
-            border: 1px solid rgba(255,255,255,0.15); 
-            padding: 8px 18px; 
-            border-radius: 100px; 
-            font-family: 'Space Grotesk', monospace; 
-            font-size: 0.9rem; 
-            color: #fff;
-            backdrop-filter: blur(20px); 
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); 
-            font-weight: 600; 
-            letter-spacing: 1px; 
-            user-select: none;
-            cursor: default;
+            background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
+            padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; 
+            font-size: 0.9rem; color: #fff;
+            backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); 
+            font-weight: 600; letter-spacing: 1px; user-select: none; cursor: default;
         }
 
-        /* --- SETTINGS CONTAINER & DROPDOWN --- */
-        .settings-container {
-            position: relative;
-        }
+        /* --- SETTINGS CONTAINER --- */
+        .settings-container { position: relative; }
 
         .settings-trigger-btn {
-            background: rgba(20, 20, 25, 0.8); 
-            border: 1px solid rgba(255,255,255,0.15); 
-            padding: 10px 14px; 
-            border-radius: 100px; 
-            font-size: 1.1rem;
-            color: #ffffff;
-            backdrop-filter: blur(20px); 
+            background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
+            padding: 10px 14px; border-radius: 100px; font-size: 1.1rem;
+            color: #ffffff; backdrop-filter: blur(20px); 
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
-            cursor: pointer;
-            transition: all 0.3s ease;
+            cursor: pointer; transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center;
-            width: 42px;
-            height: 42px;
+            width: 42px; height: 42px;
         }
 
         .settings-trigger-btn:hover, .settings-trigger-btn.active {
@@ -233,129 +187,64 @@
         }
 
         .settings-dropdown {
-            position: absolute;
-            top: calc(100% + 15px);
-            right: 0;
+            position: absolute; top: calc(100% + 15px); right: 0;
             width: 240px;
             background: rgba(15, 15, 20, 0.95);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 8px;
+            border-radius: 16px; padding: 8px;
             backdrop-filter: blur(20px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            opacity: 0;
-            visibility: hidden;
+            opacity: 0; visibility: hidden;
             transform: translateY(-10px) scale(0.95);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+            z-index: 100; display: flex; flex-direction: column; gap: 5px;
         }
 
-        .settings-dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
+        .settings-dropdown.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
         .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+            border-radius: 12px; background: transparent; border: none;
+            color: var(--text-muted); font-family: 'Inter', sans-serif;
+            font-size: 0.95rem; font-weight: 500; text-align: left; cursor: pointer;
+            transition: all 0.2s ease; width: 100%;
         }
 
-        .dropdown-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-
+        .dropdown-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
         .dropdown-item i { width: 20px; text-align: center; }
 
-        /* Music Playing Animation */
-        .music-indicator {
-            position: relative;
-        }
-        .music-indicator.playing i {
-            color: var(--accent-cyan);
-            animation: bounceIcon 1s infinite ease-in-out;
-        }
-
-        @keyframes bounceIcon {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
+        .music-indicator.playing i { color: var(--accent-cyan); animation: bounceIcon 1s infinite ease-in-out; }
+        @keyframes bounceIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
         /* --- HERO --- */
         .hero { text-align: center; margin: 4rem 0 4rem; position: relative; }
-        
         .hero h1 { 
             font-size: 4rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
-            background: var(--rainbow-gradient);
-            background-size: 300% auto;
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
+            background: var(--rainbow-gradient); background-size: 300% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: colorCycle 6s linear infinite;
-            letter-spacing: -2px; 
-            filter: drop-shadow(0 0 30px rgba(0,0,0,0.5)); 
-            user-select: none;
+            letter-spacing: -2px; filter: drop-shadow(0 0 30px rgba(0,0,0,0.5)); user-select: none;
         }
-        
         .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
 
         /* --- HUBS GRID --- */
-        .hubs-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            padding: 2rem 0;
-        }
+        .hubs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 2rem 0; }
 
         /* --- HUB CARD STYLE --- */
         .hub-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem 2rem;
-            text-decoration: none;
-            color: white;
-            position: relative;
-            overflow: hidden; 
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 24px; padding: 3rem 2rem; text-decoration: none; color: white;
+            position: relative; overflow: hidden; 
             transition: transform 0.1s linear, box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
-            backdrop-filter: blur(25px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transform-style: preserve-3d;
-            will-change: transform;
-            user-select: none;
-            text-align: center;
-            cursor: pointer;
+            backdrop-filter: blur(25px); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; transform-style: preserve-3d;
+            will-change: transform; user-select: none; text-align: center; cursor: pointer;
         }
 
         .hub-card::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
+            content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            transition: 0.6s;
-            pointer-events: none;
-            z-index: 2; 
+            transform: skewX(-25deg); transition: 0.6s; pointer-events: none; z-index: 2; 
         }
         .hub-card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
 
@@ -366,15 +255,9 @@
         }
         
         .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: ripple-anim 0.6s ease-out;
-            pointer-events: none;
-            z-index: 1;
+            position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3);
+            transform: scale(0); animation: ripple-anim 0.6s ease-out; pointer-events: none; z-index: 1;
         }
-
         @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
 
         .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
@@ -383,16 +266,11 @@
         .hub-content { position: relative; z-index: 10 !important; transform: translateZ(30px); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; pointer-events: none; }
 
         .hub-icon {
-            width: 90px; height: 90px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.05);
-            display: flex; justify-content: center; align-items: center;
-            font-size: 2.5rem;
-            border: 1px solid rgba(255,255,255,0.1);
+            width: 90px; height: 90px; border-radius: 20px;
+            background: rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center;
+            font-size: 2.5rem; border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); position: relative; overflow: hidden;
         }
 
         .hub-icon i { position: relative; z-index: 2; color: rgba(255,255,255,0.8); transition: color 0.3s; }
@@ -401,15 +279,10 @@
         .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
 
         .hub-card:hover .hub-icon {
-            background: var(--rainbow-gradient);
-            background-size: 400% auto;
-            background-clip: border-box;
-            border-color: transparent;
-            animation: colorCycle 4s linear infinite;
-            transform: translateY(-8px) scale(1.1);
-            box-shadow: 0 0 60px rgba(255, 255, 255, 0.3);
+            background: var(--rainbow-gradient); background-size: 400% auto; background-clip: border-box;
+            border-color: transparent; animation: colorCycle 4s linear infinite;
+            transform: translateY(-8px) scale(1.1); box-shadow: 0 0 60px rgba(255, 255, 255, 0.3);
         }
-
         .hub-card:hover .hub-icon i { color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .hub-card:hover h2 { color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
@@ -418,66 +291,34 @@
 
         /* --- BG SETTINGS MODAL --- */
         #bgModal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            padding: 20px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease; padding: 20px;
         }
 
         #bgModal.active { opacity: 1; visibility: visible; }
 
-        .modal-backdrop {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            z-index: -1;
-        }
+        .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: -1; }
 
         .modal-content {
-            background: rgba(15, 15, 20, 0.98);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 480px;
-            max-height: 85vh;
-            padding: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transform: scale(0.95);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow-y: auto;
+            background: rgba(15, 15, 20, 0.98); border: 1px solid var(--glass-border);
+            border-radius: 24px; width: 100%; max-width: 480px; max-height: 85vh;
+            padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative; overflow-y: auto;
         }
-        
         .modal-content::-webkit-scrollbar { width: 6px; }
         .modal-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-
         #bgModal.active .modal-content { transform: scale(1); }
 
         .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky;
-            top: 0;
-            background: rgba(15, 15, 20, 0.98);
-            z-index: 10;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky; top: 0; background: rgba(15, 15, 20, 0.98); z-index: 10;
         }
 
         .modal-header h3 { font-size: 1.2rem; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .close-modal {
-            background: none; border: none; color: var(--text-muted);
-            font-size: 1.2rem; cursor: pointer; transition: color 0.2s;
-        }
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
 
         .section-title {
@@ -486,101 +327,50 @@
         }
 
         /* PRESETS */
-        .preset-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px;
-        }
-
+        .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
         .preset-item {
-            aspect-ratio: 16/9;
-            border-radius: 8px;
-            background-size: cover;
-            background-position: center;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.2s;
+            aspect-ratio: 16/9; border-radius: 8px; background-size: cover; background-position: center;
+            border: 2px solid transparent; cursor: pointer; transition: all 0.2s;
         }
-
         .preset-item:hover { transform: scale(1.05); }
         .preset-item.active { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
 
-        /* BOTÃO DE UPLOAD */
+        /* UPLOAD */
         .upload-container { margin-bottom: 20px; }
-
         .upload-btn {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #ffffff;
-            padding: 14px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
+            width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff; padding: 14px; border-radius: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease;
         }
-
         .upload-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.6);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
         }
-        
         .upload-btn i { font-size: 1.1rem; color: #ffffff; }
-
         input[type="file"] { display: none; }
 
         .reset-btn {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-muted);
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            margin-top: 10px;
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted); padding: 10px; border-radius: 8px; cursor: pointer;
+            font-size: 0.9rem; font-weight: 500; transition: all 0.2s; margin-top: 10px;
         }
         .reset-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
-        /* --- TOAST NOTIFICATION --- */
+        /* --- TOAST --- */
         #toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(50px);
-            background: rgba(34, 197, 94, 0.9);
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            z-index: 10001;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(50px);
+            background: rgba(34, 197, 94, 0.9); color: #fff; padding: 12px 24px;
+            border-radius: 50px; font-size: 0.9rem; font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); opacity: 0; visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 10001;
+            display: flex; align-items: center; gap: 10px;
         }
-
-        #toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-            visibility: visible;
-        }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
 
         /* --- MOBILE --- */
         @media (max-width: 768px) { 
-            .hero h1 { font-size: 2.5rem; } 
-            .hero p { font-size: 1rem; }
+            .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1rem; }
             .hubs-grid { grid-template-columns: 1fr !important; gap: 1rem; padding: 1rem 0; }
             .hub-card { flex-direction: row; justify-content: flex-start; align-items: center; text-align: left; padding: 1.25rem 1.5rem; min-height: auto; height: auto; gap: 1.5rem; }
             .hub-content { flex-direction: row; align-items: center; gap: 1.25rem; width: 100%; }
@@ -595,14 +385,13 @@
 </head>
 <body>
 
-    <!-- AUDIO PLAYER (HIDDEN) -->
-    <!-- O arquivo song.mpeg deve estar na mesma pasta que este HTML -->
-    <audio id="bgMusic" loop>
+    <!-- AUDIO PLAYER (AUTOPLAY ATIVADO) -->
+    <audio id="bgMusic" autoplay loop>
         <source src="song.mpeg" type="audio/mpeg">
         Seu navegador não suporta o elemento de áudio.
     </audio>
 
-    <!-- CAMADA DE FUNDO PERSONALIZADO (FIXO) -->
+    <!-- CAMADA DE FUNDO PERSONALIZADO -->
     <div id="custom-bg-layer"></div>
 
     <!-- LOADING SCREEN -->
@@ -631,7 +420,7 @@
             <div class="header-right">
                 <div class="clock" id="clock">00:00</div>
                 
-                <!-- BOTÃO DE CONFIGURAÇÕES (NOVO) -->
+                <!-- BOTÃO DE CONFIGURAÇÕES -->
                 <div class="settings-container">
                     <button class="settings-trigger-btn" id="settingsTrigger" title="Configurações">
                         <i class="fa-solid fa-gear"></i>
@@ -642,9 +431,10 @@
                         <!-- OPÇÃO MÚSICA -->
                         <button class="dropdown-item" id="musicToggleBtn">
                             <span class="music-indicator" id="musicIconContainer">
-                                <i class="fa-solid fa-play" id="musicStateIcon"></i>
+                                <!-- O ícone será definido pelo JS, inicia como 'fa-music-slash' (tocando) -->
+                                <i class="fa-solid fa-music-slash" id="musicStateIcon"></i>
                             </span>
-                            <span id="musicLabel">Tocar Música</span>
+                            <span id="musicLabel">Desligar</span>
                         </button>
 
                         <!-- OPÇÃO TEMA DE FUNDO -->
@@ -719,7 +509,6 @@
                 <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- SEÇÃO IMAGENS -->
             <span class="section-title">Imagens Preset</span>
             <div class="preset-grid">
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=1920&auto=format&fit=crop"></div>
@@ -730,7 +519,6 @@
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1920&auto=format&fit=crop"></div>
             </div>
 
-            <!-- SEÇÃO UPLOAD -->
             <span class="section-title">Arquivo do Dispositivo</span>
             <div class="upload-container">
                 <input type="file" id="bgFileInput" accept="image/*">
@@ -754,61 +542,64 @@
         const musicIconContainer = document.getElementById('musicIconContainer');
         const musicLabel = document.getElementById('musicLabel');
         
-        let isPlaying = false;
+        // Definir volume padrão
+        audio.volume = 0.5;
 
-        // Carregar estado salvo
-        const savedMusicState = localStorage.getItem('ldx_music_playing');
-        if (savedMusicState === 'true') {
-            // Tenta tocar automaticamente se o usuário já havia ativado antes
-            // (Notas: navegadores modernos podem bloquear isso sem interação prévia)
-            isPlaying = true;
-            updateMusicUI(true);
-            audio.volume = 0.5;
-            // Promessa silenciosa para tentar dar play
+        // Função para atualizar a UI baseada no estado real de reprodução
+        function updateMusicUI() {
+            if (!audio.paused) {
+                // Tocando -> Mostrar Ícone "Com Traço" e Texto "Desligar"
+                musicStateIcon.classList.remove('fa-music');
+                musicStateIcon.classList.add('fa-music-slash');
+                musicIconContainer.classList.add('playing');
+                musicLabel.textContent = "Desligar";
+            } else {
+                // Pausado -> Mostrar Ícone "Somente Colcheia" e Texto "Ligar"
+                musicStateIcon.classList.remove('fa-music-slash');
+                musicStateIcon.classList.add('fa-music');
+                musicIconContainer.classList.remove('playing');
+                musicLabel.textContent = "Ligar";
+            }
+        }
+
+        // Tentar iniciar automaticamente
+        function attemptAutoplay() {
             const playPromise = audio.play();
+            
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
-                    // Playback iniciado
+                    // Reprodução automática iniciada com sucesso
+                    updateMusicUI();
+                    localStorage.setItem('ldx_music_playing', 'true');
                 })
                 .catch(error => {
-                    // Auto-play foi impedido. Reseta UI para paused.
-                    isPlaying = false;
-                    updateMusicUI(false);
+                    // Autoplay foi bloqueado pelo navegador (comum em Chrome/Safari)
+                    console.log("Autoplay bloqueado pelo navegador. A música começará após a interação do usuário.");
+                    // Força o estado para pausado visualmente
+                    updateMusicUI();
+                    localStorage.setItem('ldx_music_playing', 'false');
                 });
+            } else {
+                updateMusicUI();
             }
-        } else {
-            updateMusicUI(false);
         }
 
+        // Botão de Toggle
         function toggleMusic() {
-            if (isPlaying) {
-                audio.pause();
-                isPlaying = false;
-            } else {
-                audio.volume = 0.5;
+            if (audio.paused) {
+                // Se estiver pausado, liga (Tocar)
                 audio.play().then(() => {
-                    isPlaying = true;
+                    localStorage.setItem('ldx_music_playing', 'true');
                 }).catch(e => {
-                    console.error("Erro ao reproduzir áudio:", e);
-                    alert("Não foi possível reproduzir a música. Verifique se o arquivo 'song.mpeg' existe.");
+                    alert("Não foi possível reproduzir. Verifique se o arquivo 'song.mpeg' existe.");
                 });
-            }
-            localStorage.setItem('ldx_music_playing', isPlaying);
-            updateMusicUI(isPlaying);
-        }
-
-        function updateMusicUI(playing) {
-            if (playing) {
-                musicStateIcon.classList.remove('fa-play');
-                musicStateIcon.classList.add('fa-pause');
-                musicIconContainer.classList.add('playing');
-                musicLabel.textContent = "Pausar Música";
             } else {
-                musicStateIcon.classList.remove('fa-pause');
-                musicStateIcon.classList.add('fa-play');
-                musicIconContainer.classList.remove('playing');
-                musicLabel.textContent = "Tocar Música";
+                // Se estiver tocando, desliga (Pausar)
+                audio.pause();
+                localStorage.setItem('ldx_music_playing', 'false');
             }
+            // Pequeno delay para garantir que o estado do áudio atualizou antes de atualizar a UI
+            setTimeout(updateMusicUI, 50);
         }
 
         musicToggleBtn.addEventListener('click', toggleMusic);
@@ -819,14 +610,12 @@
         const bgTriggerBtn = document.getElementById('bgTriggerBtn');
         const bgModal = document.getElementById('bgModal');
 
-        // Abrir/Fechar Dropdown
         settingsTrigger.addEventListener('click', (e) => {
             e.stopPropagation();
             settingsDropdown.classList.toggle('active');
             settingsTrigger.classList.toggle('active');
         });
 
-        // Fechar dropdown ao clicar fora
         document.addEventListener('click', (e) => {
             if (!settingsDropdown.contains(e.target) && !settingsTrigger.contains(e.target)) {
                 settingsDropdown.classList.remove('active');
@@ -834,14 +623,13 @@
             }
         });
 
-        // Abrir Modal de Fundo através do Dropdown
         bgTriggerBtn.addEventListener('click', () => {
             settingsDropdown.classList.remove('active');
             settingsTrigger.classList.remove('active');
             bgModal.classList.add('active');
         });
 
-        /* --- LÓGICA DE FUNDO PADRÃO (img2.jpg) --- */
+        /* --- LÓGICA DE FUNDO PADRÃO --- */
         const defaultBackground = 'img2.jpg';
         if (!localStorage.getItem('ldx_custom_bg')) {
             localStorage.setItem('ldx_custom_bg', defaultBackground);
@@ -853,6 +641,8 @@
             const loader = document.getElementById('loader');
             setTimeout(() => {
                 document.body.classList.add('loaded');
+                // Tentar iniciar a música APÓS o loader sair, pois alguns navegadores exigem interação após o load completo
+                attemptAutoplay();
             }, 1800);
         });
 
@@ -861,7 +651,6 @@
             const now = new Date();
             const hours = now.getHours();
             const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            
             document.getElementById('clock').textContent = timeString;
 
             const greetingEl = document.getElementById('greeting-text');
@@ -876,7 +665,6 @@
                 greetingEl.textContent = greeting + " Selecione seu destino e acesse o melhor conteúdo.";
             }
         }
-        
         setInterval(updateTimeAndGreeting, 1000);
         updateTimeAndGreeting();
 
@@ -961,42 +749,29 @@
         const presetItems = document.querySelectorAll('.preset-item');
         const toast = document.getElementById('toast');
 
-        // Toast Function
         function showToast(message) {
             toast.querySelector('span').textContent = message;
             toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        // Fechar Modal (Função reutilizada)
-        function closeModal() {
-            bgModal.classList.remove('active');
-        }
+        function closeModal() { bgModal.classList.remove('active'); }
         closeModalBtn.addEventListener('click', closeModal);
         modalBackdrop.addEventListener('click', closeModal);
 
-        // Trigger Upload via Button
-        uploadTriggerBtn.addEventListener('click', () => {
-            bgFileInput.click();
-        });
+        uploadTriggerBtn.addEventListener('click', () => { bgFileInput.click(); });
 
-        // Função principal de aplicar fundo
         function setBackground(value, type) {
             document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
-
             if (type === 'image') {
                 customBgLayer.style.backgroundImage = `url('${value}')`;
                 document.body.style.backgroundImage = 'none';
                 document.body.classList.add('has-custom-bg');
                 localStorage.setItem('ldx_custom_bg', value);
                 localStorage.setItem('ldx_bg_type', 'image');
-                
                 presetItems.forEach(item => {
                     if(item.getAttribute('data-url') === value) item.classList.add('active');
                 });
-
             } else if (type === 'color') {
                 customBgLayer.style.backgroundImage = 'none';
                 document.body.style.backgroundImage = value;
@@ -1007,7 +782,6 @@
             closeModal();
         }
 
-        // Carregar fundo salvo
         const savedBg = localStorage.getItem('ldx_custom_bg');
         const savedType = localStorage.getItem('ldx_bg_type');
 
@@ -1020,7 +794,6 @@
             document.body.classList.add('has-custom-bg');
         }
 
-        // Presets
         presetItems.forEach(item => {
             item.addEventListener('click', () => {
                 const url = item.getAttribute('data-url');
@@ -1028,7 +801,6 @@
             });
         });
 
-        // Lidar com Upload de Arquivo
         bgFileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -1046,7 +818,6 @@
             }
         });
 
-        // Resetar
         resetBgBtn.addEventListener('click', () => {
             localStorage.removeItem('ldx_custom_bg');
             localStorage.removeItem('ldx_bg_type');

@@ -420,7 +420,7 @@
 <body>
 
     <!-- AUDIO PLAYER (AUTOPLAY ATIVADO) -->
-    <audio id="bgMusic" autoplay loop>
+    <audio id="bgMusic" loop>
         <source src="song.mpeg" type="audio/mpeg">
         Seu navegador não suporta o elemento de áudio.
     </audio>
@@ -545,7 +545,7 @@
 
             <span class="section-title">Imagens Preset</span>
             <div class="preset-grid">
-                <!-- IMAGENS LOCAIS ATUALIZADAS CONFORME SOLICITAÇÃO -->
+                <!-- Imagens Preset -->
                 <div class="preset-item" style="background-image: url('img3.jpg');" data-type="image" data-url="img3.jpg"></div>
                 <div class="preset-item" style="background-image: url('img4.jpg');" data-type="image" data-url="img4.jpg"></div>
                 <div class="preset-item" style="background-image: url('img5.jpeg');" data-type="image" data-url="img5.jpeg"></div>
@@ -596,11 +596,28 @@
             }
         }
 
-        // Tentar iniciar automaticamente (Música começa LIGADA sempre)
+        // Tentar iniciar automaticamente (RESPEITANDO A PREFERÊNCIA)
         function attemptAutoplay() {
-            // REMOVE a verificação de 'savedPlaying'. Sempre tenta tocar.
+            const savedPlaying = localStorage.getItem('ldx_music_playing');
+            const savedTime = localStorage.getItem('ldx_music_time');
+            const savedVol = localStorage.getItem('ldx_music_volume');
+
+            // Restaurar volume salvo
+            if (savedVol) audio.volume = parseFloat(savedVol);
+
+            // Restaurar tempo salvo (mesmo se não for tocar)
+            if (savedTime) audio.currentTime = parseFloat(savedTime);
+
+            // VERIFICAÇÃO CRÍTICA: O usuário desligou antes?
+            if (savedPlaying === 'false') {
+                // Se desligou, força o estado de pausado e não tenta tocar.
+                updateMusicUI();
+                return;
+            }
+
+            // Se estava ligado ou não existe registro (primeira vez), tenta tocar
             const playPromise = audio.play();
-            
+
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
                     // Reprodução iniciada com sucesso
@@ -646,13 +663,20 @@
                 localStorage.setItem('ldx_music_playing', 'true');
                 localStorage.setItem('ldx_music_volume', audio.volume);
             } else {
+                // Mesmo pausado, salvamos 'false' para garantir consistência
                 localStorage.setItem('ldx_music_playing', 'false');
             }
         }, 1000);
 
         // Atualiza o estado nativamente também
-        audio.onplay = () => localStorage.setItem('ldx_music_playing', 'true');
-        audio.onpause = () => localStorage.setItem('ldx_music_playing', 'false');
+        audio.onplay = () => {
+            localStorage.setItem('ldx_music_playing', 'true');
+            updateMusicUI();
+        };
+        audio.onpause = () => {
+            localStorage.setItem('ldx_music_playing', 'false');
+            updateMusicUI();
+        };
         /* --- FIM DO LOOP DE SINCRONIZAÇÃO --- */
 
         /* --- DROPDOWN MENU LOGIC --- */
@@ -692,7 +716,7 @@
             const loader = document.getElementById('loader');
             setTimeout(() => {
                 document.body.classList.add('loaded');
-                // Tentar iniciar a música APÓS o loader sair (e ser LIGADA)
+                // Tentar iniciar a música APÓS o loader sair (Respeitando o estado salvo)
                 attemptAutoplay();
             }, 1800);
         });

@@ -214,19 +214,14 @@
         
         /* AJUSTE DE TAMANHO E COR DOS ÍCONES */
         .dropdown-item i { 
-            width: 24px; /* Largura aumentada para acomodar o ícone maior */
+            width: 24px; 
             text-align: center; 
-            font-size: 1.1rem; /* Tamanho do ícone aumentado */
+            font-size: 1.1rem; 
         }
 
-        /* O ícone tocando agora segue a cor padrão (cinza -> branco no hover) */
+        /* O ícone tocando tem animação para indicar atividade */
         .music-indicator.playing i { 
             animation: bounceIcon 1s infinite ease-in-out; 
-        }
-
-        /* Desabilitar animação para o ícone X, pois ele representa parada */
-        .music-indicator.playing i.fa-xmark {
-            animation: none;
         }
 
         @keyframes bounceIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
@@ -562,14 +557,15 @@
 
         // Função para atualizar a UI baseada no estado real de reprodução
         function updateMusicUI() {
+            // Sempre define o ícone como Colcheia
+            musicStateIcon.className = "fa-solid fa-music";
+
             if (!audio.paused) {
-                // Tocando -> Mostrar Ícone "X" e Texto "Parar Música"
-                musicStateIcon.className = "fa-solid fa-xmark";
+                // Tocando -> Ícone Colcheia (Animado) e Texto "Parar Música"
                 musicIconContainer.classList.add('playing');
                 musicLabel.textContent = "Parar Música";
             } else {
-                // Pausado -> Mostrar Ícone "Colcheia" e Texto "Ligar Música"
-                musicStateIcon.className = "fa-solid fa-music";
+                // Pausado -> Ícone Colcheia (Parado) e Texto "Ligar Música"
                 musicIconContainer.classList.remove('playing');
                 musicLabel.textContent = "Ligar Música";
             }

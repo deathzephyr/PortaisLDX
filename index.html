@@ -40,7 +40,7 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND LAYER SYSTEM --- */
+        /* --- BACKGROUND LAYER SYSTEM (FIXO PARA MOBILE) --- */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -54,8 +54,14 @@
             -webkit-transform: translate3d(0,0,0);
         }
 
-        body.has-custom-bg .ambient-light { opacity: 0; transition: opacity 0.5s ease; }
-        body.has-custom-bg #custom-bg-layer { opacity: 1; }
+        body.has-custom-bg .ambient-light {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.has-custom-bg #custom-bg-layer {
+            opacity: 1;
+        }
 
         /* --- LOADING SCREEN --- */
         #loader {
@@ -136,31 +142,48 @@
         .loaded .container { opacity: 1; }
 
         /* --- HEADER --- */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; gap: 15px; flex-wrap: wrap; }
+        header { 
+            display: flex; 
+            justify-content: space-between; /* Empurra para as extremidades */
+            align-items: center; 
+            padding: 2rem 0; 
+            position: relative; 
+            gap: 15px; 
+            flex-wrap: wrap; 
+            width: 100%;
+        }
         
         .header-right { display: flex; align-items: center; gap: 12px; }
 
         .logo { 
-            font-size: 1.6rem; font-weight: 700; color: #ffffff; 
+            font-size: 2.0rem; /* AUMENTADO DE 1.6rem PARA 2.0rem */
+            font-weight: 700; 
+            color: #ffffff; 
             text-shadow: 0 0 20px rgba(255,255,255,0.1);
-            display: flex; align-items: center; gap: 15px; user-select: none;
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            user-select: none;
         }
 
         .logo-icon-special {
-            font-size: 1.4rem;
+            font-size: 1.9rem; /* AUMENTADO DE 1.4rem PARA 1.9rem */
             background: var(--rainbow-gradient);
             background-size: 200% auto;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.6));
             animation: specialPulse 3s infinite ease-in-out, colorCycle 6s linear infinite;
         }
 
         @keyframes specialPulse { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(15deg); } }
 
+        /* RELÓGIO - TAMANHO MANTIDO */
         .clock {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
             padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; 
-            font-size: 0.9rem; color: #fff;
+            font-size: 0.9rem; /* SEM ALTERAÇÃO */
+            color: #fff;
             backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); 
             font-weight: 600; letter-spacing: 1px; user-select: none; cursor: default;
         }
@@ -178,12 +201,13 @@
             width: 42px; height: 42px;
         }
 
+        /* Engrenagem BRANCA no hover */
         .settings-trigger-btn:hover, .settings-trigger-btn.active {
             border-color: rgba(255,255,255,0.8);
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-            color: var(--accent-cyan);
+            color: #ffffff; /* MANTIDO BRANCO */
         }
 
         .settings-dropdown {
@@ -212,7 +236,7 @@
 
         .dropdown-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
         
-        /* AJUSTE DE TAMANHO E COR DOS ÍCONES */
+        /* AJUSTE DE TAMANHO E COR DOS ÍCONES (Do Menu Dropdown, não do header) */
         .dropdown-item i { 
             width: 24px; 
             text-align: center; 
@@ -441,7 +465,6 @@
                         <!-- OPÇÃO MÚSICA -->
                         <button class="dropdown-item" id="musicToggleBtn">
                             <span class="music-indicator" id="musicIconContainer">
-                                <!-- O ícone inicial será definido pelo JS -->
                                 <i class="fa-solid fa-music" id="musicStateIcon"></i>
                             </span>
                             <span id="musicLabel">Parar Música</span>
@@ -612,6 +635,24 @@
         }
 
         musicToggleBtn.addEventListener('click', toggleMusic);
+
+        /* --- LOOP DE SINCRONIZAÇÃO DE TEMPO (PARA CONECTAR AS PÁGINAS) --- */
+        // Este loop roda a cada 1 segundo e salva o tempo exato da música no localStorage.
+        // Assim, o NexusHub sabe exatamente onde continuar.
+        setInterval(() => {
+            if (!audio.paused) {
+                localStorage.setItem('ldx_music_time', audio.currentTime);
+                localStorage.setItem('ldx_music_playing', 'true');
+                localStorage.setItem('ldx_music_volume', audio.volume);
+            } else {
+                localStorage.setItem('ldx_music_playing', 'false');
+            }
+        }, 1000);
+
+        // Atualiza o estado nativamente também
+        audio.onplay = () => localStorage.setItem('ldx_music_playing', 'true');
+        audio.onpause = () => localStorage.setItem('ldx_music_playing', 'false');
+        /* --- FIM DO LOOP DE SINCRONIZAÇÃO --- */
 
         /* --- DROPDOWN MENU LOGIC --- */
         const settingsTrigger = document.getElementById('settingsTrigger');

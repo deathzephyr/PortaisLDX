@@ -40,7 +40,7 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND LAYER SYSTEM (FIXO PARA MOBILE) --- */
+        /* --- BACKGROUND LAYER SYSTEM --- */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -138,25 +138,37 @@
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
         @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(1.1); } }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; opacity: 0; transition: opacity 1s ease 1s; }
-        .loaded .container { opacity: 1; }
-
-        /* --- HEADER --- */
-        header { 
+        /* --- CONTAINER E HEADER SEPARADOS --- */
+        /* Header tem largura total para ficar nos cantos */
+        .main-header {
+            width: 100%; 
             display: flex; 
-            justify-content: space-between; /* Empurra para as extremidades */
+            justify-content: space-between; 
             align-items: center; 
-            padding: 2rem 0; 
+            padding: 2rem; /* Espaçamento nas laterais, mas os elementos ficam nos extremos */
             position: relative; 
+            z-index: 50; 
             gap: 15px; 
-            flex-wrap: wrap; 
-            width: 100%;
+            flex-wrap: wrap;
         }
+
+        /* Container interno mantém padding vertical */
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 2rem; 
+            position: relative; 
+            z-index: 1; 
+            padding-bottom: 2rem; 
+            opacity: 0; 
+            transition: opacity 1s ease 1s; 
+        }
+        .loaded .container { opacity: 1; }
         
         .header-right { display: flex; align-items: center; gap: 12px; }
 
         .logo { 
-            font-size: 2.0rem; /* AUMENTADO DE 1.6rem PARA 2.0rem */
+            font-size: 2.0rem; 
             font-weight: 700; 
             color: #ffffff; 
             text-shadow: 0 0 20px rgba(255,255,255,0.1);
@@ -167,7 +179,7 @@
         }
 
         .logo-icon-special {
-            font-size: 1.9rem; /* AUMENTADO DE 1.4rem PARA 1.9rem */
+            font-size: 1.9rem;
             background: var(--rainbow-gradient);
             background-size: 200% auto;
             -webkit-background-clip: text; 
@@ -178,12 +190,10 @@
 
         @keyframes specialPulse { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(15deg); } }
 
-        /* RELÓGIO - TAMANHO MANTIDO */
         .clock {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
             padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; 
-            font-size: 0.9rem; /* SEM ALTERAÇÃO */
-            color: #fff;
+            font-size: 0.9rem; color: #fff;
             backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); 
             font-weight: 600; letter-spacing: 1px; user-select: none; cursor: default;
         }
@@ -201,13 +211,12 @@
             width: 42px; height: 42px;
         }
 
-        /* Engrenagem BRANCA no hover */
         .settings-trigger-btn:hover, .settings-trigger-btn.active {
             border-color: rgba(255,255,255,0.8);
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-            color: #ffffff; /* MANTIDO BRANCO */
+            color: #ffffff;
         }
 
         .settings-dropdown {
@@ -236,18 +245,9 @@
 
         .dropdown-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
         
-        /* AJUSTE DE TAMANHO E COR DOS ÍCONES (Do Menu Dropdown, não do header) */
-        .dropdown-item i { 
-            width: 24px; 
-            text-align: center; 
-            font-size: 1.1rem; 
-        }
+        .dropdown-item i { width: 24px; text-align: center; font-size: 1.1rem; }
 
-        /* O ícone tocando tem animação para indicar atividade */
-        .music-indicator.playing i { 
-            animation: bounceIcon 1s infinite ease-in-out; 
-        }
-
+        .music-indicator.playing i { animation: bounceIcon 1s infinite ease-in-out; }
         @keyframes bounceIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
         /* --- HERO --- */
@@ -445,41 +445,42 @@
         <div class="orb orb-3"></div>
     </div>
 
-    <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fa-solid fa-infinity logo-icon-special"></i> LDX
-            </div>
+    <!-- HEADER FORA DO CONTAINER PARA CONTROLE TOTAL DA LARGURA -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="fa-solid fa-infinity logo-icon-special"></i> LDX
+        </div>
+        
+        <div class="header-right">
+            <div class="clock" id="clock">00:00</div>
             
-            <div class="header-right">
-                <div class="clock" id="clock">00:00</div>
+            <!-- BOTÃO DE CONFIGURAÇÕES -->
+            <div class="settings-container">
+                <button class="settings-trigger-btn" id="settingsTrigger" title="Configurações">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
                 
-                <!-- BOTÃO DE CONFIGURAÇÕES -->
-                <div class="settings-container">
-                    <button class="settings-trigger-btn" id="settingsTrigger" title="Configurações">
-                        <i class="fa-solid fa-gear"></i>
+                <!-- MENU DROPDOWN -->
+                <div class="settings-dropdown" id="settingsDropdown">
+                    <!-- OPÇÃO MÚSICA -->
+                    <button class="dropdown-item" id="musicToggleBtn">
+                        <span class="music-indicator" id="musicIconContainer">
+                            <i class="fa-solid fa-music" id="musicStateIcon"></i>
+                        </span>
+                        <span id="musicLabel">Parar Música</span>
                     </button>
-                    
-                    <!-- MENU DROPDOWN -->
-                    <div class="settings-dropdown" id="settingsDropdown">
-                        <!-- OPÇÃO MÚSICA -->
-                        <button class="dropdown-item" id="musicToggleBtn">
-                            <span class="music-indicator" id="musicIconContainer">
-                                <i class="fa-solid fa-music" id="musicStateIcon"></i>
-                            </span>
-                            <span id="musicLabel">Parar Música</span>
-                        </button>
 
-                        <!-- OPÇÃO TEMA DE FUNDO -->
-                        <button class="dropdown-item" id="bgTriggerBtn">
-                            <i class="fa-solid fa-palette"></i>
-                            <span>Tema de Fundo</span>
-                        </button>
-                    </div>
+                    <!-- OPÇÃO TEMA DE FUNDO -->
+                    <button class="dropdown-item" id="bgTriggerBtn">
+                        <i class="fa-solid fa-palette"></i>
+                        <span>Tema de Fundo</span>
+                    </button>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
+    <div class="container">
         <section class="hero">
             <h1>Portais LDX.</h1>
             <p id="greeting-text">...</p>
@@ -594,20 +595,20 @@
             }
         }
 
-        // Tentar iniciar automaticamente
+        // Tentar iniciar automaticamente (Música começa LIGADA sempre)
         function attemptAutoplay() {
+            // REMOVE a verificação de 'savedPlaying'. Sempre tenta tocar.
             const playPromise = audio.play();
             
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
-                    // Reprodução automática iniciada com sucesso
+                    // Reprodução iniciada com sucesso
                     updateMusicUI();
                     localStorage.setItem('ldx_music_playing', 'true');
                 })
                 .catch(error => {
-                    // Autoplay foi bloqueado pelo navegador (comum em Chrome/Safari)
-                    console.log("Autoplay bloqueado pelo navegador. A música começará após a interação do usuário.");
-                    // Força o estado para pausado visualmente
+                    // Autoplay bloqueado pelo navegador. Música pausada.
+                    console.log("Autoplay bloqueado pelo navegador.");
                     updateMusicUI();
                     localStorage.setItem('ldx_music_playing', 'false');
                 });
@@ -630,7 +631,6 @@
                 audio.pause();
                 localStorage.setItem('ldx_music_playing', 'false');
             }
-            // Pequeno delay para garantir que o estado do áudio atualizou antes de atualizar a UI
             setTimeout(updateMusicUI, 50);
         }
 
@@ -691,7 +691,7 @@
             const loader = document.getElementById('loader');
             setTimeout(() => {
                 document.body.classList.add('loaded');
-                // Tentar iniciar a música APÓS o loader sair
+                // Tentar iniciar a música APÓS o loader sair (e ser LIGADA)
                 attemptAutoplay();
             }, 1800);
         });

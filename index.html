@@ -156,7 +156,7 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; opacity: 0; transition: opacity 1s ease 1s; }
         .loaded .container { opacity: 1; }
 
-        /* --- HEADER --- */
+        /* --- HEADER & SETTINGS DROPDOWN --- */
         header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; gap: 15px; flex-wrap: wrap; }
         
         .header-right { display: flex; align-items: center; gap: 12px; }
@@ -203,27 +203,99 @@
             cursor: default;
         }
 
-        .bg-settings-btn {
+        /* --- SETTINGS CONTAINER & DROPDOWN --- */
+        .settings-container {
+            position: relative;
+        }
+
+        .settings-trigger-btn {
             background: rgba(20, 20, 25, 0.8); 
             border: 1px solid rgba(255,255,255,0.15); 
-            padding: 8px 14px; 
+            padding: 10px 14px; 
             border-radius: 100px; 
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #ffffff;
             backdrop-filter: blur(20px); 
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
-            font-weight: 600; 
-            user-select: none;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center;
+            width: 42px;
+            height: 42px;
         }
 
-        .bg-settings-btn:hover {
+        .settings-trigger-btn:hover, .settings-trigger-btn.active {
             border-color: rgba(255,255,255,0.8);
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+            color: var(--accent-cyan);
+        }
+
+        .settings-dropdown {
+            position: absolute;
+            top: calc(100% + 15px);
+            right: 0;
+            width: 240px;
+            background: rgba(15, 15, 20, 0.95);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 8px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .settings-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .dropdown-item i { width: 20px; text-align: center; }
+
+        /* Music Playing Animation */
+        .music-indicator {
+            position: relative;
+        }
+        .music-indicator.playing i {
+            color: var(--accent-cyan);
+            animation: bounceIcon 1s infinite ease-in-out;
+        }
+
+        @keyframes bounceIcon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
         /* --- HERO --- */
@@ -432,9 +504,7 @@
         .preset-item.active { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
 
         /* BOTÃO DE UPLOAD */
-        .upload-container {
-            margin-bottom: 20px;
-        }
+        .upload-container { margin-bottom: 20px; }
 
         .upload-btn {
             width: 100%;
@@ -525,6 +595,13 @@
 </head>
 <body>
 
+    <!-- AUDIO PLAYER (HIDDEN) -->
+    <!-- O arquivo song.mpeg deve estar na mesma pasta que este HTML -->
+    <audio id="bgMusic" loop>
+        <source src="song.mpeg" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
     <!-- CAMADA DE FUNDO PERSONALIZADO (FIXO) -->
     <div id="custom-bg-layer"></div>
 
@@ -553,10 +630,30 @@
             
             <div class="header-right">
                 <div class="clock" id="clock">00:00</div>
-                <!-- BOTÃO DE FUNDO -->
-                <button class="bg-settings-btn" id="bgSettingsBtn" title="Personalizar Fundo">
-                    <i class="fa-solid fa-palette"></i>
-                </button>
+                
+                <!-- BOTÃO DE CONFIGURAÇÕES (NOVO) -->
+                <div class="settings-container">
+                    <button class="settings-trigger-btn" id="settingsTrigger" title="Configurações">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    
+                    <!-- MENU DROPDOWN -->
+                    <div class="settings-dropdown" id="settingsDropdown">
+                        <!-- OPÇÃO MÚSICA -->
+                        <button class="dropdown-item" id="musicToggleBtn">
+                            <span class="music-indicator" id="musicIconContainer">
+                                <i class="fa-solid fa-play" id="musicStateIcon"></i>
+                            </span>
+                            <span id="musicLabel">Tocar Música</span>
+                        </button>
+
+                        <!-- OPÇÃO TEMA DE FUNDO -->
+                        <button class="dropdown-item" id="bgTriggerBtn">
+                            <i class="fa-solid fa-palette"></i>
+                            <span>Tema de Fundo</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -622,7 +719,7 @@
                 <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- SEÇÃO IMAGENS (AGORA É A PRIMEIRA) -->
+            <!-- SEÇÃO IMAGENS -->
             <span class="section-title">Imagens Preset</span>
             <div class="preset-grid">
                 <div class="preset-item" style="background-image: url('https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=600&auto=format&fit=crop');" data-type="image" data-url="https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=1920&auto=format&fit=crop"></div>
@@ -650,6 +747,100 @@
     </div>
 
     <script>
+        /* --- LÓGICA DE MÚSICA --- */
+        const audio = document.getElementById('bgMusic');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        const musicStateIcon = document.getElementById('musicStateIcon');
+        const musicIconContainer = document.getElementById('musicIconContainer');
+        const musicLabel = document.getElementById('musicLabel');
+        
+        let isPlaying = false;
+
+        // Carregar estado salvo
+        const savedMusicState = localStorage.getItem('ldx_music_playing');
+        if (savedMusicState === 'true') {
+            // Tenta tocar automaticamente se o usuário já havia ativado antes
+            // (Notas: navegadores modernos podem bloquear isso sem interação prévia)
+            isPlaying = true;
+            updateMusicUI(true);
+            audio.volume = 0.5;
+            // Promessa silenciosa para tentar dar play
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Playback iniciado
+                })
+                .catch(error => {
+                    // Auto-play foi impedido. Reseta UI para paused.
+                    isPlaying = false;
+                    updateMusicUI(false);
+                });
+            }
+        } else {
+            updateMusicUI(false);
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                audio.volume = 0.5;
+                audio.play().then(() => {
+                    isPlaying = true;
+                }).catch(e => {
+                    console.error("Erro ao reproduzir áudio:", e);
+                    alert("Não foi possível reproduzir a música. Verifique se o arquivo 'song.mpeg' existe.");
+                });
+            }
+            localStorage.setItem('ldx_music_playing', isPlaying);
+            updateMusicUI(isPlaying);
+        }
+
+        function updateMusicUI(playing) {
+            if (playing) {
+                musicStateIcon.classList.remove('fa-play');
+                musicStateIcon.classList.add('fa-pause');
+                musicIconContainer.classList.add('playing');
+                musicLabel.textContent = "Pausar Música";
+            } else {
+                musicStateIcon.classList.remove('fa-pause');
+                musicStateIcon.classList.add('fa-play');
+                musicIconContainer.classList.remove('playing');
+                musicLabel.textContent = "Tocar Música";
+            }
+        }
+
+        musicToggleBtn.addEventListener('click', toggleMusic);
+
+        /* --- DROPDOWN MENU LOGIC --- */
+        const settingsTrigger = document.getElementById('settingsTrigger');
+        const settingsDropdown = document.getElementById('settingsDropdown');
+        const bgTriggerBtn = document.getElementById('bgTriggerBtn');
+        const bgModal = document.getElementById('bgModal');
+
+        // Abrir/Fechar Dropdown
+        settingsTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingsDropdown.classList.toggle('active');
+            settingsTrigger.classList.toggle('active');
+        });
+
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!settingsDropdown.contains(e.target) && !settingsTrigger.contains(e.target)) {
+                settingsDropdown.classList.remove('active');
+                settingsTrigger.classList.remove('active');
+            }
+        });
+
+        // Abrir Modal de Fundo através do Dropdown
+        bgTriggerBtn.addEventListener('click', () => {
+            settingsDropdown.classList.remove('active');
+            settingsTrigger.classList.remove('active');
+            bgModal.classList.add('active');
+        });
+
         /* --- LÓGICA DE FUNDO PADRÃO (img2.jpg) --- */
         const defaultBackground = 'img2.jpg';
         if (!localStorage.getItem('ldx_custom_bg')) {
@@ -761,8 +952,6 @@
         });
 
         /* --- BACKGROUND CUSTOMIZATION SYSTEM --- */
-        const bgSettingsBtn = document.getElementById('bgSettingsBtn');
-        const bgModal = document.getElementById('bgModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const modalBackdrop = document.getElementById('modalBackdrop');
         const bgFileInput = document.getElementById('bgFileInput');
@@ -781,12 +970,7 @@
             }, 3000);
         }
 
-        // Abrir Modal
-        bgSettingsBtn.addEventListener('click', () => {
-            bgModal.classList.add('active');
-        });
-
-        // Fechar Modal
+        // Fechar Modal (Função reutilizada)
         function closeModal() {
             bgModal.classList.remove('active');
         }
@@ -823,7 +1007,7 @@
             closeModal();
         }
 
-        // Carregar fundo salvo (ou o padrão img2.jpg definido lá em cima)
+        // Carregar fundo salvo
         const savedBg = localStorage.getItem('ldx_custom_bg');
         const savedType = localStorage.getItem('ldx_bg_type');
 
@@ -862,7 +1046,7 @@
             }
         });
 
-        // Resetar (Volta para img2.jpg)
+        // Resetar
         resetBgBtn.addEventListener('click', () => {
             localStorage.removeItem('ldx_custom_bg');
             localStorage.removeItem('ldx_bg_type');

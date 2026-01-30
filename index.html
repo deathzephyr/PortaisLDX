@@ -139,20 +139,18 @@
         @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(1.1); } }
 
         /* --- CONTAINER E HEADER SEPARADOS --- */
-        /* Header tem largura total para ficar nos cantos */
         .main-header {
             width: 100%; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 2rem; /* Espaçamento nas laterais, mas os elementos ficam nos extremos */
+            padding: 2rem; 
             position: relative; 
             z-index: 50; 
             gap: 15px; 
             flex-wrap: wrap;
         }
 
-        /* Container interno mantém padding vertical */
         .container { 
             max-width: 1200px; 
             margin: 0 auto; 
@@ -230,22 +228,60 @@
             opacity: 0; visibility: hidden;
             transform: translateY(-10px) scale(0.95);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 100; display: flex; flex-direction: column; gap: 5px;
+            z-index: 100; display: flex; flex-direction: column; gap: 2px;
         }
 
         .settings-dropdown.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
+        .dropdown-item-wrapper { position: relative; }
+
         .dropdown-item {
-            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 16px;
             border-radius: 12px; background: transparent; border: none;
             color: var(--text-muted); font-family: 'Inter', sans-serif;
             font-size: 0.95rem; font-weight: 500; text-align: left; cursor: pointer;
             transition: all 0.2s ease; width: 100%;
         }
 
+        .dropdown-item-content { display: flex; align-items: center; gap: 12px; width: 100%; }
+
         .dropdown-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
         
         .dropdown-item i { width: 24px; text-align: center; font-size: 1.1rem; }
+        .chevron-sub { font-size: 0.8rem; opacity: 0.6; transition: transform 0.2s; }
+        .dropdown-item-wrapper:hover .chevron-sub { transform: translateX(-3px); }
+
+        /* --- SUBMENU (GRID OPTIONS) --- */
+        .grid-submenu {
+            position: absolute; top: 0; right: 100%; margin-right: 10px;
+            width: 160px;
+            background: rgba(15, 15, 20, 0.98);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 6px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            opacity: 0; visibility: hidden;
+            transform: translateX(10px);
+            transition: all 0.2s ease;
+            z-index: 101;
+            display: flex; flex-direction: column; gap: 2px;
+        }
+
+        .dropdown-item-wrapper:hover .grid-submenu {
+            opacity: 1; visibility: visible; transform: translateX(0);
+        }
+
+        .grid-option {
+            padding: 10px 14px; border-radius: 8px; background: transparent; border: none;
+            color: var(--text-muted); font-family: 'Inter', sans-serif;
+            font-size: 0.9rem; font-weight: 500; text-align: left; cursor: pointer;
+            transition: all 0.2s; display: flex; align-items: center; gap: 10px;
+        }
+
+        .grid-option:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .grid-option.selected { background: rgba(255, 255, 255, 0.05); color: #fff; font-weight: 600; }
+        .grid-option i { font-size: 0.9rem; color: var(--accent-cyan); }
 
         .music-indicator.playing i { animation: bounceIcon 1s infinite ease-in-out; }
         @keyframes bounceIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
@@ -262,7 +298,11 @@
         .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
 
         /* --- HUBS GRID --- */
-        .hubs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 2rem 0; }
+        /* PADRÃO ATUALIZADO PARA 4 COLUNAS */
+        .hubs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 2rem 0; }
+        
+        /* Classe para 2 colunas */
+        .hubs-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
 
         /* --- HUB CARD STYLE --- */
         .hub-card {
@@ -274,6 +314,9 @@
             align-items: center; justify-content: center; transform-style: preserve-3d;
             will-change: transform; user-select: none; text-align: center; cursor: pointer;
         }
+
+        /* Ajuste de padding para telas menores ou com mais colunas */
+        .hubs-grid.cols-4 .hub-card { padding: 2.5rem 1.5rem; }
 
         .hub-card::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
@@ -311,6 +354,9 @@
 
         .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
         .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
+
+        .hubs-grid.cols-4 .hub-card h2 { font-size: 1.5rem; } /* Título menor no layout de 4 colunas */
+        .hubs-grid.cols-4 .hub-card p { font-size: 0.85rem; }
 
         .hub-card:hover .hub-icon {
             background: var(--rainbow-gradient); background-size: 400% auto; background-clip: border-box;
@@ -360,17 +406,8 @@
             color: var(--text-muted); margin: 15px 0 10px 0; display: block; font-weight: 600;
         }
 
-        /* PRESETS */
-        .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
-        .preset-item {
-            aspect-ratio: 16/9; border-radius: 8px; background-size: cover; background-position: center;
-            border: 2px solid transparent; cursor: pointer; transition: all 0.2s;
-        }
-        .preset-item:hover { transform: scale(1.05); }
-        .preset-item.active { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-
         /* UPLOAD */
-        .upload-container { margin-bottom: 20px; }
+        .upload-container { margin-bottom: 20px; margin-top: 10px; }
         .upload-btn {
             width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ffffff; padding: 14px; border-radius: 12px; cursor: pointer;
@@ -403,8 +440,9 @@
         #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
 
         /* --- MOBILE --- */
-        @media (max-width: 768px) { 
+        @media (max-width: 900px) { 
             .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1rem; }
+            /* No mobile, força 1 coluna sempre */
             .hubs-grid { grid-template-columns: 1fr !important; gap: 1rem; padding: 1rem 0; }
             .hub-card { flex-direction: row; justify-content: flex-start; align-items: center; text-align: left; padding: 1.25rem 1.5rem; min-height: auto; height: auto; gap: 1.5rem; }
             .hub-content { flex-direction: row; align-items: center; gap: 1.25rem; width: 100%; }
@@ -414,6 +452,9 @@
             .hub-bg-icon { display: none; }
             .clock { font-size: 0.8rem; padding: 6px 14px; }
             .header-right { gap: 8px; }
+            
+            /* Esconde o submenu no mobile (abre para fora da tela) */
+            .grid-submenu { display: none; }
         }
     </style>
 </head>
@@ -464,17 +505,42 @@
                 <div class="settings-dropdown" id="settingsDropdown">
                     <!-- OPÇÃO MÚSICA -->
                     <button class="dropdown-item" id="musicToggleBtn">
-                        <span class="music-indicator" id="musicIconContainer">
-                            <i class="fa-solid fa-music" id="musicStateIcon"></i>
+                        <span class="dropdown-item-content">
+                            <span class="music-indicator" id="musicIconContainer">
+                                <i class="fa-solid fa-music" id="musicStateIcon"></i>
+                            </span>
+                            <span id="musicLabel">Parar Música</span>
                         </span>
-                        <span id="musicLabel">Parar Música</span>
                     </button>
 
-                    <!-- OPÇÃO TEMA DE FUNDO -->
+                    <!-- OPÇÃO FUNDO -->
                     <button class="dropdown-item" id="bgTriggerBtn">
-                        <i class="fa-solid fa-palette"></i>
-                        <span>Tema de Fundo</span>
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-palette"></i>
+                            <span>Tema de Fundo</span>
+                        </span>
                     </button>
+
+                    <!-- NOVA OPÇÃO LAYOUT (COLUNAS) -->
+                    <div class="dropdown-item-wrapper">
+                        <button class="dropdown-item" id="gridTriggerBtn">
+                            <span class="dropdown-item-content">
+                                <i class="fa-solid fa-border-all"></i>
+                                <span>Layout</span>
+                            </span>
+                            <i class="fa-solid fa-chevron-left chevron-sub"></i>
+                        </button>
+                        <!-- SUBMENU DE COLUNAS -->
+                        <div class="grid-submenu" id="gridSubmenu">
+                            <button class="grid-option selected" data-cols="4">
+                                <i class="fa-solid fa-table-columns"></i> 4 Colunas
+                            </button>
+                            <button class="grid-option" data-cols="2">
+                                <i class="fa-solid fa-table-cells"></i> 2 Colunas
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -524,6 +590,18 @@
                 </div>
             </a>
 
+            <!-- CARD: AXIOMHUB -->
+            <a href="https://deathzephyr.github.io/AxiomHub/" target="_self" class="hub-card">
+                <div class="hub-bg-icon"><i class="fa-solid fa-robot"></i></div>
+                <div class="hub-content">
+                    <div class="hub-icon"><i class="fa-solid fa-robot"></i></div>
+                    <div>
+                        <h2>AxiomHub</h2>
+                        <p>Robótica e Inovação.</p>
+                    </div>
+                </div>
+            </a>
+
         </div>
 
         <footer>
@@ -541,17 +619,6 @@
             <div class="modal-header">
                 <h3><i class="fa-solid fa-palette" style="color: #fff;"></i> Personalizar</h3>
                 <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <span class="section-title">Imagens Preset</span>
-            <div class="preset-grid">
-                <!-- Imagens Preset -->
-                <div class="preset-item" style="background-image: url('img3.jpg');" data-type="image" data-url="img3.jpg"></div>
-                <div class="preset-item" style="background-image: url('img4.jpg');" data-type="image" data-url="img4.jpg"></div>
-                <div class="preset-item" style="background-image: url('img5.jpeg');" data-type="image" data-url="img5.jpeg"></div>
-                <div class="preset-item" style="background-image: url('img6.jpg');" data-type="image" data-url="img6.jpg"></div>
-                <div class="preset-item" style="background-image: url('img7.png');" data-type="image" data-url="img7.png"></div>
-                <div class="preset-item" style="background-image: url('img8.jpg');" data-type="image" data-url="img8.jpg"></div>
             </div>
 
             <span class="section-title">Arquivo do Dispositivo</span>
@@ -748,7 +815,7 @@
         
         hubCards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
-                if(window.innerWidth > 768) {
+                if(window.innerWidth > 900) {
                     const rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -791,26 +858,57 @@
             });
         });
 
-        /* --- GRID CONTROL --- */
+        /* --- GRID CONTROL (NOVO) --- */
         const bentoGrid = document.getElementById('bentoGrid');
-        function loadSavedGrid() {
-            let savedCols;
-            let key = window.innerWidth <= 768 ? 'nexusHub_mobileCols' : 'nexusHub_desktopCols';
-            savedCols = localStorage.getItem(key) || (window.innerWidth <= 768 ? '1' : '3');
-            
-            if (window.innerWidth > 768) {
-                bentoGrid.style.gridTemplateColumns = savedCols === 'auto' ? '' : `repeat(${savedCols}, 1fr)`;
-            } else {
-                bentoGrid.style.gridTemplateColumns = '1fr';
-            }
-        }
-        loadSavedGrid();
+        const gridOptions = document.querySelectorAll('.grid-option');
+        const gridStorageKey = 'ldx_portal_grid'; // Chave para salvar
 
+        function setGrid(cols) {
+            // Atualiza o DOM
+            if (cols === '2') {
+                bentoGrid.classList.add('cols-2');
+            } else {
+                bentoGrid.classList.remove('cols-2');
+            }
+            // Salva a preferência
+            localStorage.setItem(gridStorageKey, cols);
+
+            // Atualiza a UI (classe .selected)
+            gridOptions.forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.cols === cols) opt.classList.add('selected');
+            });
+        }
+
+        function loadGrid() {
+            // Se for mobile, força 1 coluna e ignora o resto
+            if (window.innerWidth <= 900) {
+                bentoGrid.classList.remove('cols-2');
+                return;
+            }
+
+            // Carrega do localStorage ou usa 4 como padrão
+            const savedCols = localStorage.getItem(gridStorageKey) || '4';
+            setGrid(savedCols);
+        }
+
+        // Event Listeners para os botões de coluna
+        gridOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                const cols = opt.getAttribute('data-cols');
+                setGrid(cols);
+                // Opcional: fechar o dropdown após selecionar, 
+                // mas hover menus geralmente ficam abertos até sair da área
+            });
+        });
+
+        // Inicializa e monitora resize
+        loadGrid();
         let lastWidth = window.innerWidth;
         window.addEventListener('resize', () => {
             if (window.innerWidth !== lastWidth) {
                 lastWidth = window.innerWidth;
-                loadSavedGrid();
+                loadGrid();
             }
         });
 
@@ -821,7 +919,6 @@
         const uploadTriggerBtn = document.getElementById('uploadTriggerBtn');
         const resetBgBtn = document.getElementById('resetBgBtn');
         const customBgLayer = document.getElementById('custom-bg-layer');
-        const presetItems = document.querySelectorAll('.preset-item');
         const toast = document.getElementById('toast');
 
         function showToast(message) {
@@ -837,16 +934,12 @@
         uploadTriggerBtn.addEventListener('click', () => { bgFileInput.click(); });
 
         function setBackground(value, type) {
-            document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
             if (type === 'image') {
                 customBgLayer.style.backgroundImage = `url('${value}')`;
                 document.body.style.backgroundImage = 'none';
                 document.body.classList.add('has-custom-bg');
                 localStorage.setItem('ldx_custom_bg', value);
                 localStorage.setItem('ldx_bg_type', 'image');
-                presetItems.forEach(item => {
-                    if(item.getAttribute('data-url') === value) item.classList.add('active');
-                });
             } else if (type === 'color') {
                 customBgLayer.style.backgroundImage = 'none';
                 document.body.style.backgroundImage = value;
@@ -868,13 +961,6 @@
             }
             document.body.classList.add('has-custom-bg');
         }
-
-        presetItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const url = item.getAttribute('data-url');
-                setBackground(url, 'image');
-            });
-        });
 
         bgFileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];

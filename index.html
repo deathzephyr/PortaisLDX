@@ -298,11 +298,19 @@
         .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
 
         /* --- HUBS GRID --- */
-        /* PADRÃO ATUALIZADO PARA 4 COLUNAS */
-        .hubs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 2rem 0; }
+        /* PADRÃO ATUALIZADO PARA 5 COLUNAS */
+        .hubs-grid { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 1.5rem; 
+            padding: 2rem 0; 
+        }
         
         /* Classe para 2 colunas */
-        .hubs-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .hubs-grid.cols-2 { 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 2rem; 
+        }
 
         /* --- HUB CARD STYLE --- */
         .hub-card {
@@ -315,8 +323,19 @@
             will-change: transform; user-select: none; text-align: center; cursor: pointer;
         }
 
-        /* Ajuste de padding para telas menores ou com mais colunas */
-        .hubs-grid.cols-4 .hub-card { padding: 2.5rem 1.5rem; }
+        /* Ajuste de layout para 5 colunas (Padrão) - Itens menores */
+        .hubs-grid:not(.cols-2) .hub-card { 
+            padding: 1.8rem 1rem; 
+        }
+        .hubs-grid:not(.cols-2) .hub-card h2 { font-size: 1.3rem; }
+        .hubs-grid:not(.cols-2) .hub-card p { font-size: 0.75rem; }
+        .hubs-grid:not(.cols-2) .hub-icon { 
+            width: 65px; height: 65px; font-size: 1.8rem; 
+        }
+
+        /* Ajuste de layout para 2 colunas - Itens maiores */
+        .hubs-grid.cols-2 .hub-card h2 { font-size: 2rem; }
+        .hubs-grid.cols-2 .hub-card p { font-size: 1rem; }
 
         .hub-card::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
@@ -352,11 +371,8 @@
 
         .hub-icon i { position: relative; z-index: 2; color: rgba(255,255,255,0.8); transition: color 0.3s; }
 
-        .hub-card h2 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
-        .hub-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; font-weight: 400; }
-
-        .hubs-grid.cols-4 .hub-card h2 { font-size: 1.5rem; } /* Título menor no layout de 4 colunas */
-        .hubs-grid.cols-4 .hub-card p { font-size: 0.85rem; }
+        .hub-card h2 { font-weight: 700; letter-spacing: -0.5px; margin: 0; }
+        .hub-card p { color: var(--text-muted); line-height: 1.5; font-weight: 400; }
 
         .hub-card:hover .hub-icon {
             background: var(--rainbow-gradient); background-size: 400% auto; background-clip: border-box;
@@ -444,11 +460,11 @@
             .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1rem; }
             /* No mobile, força 1 coluna sempre */
             .hubs-grid { grid-template-columns: 1fr !important; gap: 1rem; padding: 1rem 0; }
-            .hub-card { flex-direction: row; justify-content: flex-start; align-items: center; text-align: left; padding: 1.25rem 1.5rem; min-height: auto; height: auto; gap: 1.5rem; }
+            .hub-card { flex-direction: row; justify-content: flex-start; align-items: center; text-align: left; padding: 1.25rem 1.5rem !important; min-height: auto; height: auto; gap: 1.5rem; }
             .hub-content { flex-direction: row; align-items: center; gap: 1.25rem; width: 100%; }
-            .hub-icon { width: 55px; height: 55px; font-size: 1.5rem; flex-shrink: 0; margin-bottom: 0; }
-            .hub-card h2 { font-size: 1.25rem; margin-bottom: 0.2rem; }
-            .hub-card p { font-size: 0.85rem; margin: 0; }
+            .hub-icon { width: 55px !important; height: 55px !important; font-size: 1.5rem !important; flex-shrink: 0; margin-bottom: 0; }
+            .hub-card h2 { font-size: 1.25rem !important; margin-bottom: 0.2rem; }
+            .hub-card p { font-size: 0.85rem !important; margin: 0; }
             .hub-bg-icon { display: none; }
             .clock { font-size: 0.8rem; padding: 6px 14px; }
             .header-right { gap: 8px; }
@@ -456,7 +472,7 @@
             /* Esconde o submenu no mobile (abre para fora da tela) */
             .grid-submenu { display: none; }
             
-            /* ESCONDE O BOTÃO DE LAYOUT NO MOBILE (SOLICITAÇÃO DO USUÁRIO) */
+            /* ESCONDE O BOTÃO DE LAYOUT NO MOBILE */
             .layout-option-wrapper { display: none; }
         }
     </style>
@@ -524,7 +540,7 @@
                         </span>
                     </button>
 
-                    <!-- NOVA OPÇÃO LAYOUT (COLUNAS) - WRAPPER COM CLASSE PARA CONTROLE DE VISIBILIDADE -->
+                    <!-- OPÇÃO LAYOUT (5 E 2 COLUNAS) -->
                     <div class="dropdown-item-wrapper layout-option-wrapper">
                         <button class="dropdown-item" id="gridTriggerBtn">
                             <span class="dropdown-item-content">
@@ -535,8 +551,8 @@
                         </button>
                         <!-- SUBMENU DE COLUNAS -->
                         <div class="grid-submenu" id="gridSubmenu">
-                            <button class="grid-option selected" data-cols="4">
-                                <i class="fa-solid fa-table-columns"></i> 4 Colunas
+                            <button class="grid-option selected" data-cols="5">
+                                <i class="fa-solid fa-table-columns"></i> 5 Colunas
                             </button>
                             <button class="grid-option" data-cols="2">
                                 <i class="fa-solid fa-table-cells"></i> 2 Colunas
@@ -605,7 +621,7 @@
                 </div>
             </a>
 
-            <!-- NOVO CARD: VERTEXHUB -->
+            <!-- CARD: VERTEXHUB -->
             <a href="https://deathzephyr.github.io/VertexHub/" target="_self" class="hub-card">
                 <div class="hub-bg-icon"><i class="fa-solid fa-cube"></i></div>
                 <div class="hub-content">
@@ -873,13 +889,13 @@
             });
         });
 
-        /* --- GRID CONTROL (NOVO) --- */
+        /* --- GRID CONTROL (ATUALIZADO PARA 5 COLUNAS PADRÃO) --- */
         const bentoGrid = document.getElementById('bentoGrid');
         const gridOptions = document.querySelectorAll('.grid-option');
-        const gridStorageKey = 'ldx_portal_grid'; // Chave para salvar
+        const gridStorageKey = 'ldx_portal_grid'; 
 
         function setGrid(cols) {
-            // Atualiza o DOM
+            // Lógica: Se for 2, adiciona classe. Se for 5 (ou qualquer outra), remove classe (volta ao padrão)
             if (cols === '2') {
                 bentoGrid.classList.add('cols-2');
             } else {
@@ -902,8 +918,8 @@
                 return;
             }
 
-            // Carrega do localStorage ou usa 4 como padrão
-            const savedCols = localStorage.getItem(gridStorageKey) || '4';
+            // Carrega do localStorage ou usa '5' como padrão
+            const savedCols = localStorage.getItem(gridStorageKey) || '5';
             setGrid(savedCols);
         }
 
@@ -912,8 +928,6 @@
             opt.addEventListener('click', () => {
                 const cols = opt.getAttribute('data-cols');
                 setGrid(cols);
-                // Opcional: fechar o dropdown após selecionar, 
-                // mas hover menus geralmente ficam abertos até sair da área
             });
         });
 

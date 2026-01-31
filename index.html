@@ -455,6 +455,9 @@
             
             /* Esconde o submenu no mobile (abre para fora da tela) */
             .grid-submenu { display: none; }
+            
+            /* ESCONDE O BOTÃO DE LAYOUT NO MOBILE (SOLICITAÇÃO DO USUÁRIO) */
+            .layout-option-wrapper { display: none; }
         }
     </style>
 </head>
@@ -521,8 +524,8 @@
                         </span>
                     </button>
 
-                    <!-- NOVA OPÇÃO LAYOUT (COLUNAS) -->
-                    <div class="dropdown-item-wrapper">
+                    <!-- NOVA OPÇÃO LAYOUT (COLUNAS) - WRAPPER COM CLASSE PARA CONTROLE DE VISIBILIDADE -->
+                    <div class="dropdown-item-wrapper layout-option-wrapper">
                         <button class="dropdown-item" id="gridTriggerBtn">
                             <span class="dropdown-item-content">
                                 <i class="fa-solid fa-border-all"></i>
@@ -598,6 +601,18 @@
                     <div>
                         <h2>AxiomHub</h2>
                         <p>Inteligência Artificial.</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- NOVO CARD: VERTEXHUB -->
+            <a href="https://deathzephyr.github.io/VertexHub/" target="_self" class="hub-card">
+                <div class="hub-bg-icon"><i class="fa-solid fa-cube"></i></div>
+                <div class="hub-content">
+                    <div class="hub-icon"><i class="fa-solid fa-cube"></i></div>
+                    <div>
+                        <h2>VertexHub</h2>
+                        <p>Utilidades Essenciais.</p>
                     </div>
                 </div>
             </a>

@@ -174,6 +174,36 @@
             align-items: center; 
             gap: 15px; 
             user-select: none;
+            cursor: pointer; /* Indica que é clicável */
+            position: relative; /* Necessário para a animação de ripple ficar dentro */
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 60;
+        }
+
+        /* --- NOVA ANIMAÇÃO DE CLIQUE NO LOGO --- */
+        .logo-click-anim {
+            animation: logoBurst 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes logoBurst {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.15) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+
+        .logo-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            transform: scale(0);
+            pointer-events: none;
+            animation: logoRippleAnim 0.6s ease-out forwards;
+            z-index: -1; /* Fica atrás do texto */
+        }
+
+        @keyframes logoRippleAnim {
+            0% { transform: scale(0); opacity: 0.6; }
+            100% { transform: scale(2.5); opacity: 0; }
         }
 
         .logo-icon-special {
@@ -184,6 +214,8 @@
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.6));
             animation: specialPulse 3s infinite ease-in-out, colorCycle 6s linear infinite;
+            position: relative;
+            z-index: 2;
         }
 
         @keyframes specialPulse { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(15deg); } }
@@ -593,7 +625,7 @@
         .step-list {
             list-style: none;
             display: flex;
-            flex-direction: column;
+            flex-direction: column,
             gap: 1.2rem;
             margin-bottom: 1rem;
         }
@@ -798,7 +830,8 @@
 
     <!-- HEADER -->
     <header class="main-header">
-        <div class="logo">
+        <!-- LOGO LDX (Agora com animação de clique) -->
+        <div class="logo" id="mainLogo">
             <i class="fa-solid fa-infinity logo-icon-special"></i> LDX
         </div>
         
@@ -1086,6 +1119,40 @@
     </div>
 
     <script>
+        /* --- LOGO CLICK ANIMATION --- */
+        const logo = document.getElementById('mainLogo');
+        
+        logo.addEventListener('click', function(e) {
+            // 1. Adiciona a classe de animação de "Burst" (expansão)
+            logo.classList.remove('logo-click-anim');
+            void logo.offsetWidth; // Força o reflow para permitir reiniciar a animação se clicar rápido
+            logo.classList.add('logo-click-anim');
+
+            // 2. Cria o efeito Ripple
+            const ripple = document.createElement('span');
+            ripple.classList.add('logo-ripple');
+            
+            // Calcula a posição relativa ao logo
+            const rect = logo.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+            
+            logo.appendChild(ripple);
+            
+            // Remove o ripple após a animação
+            setTimeout(() => { 
+                ripple.remove(); 
+            }, 600);
+
+            // Remove a classe de animação principal após terminar
+            setTimeout(() => { 
+                logo.classList.remove('logo-click-anim'); 
+            }, 500);
+        });
+
         /* --- LÓGICA DE COMPARTILHAR --- */
         const shareTriggerBtn = document.getElementById('shareTrigger');
         const shareUrl = 'https://deathzephyr.github.io/PortaisLDX/';

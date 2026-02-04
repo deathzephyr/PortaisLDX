@@ -196,6 +196,25 @@
             font-weight: 600; letter-spacing: 1px; user-select: none; cursor: default;
         }
 
+        /* --- BOTÃO COMPARTILHAR --- */
+        .share-trigger-btn {
+            background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
+            padding: 10px 14px; border-radius: 100px; font-size: 1.1rem;
+            color: #ffffff; backdrop-filter: blur(20px); 
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            width: 42px; height: 42px;
+        }
+
+        .share-trigger-btn:hover {
+            border-color: rgba(255,255,255,0.8);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
         /* --- SETTINGS CONTAINER --- */
         .settings-container { position: relative; }
 
@@ -786,6 +805,11 @@
         <div class="header-right">
             <div class="clock" id="clock">00:00</div>
             
+            <!-- BOTÃO COMPARTILHAR (NOVO) -->
+            <button class="share-trigger-btn" id="shareTrigger" title="Compartilhar">
+                <i class="fa-solid fa-share-nodes"></i>
+            </button>
+
             <!-- SETTINGS -->
             <div class="settings-container">
                 <button class="settings-trigger-btn" id="settingsTrigger" title="Configurações">
@@ -1030,12 +1054,10 @@
                             <h4>Instale a Extensão AdGuard</h4>
                             <p>Selecione o seu navegador e instale a extensão AdGuard:</p>
                             
-                            <!-- Botão Chrome (Só colorido no hover) -->
                             <a href="https://chromewebstore.google.com/detail/bloqueador-adguard/bgnkhhnnamicmpeenaelnjfhikgbkllg" target="_blank" class="modal-btn btn-primary">
                                 <i class="fa-brands fa-chrome"></i> AdGuard (Chrome)
                             </a>
                             
-                            <!-- Botão Firefox (Só colorido no hover) -->
                             <a href="https://addons.mozilla.org/firefox/addon/adguard-adblocker/" target="_blank" class="modal-btn btn-primary">
                                 <i class="fa-brands fa-firefox-browser"></i> AdGuard (Firefox)
                             </a>
@@ -1064,6 +1086,31 @@
     </div>
 
     <script>
+        /* --- LÓGICA DE COMPARTILHAR --- */
+        const shareTriggerBtn = document.getElementById('shareTrigger');
+        const shareUrl = 'https://deathzephyr.github.io/PortaisLDX/';
+
+        shareTriggerBtn.addEventListener('click', async () => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'LDX Portais',
+                        text: 'Confira os Portais LDX!',
+                        url: shareUrl
+                    });
+                } catch (err) {
+                    console.error('Erro ao compartilhar', err);
+                }
+            } else {
+                // Fallback para navegadores mais antigos: Copiar link
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    showToast("Link copiado para a área de transferência!");
+                }).catch(err => {
+                    showToast("Não foi possível copiar automaticamente: " + shareUrl);
+                });
+            }
+        });
+
         /* --- LÓGICA DE MÚSICA --- */
         const audio = document.getElementById('bgMusic');
         const musicToggleBtn = document.getElementById('musicToggleBtn');
@@ -1196,7 +1243,7 @@
             const greetingEl = document.getElementById('greeting-text');
             let greeting = "Seja bem-vindo.";
             
-            if (hours >=5 && hours < 12) greeting = "Bom dia, viajante.";
+            if (hours >= 5 && hours < 12) greeting = "Bom dia, viajante.";
             else if (hours >= 12 && hours < 18) greeting = "Boa tarde, viajante.";
             else if (hours >= 18 && hours < 24) greeting = "Boa noite, viajante.";
             else greeting = "Boa madrugada, insone.";

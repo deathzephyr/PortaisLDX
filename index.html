@@ -144,11 +144,12 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 2rem; 
+            padding: 2rem 1.5rem; /* Ajuste de padding lateral */
             position: relative; 
             z-index: 50; 
-            gap: 15px; 
-            flex-wrap: wrap;
+            gap: 10px; /* Reduzi o gap para caber no mobile */
+            flex-wrap: nowrap; /* IMPORTANTE: Força tudo na mesma linha */
+            white-space: nowrap; /* Impede quebra de texto indesejada */
         }
 
         .container { 
@@ -163,7 +164,7 @@
         }
         .loaded .container { opacity: 1; }
         
-        .header-right { display: flex; align-items: center; gap: 12px; }
+        .header-right { display: flex; align-items: center; gap: 8px; /* Gap menor para mobile */ flex-shrink: 0; }
 
         .logo { 
             font-size: 2.0rem; 
@@ -172,15 +173,17 @@
             text-shadow: 0 0 20px rgba(255,255,255,0.1);
             display: flex; 
             align-items: center; 
-            gap: 15px; 
+            gap: 10px; /* Ajuste de gap */
             user-select: none;
-            cursor: pointer; /* Indica que é clicável */
-            position: relative; /* Necessário para a animação de ripple ficar dentro */
+            cursor: pointer;
+            position: relative;
             transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 60;
+            flex-shrink: 1; /* Permite que o logo encolha um pouco se necessário */
+            min-width: fit-content;
         }
 
-        /* --- NOVA ANIMAÇÃO DE CLIQUE NO LOGO --- */
+        /* --- ANIMAÇÃO DE CLIQUE NO LOGO --- */
         .logo-click-anim {
             animation: logoBurst 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -198,7 +201,7 @@
             transform: scale(0);
             pointer-events: none;
             animation: logoRippleAnim 0.6s ease-out forwards;
-            z-index: -1; /* Fica atrás do texto */
+            z-index: -1;
         }
 
         @keyframes logoRippleAnim {
@@ -222,24 +225,28 @@
 
         .clock {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
-            padding: 8px 18px; border-radius: 100px; font-family: 'Space Grotesk', monospace; 
-            font-size: 0.9rem; color: #fff;
+            padding: 8px 12px; /* Padding ajustado */
+            border-radius: 100px; font-family: 'Space Grotesk', monospace; 
+            font-size: 0.85rem; color: #fff;
             backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); 
             font-weight: 600; letter-spacing: 1px; user-select: none; cursor: default;
+            flex-shrink: 0;
         }
 
-        /* --- BOTÃO COMPARTILHAR --- */
-        .share-trigger-btn {
+        /* --- BOTÕES GERAIS --- */
+        .share-trigger-btn, .settings-trigger-btn {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
-            padding: 10px 14px; border-radius: 100px; font-size: 1.1rem;
+            padding: 8px 12px; /* Tamanho ajustado para mobile */
+            border-radius: 100px; font-size: 1rem; /* Ícone um pouco menor */
             color: #ffffff; backdrop-filter: blur(20px); 
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
             cursor: pointer; transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center;
-            width: 42px; height: 42px;
+            width: 36px; height: 36px; /* Tamanho reduzido para caber */
+            flex-shrink: 0;
         }
 
-        .share-trigger-btn:hover {
+        .share-trigger-btn:hover, .settings-trigger-btn:hover {
             border-color: rgba(255,255,255,0.8);
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
@@ -250,27 +257,9 @@
         /* --- SETTINGS CONTAINER --- */
         .settings-container { position: relative; }
 
-        .settings-trigger-btn {
-            background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
-            padding: 10px 14px; border-radius: 100px; font-size: 1.1rem;
-            color: #ffffff; backdrop-filter: blur(20px); 
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
-            cursor: pointer; transition: all 0.3s ease;
-            display: flex; align-items: center; justify-content: center;
-            width: 42px; height: 42px;
-        }
-
-        .settings-trigger-btn:hover, .settings-trigger-btn.active {
-            border-color: rgba(255,255,255,0.8);
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-        }
-
         .settings-dropdown {
             position: absolute; top: calc(100% + 15px); right: 0;
-            width: 240px;
+            width: 260px; /* Um pouco mais largo para caber o texto do cadeado */
             background: rgba(15, 15, 20, 0.95);
             border: 1px solid var(--glass-border);
             border-radius: 16px; padding: 8px;
@@ -291,7 +280,7 @@
             padding: 12px 16px;
             border-radius: 12px; background: transparent; border: none;
             color: var(--text-muted); font-family: 'Inter', sans-serif;
-            font-size: 0.95rem; font-weight: 500; text-align: left; cursor: pointer;
+            font-size: 0.9rem; font-weight: 500; text-align: left; cursor: pointer;
             transition: all 0.2s ease; width: 100%;
         }
 
@@ -326,7 +315,7 @@
         .grid-option {
             padding: 10px 14px; border-radius: 8px; background: transparent; border: none;
             color: var(--text-muted); font-family: 'Inter', sans-serif;
-            font-size: 0.9rem; font-weight: 500; text-align: left; cursor: pointer;
+            font-size: 0.85rem; font-weight: 500; text-align: left; cursor: pointer;
             transition: all 0.2s; display: flex; align-items: center; gap: 10px;
         }
 
@@ -340,20 +329,20 @@
         /* --- HERO --- */
         .hero { text-align: center; margin: 4rem 0 3rem; position: relative; }
         .hero h1 { 
-            font-size: 4rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
+            font-size: 3.5rem; /* Ajustado para mobile */
+            font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
             background: var(--rainbow-gradient); background-size: 300% auto;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: colorCycle 6s linear infinite;
-            letter-spacing: -2px; filter: drop-shadow(0 0 30px rgba(0,0,0,0.5)); user-select: none;
+            letter-spacing: -1px; /* Ajuste de letra */
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.5)); user-select: none;
         }
-        .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
+        .hero p { color: var(--text-muted); font-size: 1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
 
-        /* --- TUTORIAL BANNER (ESTILO DEFINITIVO) --- */
+        /* --- TUTORIAL BANNER --- */
         .tutorial-banner {
-            /* Fundo e Borda iguais aos quadrados */
             background: var(--glass-bg); 
             border: 1px solid var(--glass-border);
-            
             border-radius: 24px; 
             padding: 2rem 2.5rem;
             margin-bottom: 1.2rem; 
@@ -368,7 +357,11 @@
             z-index: 10;
         }
 
-        /* Ícone de fundo gigante (igual aos quadrados) */
+        /* Estado oculto (controlado via JS) */
+        .tutorial-banner.hidden-banner {
+            display: none !important;
+        }
+
         .tutorial-banner .hub-bg-icon {
             position: absolute; 
             right: -20px; 
@@ -381,7 +374,6 @@
             z-index: 1; 
         }
 
-        /* HOVER DO BANNER: Comportamento IGUAL AOS QUADRADOS (Sem Borda Colorida) */
         .tutorial-banner:hover {
             background: rgba(30, 30, 35, 0.8); 
             border-color: rgba(255, 255, 255, 0.4);
@@ -389,10 +381,7 @@
             transform: translateY(-2px);
         }
 
-        .tutorial-banner:hover .hub-bg-icon { 
-            opacity: 0.08; 
-            transform: rotate(0deg) scale(1.1); 
-        }
+        .tutorial-banner:hover .hub-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.1); }
 
         .tutorial-content {
             display: flex;
@@ -402,35 +391,24 @@
             z-index: 2;
         }
 
-        /* Ícone Principal: SÓ ELE FICA COLORIDO NO HOVER */
         .tutorial-icon {
             width: 60px; height: 60px;
-            background: rgba(255,255,255,0.05); /* Fundo cinza padrão */
-            border: 1px solid rgba(255,255,255,0.1); /* Borda cinza padrão */
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 16px;
             display: flex; justify-content: center; align-items: center;
             font-size: 1.8rem; 
-            color: rgba(255,255,255,0.6); /* Ícone cinza */
+            color: rgba(255,255,255,0.6);
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             flex-shrink: 0;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .tutorial-text h3 {
-            color: #fff;
-            font-size: 1.4rem;
-            margin-bottom: 0.3rem;
-        }
+        .tutorial-text h3 { color: #fff; font-size: 1.4rem; margin-bottom: 0.3rem; }
+        .tutorial-text p { color: #cbd5e1; font-size: 0.95rem; margin: 0; }
 
-        .tutorial-text p {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            margin: 0;
-        }
-
-        /* Botão: NÃO fica colorido no hover, apenas mais branco */
         .tutorial-btn {
-            background: rgba(255, 255, 255, 0.1); /* Cinza claro */
+            background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255,255,255,0.1);
             color: #fff; 
             padding: 12px 24px;
@@ -445,9 +423,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* EFEITOS DE HOVER NO BANNER */
         .tutorial-banner:hover .tutorial-icon {
-            /* Apenas o ícone ganha gradiente arco-íris */
             background: var(--rainbow-gradient);
             background-size: 200% auto;
             animation: colorCycle 4s linear infinite;
@@ -458,7 +434,6 @@
         }
 
         .tutorial-banner:hover .tutorial-btn {
-            /* Botão fica apenas mais brilhante, sem arco-íris */
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.3);
             color: #fff;
@@ -473,10 +448,7 @@
             padding: 2rem 0; 
         }
         
-        .hubs-grid.cols-2 { 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 2rem; 
-        }
+        .hubs-grid.cols-2 { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
 
         /* --- HUB CARD STYLE --- */
         .hub-card {
@@ -575,171 +547,86 @@
             flex-shrink: 0;
         }
 
-        .modal-header h3 { font-size: 1.2rem; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .modal-header h3 { font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 10px; }
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
 
         /* --- TUTORIAL TABS --- */
         .tutorial-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-            background: rgba(255,255,255,0.05);
-            padding: 5px;
-            border-radius: 12px;
+            display: flex; gap: 10px; margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.05); padding: 5px; border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.1);
         }
 
         .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            flex: 1; padding: 10px; border: none; background: transparent;
+            color: var(--text-muted); font-size: 0.85rem; font-weight: 600;
+            border-radius: 8px; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
         .tab-btn.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.1); color: #fff;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- TUTORIAL STEPS --- */
-        .step-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column,
-            gap: 1.2rem;
-            margin-bottom: 1rem;
-        }
+        .step-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 1rem; }
 
-        .step-item {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
+        .step-item { display: flex; gap: 1rem; align-items: flex-start; }
 
         .step-number {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 700;
-            flex-shrink: 0;
-            margin-top: 2px;
+            background: rgba(255,255,255,0.1); color: #fff; width: 28px; height: 28px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;
         }
 
-        .step-content h4 {
-            color: #fff;
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-        }
+        .step-content h4 { color: #fff; font-size: 1rem; margin-bottom: 0.3rem; }
+        .step-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
 
-        .step-content p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        /* Container para DNS e Botão Copiar */
-        .dns-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 8px;
-        }
-
-        /* Caixa para o DNS */
+        .dns-container { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+        
         .dns-code-box {
-            background: rgba(255,255,255,0.1);
-            border: 1px dashed rgba(255, 255, 255, 0.3);
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            color: #ffffff; /* Branco solicitado */
-            text-align: left;
-            font-size: 1rem;
-            user-select: all;
-            flex-grow: 1;
+            background: rgba(255,255,255,0.1); border: 1px dashed rgba(255, 255, 255, 0.3);
+            padding: 10px 12px; border-radius: 8px; font-family: 'Courier New', monospace;
+            color: #ffffff; text-align: left; font-size: 0.9rem; user-select: all; flex-grow: 1;
         }
 
-        /* Botão Copiar */
         .copy-dns-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.9rem;
-            flex-shrink: 0;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer;
+            transition: 0.2s; font-size: 0.9rem; flex-shrink: 0;
         }
-        .copy-dns-btn:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: rgba(255,255,255,0.4);
-        }
+        .copy-dns-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
 
         .modal-btn {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            cursor: pointer;
-            border: none;
-            font-size: 0.95rem;
+            display: block; width: 100%; padding: 12px; border-radius: 12px;
+            text-align: center; font-weight: 600; text-decoration: none;
+            transition: all 0.3s ease; margin-top: 8px; cursor: pointer;
+            border: none; font-size: 0.9rem;
         }
 
-        /* --- BOTÕES DE DOWNLOAD (PC) --- */
-        /* Base: Vidro/Transparente. Hover: Rainbow Animado */
+        /* --- BOTÕES DE DOWNLOAD --- */
         .btn-primary {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;
         }
         .btn-primary:hover {
-            background: var(--rainbow-gradient);
-            background-size: 200% auto;
-            animation: colorCycle 4s linear infinite;
-            filter: brightness(1.2);
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            background: var(--rainbow-gradient); background-size: 200% auto;
+            animation: colorCycle 4s linear infinite; filter: brightness(1.2);
+            transform: translateY(-2px); box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
 
-        /* --- BACKGROUND MODAL SPECIFIC --- */
+        /* --- BACKGROUND MODAL --- */
         .upload-container { margin-bottom: 20px; margin-top: 10px; }
         .upload-btn {
             width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #ffffff; padding: 14px; border-radius: 12px; cursor: pointer;
+            color: #ffffff; padding: 12px; border-radius: 12px; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 10px;
-            font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease;
+            font-weight: 500; font-size: 0.9rem; transition: all 0.3s ease;
         }
         .upload-btn:hover {
             background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.6);
@@ -766,36 +653,52 @@
         }
         #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
 
-        /* --- MOBILE --- */
+        /* --- MOBILE ADJUSTMENTS --- */
         @media (max-width: 900px) { 
-            .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 0.9rem; }
             
+            /* Garante que o header não quebre linha */
+            .main-header {
+                padding: 1rem 1rem;
+                justify-content: space-between; /* Força o logo para esquerda e botões para direita */
+            }
+
+            .logo {
+                font-size: 1.5rem; /* Reduz o tamanho da fonte do logo */
+                gap: 8px;
+            }
+            .logo-icon-special { font-size: 1.5rem; }
+
+            .header-right {
+                gap: 6px;
+            }
+
+            .clock {
+                font-size: 0.7rem; /* Fonte menor */
+                padding: 6px 8px;
+            }
+
             /* BANNER TUTORIAL NO MOBILE */
             .tutorial-banner {
-                flex-direction: column;
-                text-align: center;
-                padding: 1.5rem;
-                gap: 1rem;
-                margin-bottom: 1rem;
+                flex-direction: column; text-align: center; padding: 1.5rem; gap: 1rem; margin-bottom: 1rem;
             }
-            .tutorial-content {
-                flex-direction: column;
-                text-align: center;
-            }
+            .tutorial-content { flex-direction: column; text-align: center; }
             .tutorial-btn { width: 100%; }
 
             /* GRID NO MOBILE */
             .hubs-grid { grid-template-columns: 1fr !important; gap: 1rem; padding: 1rem 0; }
-            .hub-card { flex-direction: row; justify-content: flex-start; align-items: center; text-align: left; padding: 1.25rem 1.5rem !important; min-height: auto; height: auto; gap: 1.5rem; }
+            .hub-card { 
+                flex-direction: row; justify-content: flex-start; align-items: center; 
+                text-align: left; padding: 1.25rem 1.5rem !important; min-height: auto; height: auto; gap: 1.5rem; 
+            }
             .hub-content { flex-direction: row; align-items: center; gap: 1.25rem; width: 100%; }
             .hub-icon { width: 55px !important; height: 55px !important; font-size: 1.5rem !important; flex-shrink: 0; margin-bottom: 0; }
-            .hub-card h2 { font-size: 1.25rem !important; margin-bottom: 0.2rem; }
+            .hub-card h2 { font-size: 1.2rem !important; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem !important; margin: 0; }
             .hub-bg-icon { display: none; }
             
-            .clock { font-size: 0.8rem; padding: 6px 14px; }
-            .header-right { gap: 8px; }
-            .grid-submenu { display: none; }
+            .grid-submenu { display: none; } /* Esconde submenu no mobile para simplificar */
             .layout-option-wrapper { display: none; }
         }
     </style>
@@ -830,15 +733,15 @@
 
     <!-- HEADER -->
     <header class="main-header">
-        <!-- LOGO LDX (Agora com animação de clique) -->
+        <!-- LOGO LDX -->
         <div class="logo" id="mainLogo">
-            <i class="fa-solid fa-infinity logo-icon-special"></i> LDX
+            <i class="fa-solid fa-infinity logo-icon-special"></i> <span>LDX</span>
         </div>
         
         <div class="header-right">
             <div class="clock" id="clock">00:00</div>
             
-            <!-- BOTÃO COMPARTILHAR (NOVO) -->
+            <!-- BOTÃO COMPARTILHAR -->
             <button class="share-trigger-btn" id="shareTrigger" title="Compartilhar">
                 <i class="fa-solid fa-share-nodes"></i>
             </button>
@@ -850,12 +753,21 @@
                 </button>
                 
                 <div class="settings-dropdown" id="settingsDropdown">
+                    <!-- MÚSICA -->
                     <button class="dropdown-item" id="musicToggleBtn">
                         <span class="dropdown-item-content">
                             <span class="music-indicator" id="musicIconContainer">
                                 <i class="fa-solid fa-music" id="musicStateIcon"></i>
                             </span>
                             <span id="musicLabel">Parar Música</span>
+                        </span>
+                    </button>
+
+                    <!-- TUTORIAL (CADEADO) -->
+                    <button class="dropdown-item" id="adblockToggleBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-lock-open" id="adblockIcon"></i>
+                            <span id="adblockLabel">Ocultar Tutorial</span>
                         </span>
                     </button>
 
@@ -866,6 +778,7 @@
                         </span>
                     </button>
 
+                    <!-- LAYOUT (APENAS PC) -->
                     <div class="dropdown-item-wrapper layout-option-wrapper">
                         <button class="dropdown-item" id="gridTriggerBtn">
                             <span class="dropdown-item-content">
@@ -895,11 +808,9 @@
             <p id="greeting-text">...</p>
         </section>
 
-        <!-- BANNER TUTORIAL (SÓ O ÍCONE FICA COLORIDO) -->
+        <!-- BANNER TUTORIAL -->
         <div class="tutorial-banner" id="tutorialBanner">
-            <!-- Ícone gigante no fundo -->
             <div class="hub-bg-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            
             <div class="tutorial-content">
                 <div class="tutorial-icon">
                     <i class="fa-solid fa-shield-halved"></i>
@@ -982,7 +893,7 @@
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast"><i class="fa-solid fa-check-circle"></i> <span>Imagem carregada com sucesso!</span></div>
+    <div id="toast"><i class="fa-solid fa-check-circle"></i> <span>Ação realizada!</span></div>
 
     <!-- MODAL FUNDO -->
     <div class="modal-overlay" id="bgModal">
@@ -1008,7 +919,7 @@
         </div>
     </div>
 
-    <!-- MODAL TUTORIAL (DUAS OPÇÕES: CELULAR E PC) -->
+    <!-- MODAL TUTORIAL -->
     <div class="modal-overlay" id="tutorialModal">
         <div class="modal-backdrop" id="tutorialModalBackdrop"></div>
         <div class="modal-content">
@@ -1017,7 +928,7 @@
                 <button class="close-modal" id="closeTutorialModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- TABS PARA SELECIONAR DISPOSITIVO -->
+            <!-- TABS -->
             <div class="tutorial-tabs">
                 <button class="tab-btn active" onclick="switchTab('mobile')">
                     <i class="fa-solid fa-mobile-screen"></i> Celular
@@ -1038,7 +949,7 @@
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h4>Configurações do Celular</h4>
-                            <p>Acesse o menu <strong>Configurações</strong> do seu aparelho e procure pela opção de Rede ou Conexões.</p>
+                            <p>Acesse o menu <strong>Configurações</strong> e procure por Rede ou Conexões.</p>
                         </div>
                     </div>
 
@@ -1046,7 +957,7 @@
                         <div class="step-number">2</div>
                         <div class="step-content">
                             <h4>DNS Privado</h4>
-                            <p>Encontre a opção <strong>DNS Privado</strong> (ou Private DNS) e selecione o modo "Nome do host do provedor de DNS".</p>
+                            <p>Encontre a opção <strong>DNS Privado</strong> e selecione "Nome do host do provedor de DNS".</p>
                         </div>
                     </div>
 
@@ -1054,10 +965,10 @@
                         <div class="step-number">3</div>
                         <div class="step-content">
                             <h4>Adicionar DNS</h4>
-                            <p>No campo de texto, insira o seguinte endereço:</p>
+                            <p>No campo de texto, insira:</p>
                             <div class="dns-container">
                                 <div class="dns-code-box">dns.adguard.com</div>
-                                <button class="copy-dns-btn" onclick="copyDNS()" title="Copiar DNS">
+                                <button class="copy-dns-btn" onclick="copyDNS()">
                                     <i class="fa-regular fa-copy"></i>
                                 </button>
                             </div>
@@ -1068,7 +979,7 @@
                         <div class="step-number">4</div>
                         <div class="step-content">
                             <h4>Salvar</h4>
-                            <p>Clique em <strong>Salvar</strong> (ou conectar). O bloqueio será ativado imediatamente em todo o sistema.</p>
+                            <p>Clique em <strong>Salvar</strong>. O bloqueio será ativado imediatamente.</p>
                         </div>
                     </div>
                 </div>
@@ -1084,13 +995,11 @@
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <div class="step-content">
-                            <h4>Instale a Extensão AdGuard</h4>
-                            <p>Selecione o seu navegador e instale a extensão AdGuard:</p>
-                            
+                            <h4>Instale a Extensão</h4>
+                            <p>Selecione o seu navegador e instale o AdGuard:</p>
                             <a href="https://chromewebstore.google.com/detail/bloqueador-adguard/bgnkhhnnamicmpeenaelnjfhikgbkllg" target="_blank" class="modal-btn btn-primary">
                                 <i class="fa-brands fa-chrome"></i> AdGuard (Chrome)
                             </a>
-                            
                             <a href="https://addons.mozilla.org/firefox/addon/adguard-adblocker/" target="_blank" class="modal-btn btn-primary">
                                 <i class="fa-brands fa-firefox-browser"></i> AdGuard (Firefox)
                             </a>
@@ -1109,7 +1018,7 @@
                         <div class="step-number">3</div>
                         <div class="step-content">
                             <h4>Reinicie a Página</h4>
-                            <p>Recarregue qualquer Portal (F5). Os anúncios desaparecerão magicamente.</p>
+                            <p>Recarregue qualquer Portal (F5). Os anúncios desaparecerão.</p>
                         </div>
                     </div>
                 </div>
@@ -1121,60 +1030,35 @@
     <script>
         /* --- LOGO CLICK ANIMATION --- */
         const logo = document.getElementById('mainLogo');
-        
         logo.addEventListener('click', function(e) {
-            // 1. Adiciona a classe de animação de "Burst" (expansão)
             logo.classList.remove('logo-click-anim');
-            void logo.offsetWidth; // Força o reflow para permitir reiniciar a animação se clicar rápido
+            void logo.offsetWidth;
             logo.classList.add('logo-click-anim');
 
-            // 2. Cria o efeito Ripple
             const ripple = document.createElement('span');
             ripple.classList.add('logo-ripple');
-            
-            // Calcula a posição relativa ao logo
             const rect = logo.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
-            
             ripple.style.width = ripple.style.height = `${size}px`;
             ripple.style.left = `${e.clientX - rect.left - size/2}px`;
             ripple.style.top = `${e.clientY - rect.top - size/2}px`;
-            
             logo.appendChild(ripple);
-            
-            // Remove o ripple após a animação
-            setTimeout(() => { 
-                ripple.remove(); 
-            }, 600);
-
-            // Remove a classe de animação principal após terminar
-            setTimeout(() => { 
-                logo.classList.remove('logo-click-anim'); 
-            }, 500);
+            setTimeout(() => { ripple.remove(); }, 600);
+            setTimeout(() => { logo.classList.remove('logo-click-anim'); }, 500);
         });
 
         /* --- LÓGICA DE COMPARTILHAR --- */
         const shareTriggerBtn = document.getElementById('shareTrigger');
         const shareUrl = 'https://deathzephyr.github.io/PortaisLDX/';
-
         shareTriggerBtn.addEventListener('click', async () => {
             if (navigator.share) {
                 try {
-                    await navigator.share({
-                        title: 'LDX Portais',
-                        text: 'Confira os Portais LDX!',
-                        url: shareUrl
-                    });
-                } catch (err) {
-                    console.error('Erro ao compartilhar', err);
-                }
+                    await navigator.share({ title: 'LDX Portais', text: 'Confira os Portais LDX!', url: shareUrl });
+                } catch (err) { console.error('Erro ao compartilhar', err); }
             } else {
-                // Fallback para navegadores mais antigos: Copiar link
                 navigator.clipboard.writeText(shareUrl).then(() => {
-                    showToast("Link copiado para a área de transferência!");
-                }).catch(err => {
-                    showToast("Não foi possível copiar automaticamente: " + shareUrl);
-                });
+                    showToast("Link copiado!");
+                }).catch(() => showToast("Link: " + shareUrl));
             }
         });
 
@@ -1184,7 +1068,6 @@
         const musicStateIcon = document.getElementById('musicStateIcon');
         const musicIconContainer = document.getElementById('musicIconContainer');
         const musicLabel = document.getElementById('musicLabel');
-        
         audio.volume = 0.5;
 
         function updateMusicUI() {
@@ -1201,63 +1084,77 @@
         function attemptAutoplay() {
             const savedPlaying = localStorage.getItem('ldx_music_playing');
             const savedTime = localStorage.getItem('ldx_music_time');
-            const savedVol = localStorage.getItem('ldx_music_volume');
-
-            if (savedVol) audio.volume = parseFloat(savedVol);
             if (savedTime) audio.currentTime = parseFloat(savedTime);
-
-            if (savedPlaying === 'false') {
-                updateMusicUI();
-                return;
-            }
+            
+            if (savedPlaying === 'false') { updateMusicUI(); return; }
 
             const playPromise = audio.play();
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
                     updateMusicUI();
                     localStorage.setItem('ldx_music_playing', 'true');
-                }).catch(error => {
-                    console.log("Autoplay bloqueado.");
+                }).catch(() => {
                     updateMusicUI();
                     localStorage.setItem('ldx_music_playing', 'false');
                 });
-            } else {
-                updateMusicUI();
-            }
+            } else { updateMusicUI(); }
         }
 
         function toggleMusic() {
             if (audio.paused) {
-                audio.play().then(() => {
-                    localStorage.setItem('ldx_music_playing', 'true');
-                }).catch(e => alert("Erro ao reproduzir áudio."));
+                audio.play().then(() => localStorage.setItem('ldx_music_playing', 'true')).catch(() => alert("Erro ao tocar áudio."));
             } else {
                 audio.pause();
                 localStorage.setItem('ldx_music_playing', 'false');
             }
             setTimeout(updateMusicUI, 50);
         }
-
         musicToggleBtn.addEventListener('click', toggleMusic);
 
         setInterval(() => {
             if (!audio.paused) {
                 localStorage.setItem('ldx_music_time', audio.currentTime);
                 localStorage.setItem('ldx_music_playing', 'true');
-                localStorage.setItem('ldx_music_volume', audio.volume);
-            } else {
-                localStorage.setItem('ldx_music_playing', 'false');
-            }
+            } else { localStorage.setItem('ldx_music_playing', 'false'); }
         }, 1000);
 
-        audio.onplay = () => {
-            localStorage.setItem('ldx_music_playing', 'true');
-            updateMusicUI();
-        };
-        audio.onpause = () => {
-            localStorage.setItem('ldx_music_playing', 'false');
-            updateMusicUI();
-        };
+        audio.onplay = () => { localStorage.setItem('ldx_music_playing', 'true'); updateMusicUI(); };
+        audio.onpause = () => { localStorage.setItem('ldx_music_playing', 'false'); updateMusicUI(); };
+
+        /* --- TOGGLE TUTORIAL BANNER (CADEADO) --- */
+        const adblockToggleBtn = document.getElementById('adblockToggleBtn');
+        const tutorialBanner = document.getElementById('tutorialBanner');
+        const adblockIcon = document.getElementById('adblockIcon');
+        const adblockLabel = document.getElementById('adblockLabel');
+        const ADBLOCK_STORAGE_KEY = 'ldx_adblock_visible';
+
+        function initAdblockToggle() {
+            // Pega o estado salvo. Se não existir, assume true (visível) para primeira vez.
+            const isVisible = localStorage.getItem(ADBLOCK_STORAGE_KEY) !== 'false';
+            updateAdblockUI(isVisible);
+        }
+
+        function updateAdblockUI(isVisible) {
+            if (isVisible) {
+                tutorialBanner.style.display = 'flex';
+                adblockIcon.className = 'fa-solid fa-lock-open'; // Aberto = Visível
+                adblockLabel.textContent = "Ocultar Tutorial";
+            } else {
+                tutorialBanner.style.display = 'none';
+                adblockIcon.className = 'fa-solid fa-lock'; // Fechado = Oculto
+                adblockLabel.textContent = "Exibir Tutorial";
+            }
+        }
+
+        adblockToggleBtn.addEventListener('click', () => {
+            const currentState = localStorage.getItem(ADBLOCK_STORAGE_KEY) !== 'false';
+            const newState = !currentState;
+            localStorage.setItem(ADBLOCK_STORAGE_KEY, newState);
+            updateAdblockUI(newState);
+            // Feedback visual no botão
+            adblockToggleBtn.style.transform = "scale(0.95)";
+            setTimeout(() => adblockToggleBtn.style.transform = "scale(1)", 150);
+        });
 
         /* --- DROPDOWN --- */
         const settingsTrigger = document.getElementById('settingsTrigger');
@@ -1297,6 +1194,7 @@
             setTimeout(() => {
                 document.body.classList.add('loaded');
                 attemptAutoplay();
+                initAdblockToggle(); // Inicia o estado do banner
             }, 1800);
         });
 
@@ -1309,7 +1207,6 @@
 
             const greetingEl = document.getElementById('greeting-text');
             let greeting = "Seja bem-vindo.";
-            
             if (hours >= 5 && hours < 12) greeting = "Bom dia, viajante.";
             else if (hours >= 12 && hours < 18) greeting = "Boa tarde, viajante.";
             else if (hours >= 18 && hours < 24) greeting = "Boa noite, viajante.";
@@ -1324,7 +1221,6 @@
 
         /* --- TILT & CLICK EFFECTS (CARDS) --- */
         const hubCards = document.querySelectorAll('.hub-card');
-        
         hubCards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 if(window.innerWidth > 900) {
@@ -1371,23 +1267,18 @@
         });
 
         /* --- TUTORIAL BANNER CLICK --- */
-        const tutorialBanner = document.getElementById('tutorialBanner');
-        
-        tutorialBanner.addEventListener('click', function() {
+        const tutorialBannerClick = document.getElementById('tutorialBanner');
+        tutorialBannerClick.addEventListener('click', function() {
             document.getElementById('tutorialModal').classList.add('active');
         });
 
-        /* --- TABS LOGIC (CELULAR / PC) --- */
+        /* --- TABS LOGIC --- */
         function switchTab(device) {
-            // Remove active class from all buttons
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // Hide all contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
 
-            // Activate selected
             if (device === 'mobile') {
                 buttons[0].classList.add('active');
                 document.getElementById('tab-mobile').classList.add('active');
@@ -1400,22 +1291,15 @@
         /* --- COPIAR DNS --- */
         function copyDNS() {
             const dns = "dns.adguard.com";
-            
-            // Tenta usar a API moderna Clipboard
             navigator.clipboard.writeText(dns).then(() => {
                 showToast("DNS copiado!");
-            }).catch(err => {
-                // Fallback para compatibilidade (arquivo local, etc)
+            }).catch(() => {
                 const textArea = document.createElement("textarea");
                 textArea.value = dns;
                 document.body.appendChild(textArea);
                 textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showToast("DNS copiado!");
-                } catch (err) {
-                    showToast("Erro ao copiar");
-                }
+                try { document.execCommand('copy'); showToast("DNS copiado!"); } 
+                catch (err) { showToast("Erro ao copiar"); }
                 document.body.removeChild(textArea);
             });
         }
@@ -1426,11 +1310,8 @@
         const gridStorageKey = 'ldx_portal_grid'; 
 
         function setGrid(cols) {
-            if (cols === '2') {
-                bentoGrid.classList.add('cols-2');
-            } else {
-                bentoGrid.classList.remove('cols-2');
-            }
+            if (cols === '2') bentoGrid.classList.add('cols-2');
+            else bentoGrid.classList.remove('cols-2');
             localStorage.setItem(gridStorageKey, cols);
 
             gridOptions.forEach(opt => {
@@ -1449,10 +1330,7 @@
         }
 
         gridOptions.forEach(opt => {
-            opt.addEventListener('click', () => {
-                const cols = opt.getAttribute('data-cols');
-                setGrid(cols);
-            });
+            opt.addEventListener('click', () => setGrid(opt.getAttribute('data-cols')));
         });
 
         loadGrid();
@@ -1469,13 +1347,10 @@
             const modal = document.getElementById(modalId);
             const closeBtn = document.getElementById(closeBtnId);
             const backdrop = document.getElementById(backdropId);
-
             function closeModal() { modal.classList.remove('active'); }
-            
             closeBtn.addEventListener('click', closeModal);
             backdrop.addEventListener('click', closeModal);
         }
-
         setupModal('bgModal', 'closeBgModalBtn', 'bgModalBackdrop');
         setupModal('tutorialModal', 'closeTutorialModalBtn', 'tutorialModalBackdrop');
 
@@ -1513,27 +1388,19 @@
 
         const savedBg = localStorage.getItem('ldx_custom_bg');
         const savedType = localStorage.getItem('ldx_bg_type');
-
         if (savedBg) {
-            if(savedType === 'image') {
-                customBgLayer.style.backgroundImage = `url('${savedBg}')`;
-            } else {
-                document.body.style.backgroundImage = savedBg;
-            }
+            if(savedType === 'image') customBgLayer.style.backgroundImage = `url('${savedBg}')`;
+            else document.body.style.backgroundImage = savedBg;
             document.body.classList.add('has-custom-bg');
         }
 
         bgFileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast("Imagem muito grande! (Max 5MB)");
-                    return;
-                }
+                if (file.size > 5 * 1024 * 1024) { showToast("Imagem muito grande! (Max 5MB)"); return; }
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    const base64String = event.target.result;
-                    setBackground(base64String, 'image');
+                    setBackground(event.target.result, 'image');
                     showToast("Imagem carregada com sucesso!");
                 };
                 reader.readAsDataURL(file);

@@ -287,7 +287,7 @@
         @keyframes bounceIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
         /* --- HERO --- */
-        .hero { text-align: center; margin: 4rem 0 4rem; position: relative; }
+        .hero { text-align: center; margin: 4rem 0 3rem; position: relative; }
         .hero h1 { 
             font-size: 4rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
             background: var(--rainbow-gradient); background-size: 300% auto;
@@ -297,8 +297,124 @@
         }
         .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
 
+        /* --- TUTORIAL BANNER (ESTILO DEFINITIVO) --- */
+        .tutorial-banner {
+            /* Fundo e Borda iguais aos quadrados */
+            background: var(--glass-bg); 
+            border: 1px solid var(--glass-border);
+            
+            border-radius: 24px; 
+            padding: 2rem 2.5rem;
+            margin-bottom: 1.2rem; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(25px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Ícone de fundo gigante (igual aos quadrados) */
+        .tutorial-banner .hub-bg-icon {
+            position: absolute; 
+            right: -20px; 
+            bottom: -20px; 
+            font-size: 8rem; 
+            opacity: 0.03; 
+            transform: rotate(-15deg); 
+            pointer-events: none; 
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            z-index: 1; 
+        }
+
+        /* HOVER DO BANNER: Comportamento IGUAL AOS QUADRADOS (Sem Borda Colorida) */
+        .tutorial-banner:hover {
+            background: rgba(30, 30, 35, 0.8); 
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .tutorial-banner:hover .hub-bg-icon { 
+            opacity: 0.08; 
+            transform: rotate(0deg) scale(1.1); 
+        }
+
+        .tutorial-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-grow: 1;
+            z-index: 2;
+        }
+
+        /* Ícone Principal: SÓ ELE FICA COLORIDO NO HOVER */
+        .tutorial-icon {
+            width: 60px; height: 60px;
+            background: rgba(255,255,255,0.05); /* Fundo cinza padrão */
+            border: 1px solid rgba(255,255,255,0.1); /* Borda cinza padrão */
+            border-radius: 16px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.8rem; 
+            color: rgba(255,255,255,0.6); /* Ícone cinza */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .tutorial-text h3 {
+            color: #fff;
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .tutorial-text p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Botão: NÃO fica colorido no hover, apenas mais branco */
+        .tutorial-btn {
+            background: rgba(255, 255, 255, 0.1); /* Cinza claro */
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; 
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            z-index: 2;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* EFEITOS DE HOVER NO BANNER */
+        .tutorial-banner:hover .tutorial-icon {
+            /* Apenas o ícone ganha gradiente arco-íris */
+            background: var(--rainbow-gradient);
+            background-size: 200% auto;
+            animation: colorCycle 4s linear infinite;
+            border-color: transparent;
+            color: #fff;
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 15px 30px rgba(255,255,255,0.2);
+        }
+
+        .tutorial-banner:hover .tutorial-btn {
+            /* Botão fica apenas mais brilhante, sem arco-íris */
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
         /* --- HUBS GRID --- */
-        /* PADRÃO ATUALIZADO PARA 5 COLUNAS */
         .hubs-grid { 
             display: grid; 
             grid-template-columns: repeat(5, 1fr); 
@@ -306,7 +422,6 @@
             padding: 2rem 0; 
         }
         
-        /* Classe para 2 colunas */
         .hubs-grid.cols-2 { 
             grid-template-columns: repeat(2, 1fr); 
             gap: 2rem; 
@@ -323,17 +438,11 @@
             will-change: transform; user-select: none; text-align: center; cursor: pointer;
         }
 
-        /* Ajuste de layout para 5 colunas (Padrão) - Itens menores */
-        .hubs-grid:not(.cols-2) .hub-card { 
-            padding: 1.8rem 1rem; 
-        }
+        .hubs-grid:not(.cols-2) .hub-card { padding: 1.8rem 1rem; }
         .hubs-grid:not(.cols-2) .hub-card h2 { font-size: 1.3rem; }
         .hubs-grid:not(.cols-2) .hub-card p { font-size: 0.75rem; }
-        .hubs-grid:not(.cols-2) .hub-icon { 
-            width: 65px; height: 65px; font-size: 1.8rem; 
-        }
+        .hubs-grid:not(.cols-2) .hub-icon { width: 65px; height: 65px; font-size: 1.8rem; }
 
-        /* Ajuste de layout para 2 colunas - Itens maiores */
         .hubs-grid.cols-2 .hub-card h2 { font-size: 2rem; }
         .hubs-grid.cols-2 .hub-card p { font-size: 1rem; }
 
@@ -385,44 +494,195 @@
         /* --- FOOTER --- */
         footer { text-align: center; padding: 3rem 0; color: var(--text-muted); border-top: 1px solid var(--glass-border); margin-top: 5rem; font-size: 0.8rem; position: relative; z-index: 2; user-select: none; }
 
-        /* --- BG SETTINGS MODAL --- */
-        #bgModal {
+        /* --- MODAL SYSTEM --- */
+        .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; visibility: hidden; transition: all 0.3s ease; padding: 20px;
         }
 
-        #bgModal.active { opacity: 1; visibility: visible; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
 
         .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: -1; }
 
         .modal-content {
             background: rgba(15, 15, 20, 0.98); border: 1px solid var(--glass-border);
-            border-radius: 24px; width: 100%; max-width: 480px; max-height: 85vh;
+            border-radius: 24px; width: 100%; max-width: 500px; max-height: 90vh;
             padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative; overflow-y: auto;
+            display: flex; flex-direction: column;
         }
         .modal-content::-webkit-scrollbar { width: 6px; }
         .modal-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-        #bgModal.active .modal-content { transform: scale(1); }
+        .modal-overlay.active .modal-content { transform: scale(1); }
 
         .modal-header {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);
             position: sticky; top: 0; background: rgba(15, 15, 20, 0.98); z-index: 10;
+            flex-shrink: 0;
         }
 
         .modal-header h3 { font-size: 1.2rem; color: #fff; display: flex; align-items: center; gap: 10px; }
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
 
-        .section-title {
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px;
-            color: var(--text-muted); margin: 15px 0 10px 0; display: block; font-weight: 600;
+        /* --- TUTORIAL TABS --- */
+        .tutorial-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            padding: 5px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* UPLOAD */
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- TUTORIAL STEPS --- */
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-content h4 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Container para DNS e Botão Copiar */
+        .dns-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        /* Caixa para o DNS */
+        .dns-code-box {
+            background: rgba(255,255,255,0.1);
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #ffffff; /* Branco solicitado */
+            text-align: left;
+            font-size: 1rem;
+            user-select: all;
+            flex-grow: 1;
+        }
+
+        /* Botão Copiar */
+        .copy-dns-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .copy-dns-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .modal-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        /* --- BOTÕES DE DOWNLOAD (PC) --- */
+        /* Base: Vidro/Transparente. Hover: Rainbow Animado */
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--rainbow-gradient);
+            background-size: 200% auto;
+            animation: colorCycle 4s linear infinite;
+            filter: brightness(1.2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        /* --- BACKGROUND MODAL SPECIFIC --- */
         .upload-container { margin-bottom: 20px; margin-top: 10px; }
         .upload-btn {
             width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
@@ -458,7 +718,22 @@
         /* --- MOBILE --- */
         @media (max-width: 900px) { 
             .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1rem; }
-            /* No mobile, força 1 coluna sempre */
+            
+            /* BANNER TUTORIAL NO MOBILE */
+            .tutorial-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+            .tutorial-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .tutorial-btn { width: 100%; }
+
+            /* GRID NO MOBILE */
             .hubs-grid { grid-template-columns: 1fr !important; gap: 1rem; padding: 1rem 0; }
             .hub-card { flex-direction: row; justify-content: flex-start; align-items: center; text-align: left; padding: 1.25rem 1.5rem !important; min-height: auto; height: auto; gap: 1.5rem; }
             .hub-content { flex-direction: row; align-items: center; gap: 1.25rem; width: 100%; }
@@ -466,26 +741,23 @@
             .hub-card h2 { font-size: 1.25rem !important; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem !important; margin: 0; }
             .hub-bg-icon { display: none; }
+            
             .clock { font-size: 0.8rem; padding: 6px 14px; }
             .header-right { gap: 8px; }
-            
-            /* Esconde o submenu no mobile (abre para fora da tela) */
             .grid-submenu { display: none; }
-            
-            /* ESCONDE O BOTÃO DE LAYOUT NO MOBILE */
             .layout-option-wrapper { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- AUDIO PLAYER (AUTOPLAY ATIVADO) -->
+    <!-- AUDIO PLAYER -->
     <audio id="bgMusic" loop>
         <source src="song.mpeg" type="audio/mpeg">
         Seu navegador não suporta o elemento de áudio.
     </audio>
 
-    <!-- CAMADA DE FUNDO PERSONALIZADO -->
+    <!-- BACKGROUND LAYER -->
     <div id="custom-bg-layer"></div>
 
     <!-- LOADING SCREEN -->
@@ -505,7 +777,7 @@
         <div class="orb orb-3"></div>
     </div>
 
-    <!-- HEADER FORA DO CONTAINER PARA CONTROLE TOTAL DA LARGURA -->
+    <!-- HEADER -->
     <header class="main-header">
         <div class="logo">
             <i class="fa-solid fa-infinity logo-icon-special"></i> LDX
@@ -514,15 +786,13 @@
         <div class="header-right">
             <div class="clock" id="clock">00:00</div>
             
-            <!-- BOTÃO DE CONFIGURAÇÕES -->
+            <!-- SETTINGS -->
             <div class="settings-container">
                 <button class="settings-trigger-btn" id="settingsTrigger" title="Configurações">
                     <i class="fa-solid fa-gear"></i>
                 </button>
                 
-                <!-- MENU DROPDOWN -->
                 <div class="settings-dropdown" id="settingsDropdown">
-                    <!-- OPÇÃO MÚSICA -->
                     <button class="dropdown-item" id="musicToggleBtn">
                         <span class="dropdown-item-content">
                             <span class="music-indicator" id="musicIconContainer">
@@ -532,7 +802,6 @@
                         </span>
                     </button>
 
-                    <!-- OPÇÃO FUNDO -->
                     <button class="dropdown-item" id="bgTriggerBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-palette"></i>
@@ -540,7 +809,6 @@
                         </span>
                     </button>
 
-                    <!-- OPÇÃO LAYOUT (5 E 2 COLUNAS) -->
                     <div class="dropdown-item-wrapper layout-option-wrapper">
                         <button class="dropdown-item" id="gridTriggerBtn">
                             <span class="dropdown-item-content">
@@ -549,7 +817,6 @@
                             </span>
                             <i class="fa-solid fa-chevron-left chevron-sub"></i>
                         </button>
-                        <!-- SUBMENU DE COLUNAS -->
                         <div class="grid-submenu" id="gridSubmenu">
                             <button class="grid-option selected" data-cols="5">
                                 <i class="fa-solid fa-table-columns"></i> 5 Colunas
@@ -570,6 +837,23 @@
             <h1>Portais LDX.</h1>
             <p id="greeting-text">...</p>
         </section>
+
+        <!-- BANNER TUTORIAL (SÓ O ÍCONE FICA COLORIDO) -->
+        <div class="tutorial-banner" id="tutorialBanner">
+            <!-- Ícone gigante no fundo -->
+            <div class="hub-bg-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            
+            <div class="tutorial-content">
+                <div class="tutorial-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="tutorial-text">
+                    <h3>Remover Anúncios</h3>
+                    <p>Tutoriais para PC e Celular.</p>
+                </div>
+            </div>
+            <button class="tutorial-btn">Ver Tutorial</button>
+        </div>
 
         <div class="hubs-grid" id="bentoGrid">
             
@@ -636,20 +920,20 @@
         </div>
 
         <footer>
-            <p>DESIGN BY LDX © 2026</p>
+            <p>DESIGN BY LDX ©2026</p>
         </footer>
     </div>
 
     <!-- TOAST NOTIFICATION -->
     <div id="toast"><i class="fa-solid fa-check-circle"></i> <span>Imagem carregada com sucesso!</span></div>
 
-    <!-- MODAL DE CONFIGURAÇÃO DE FUNDO -->
-    <div id="bgModal">
-        <div class="modal-backdrop" id="modalBackdrop"></div>
+    <!-- MODAL FUNDO -->
+    <div class="modal-overlay" id="bgModal">
+        <div class="modal-backdrop" id="bgModalBackdrop"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fa-solid fa-palette" style="color: #fff;"></i> Personalizar</h3>
-                <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                <button class="close-modal" id="closeBgModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
             <span class="section-title">Arquivo do Dispositivo</span>
@@ -667,6 +951,118 @@
         </div>
     </div>
 
+    <!-- MODAL TUTORIAL (DUAS OPÇÕES: CELULAR E PC) -->
+    <div class="modal-overlay" id="tutorialModal">
+        <div class="modal-backdrop" id="tutorialModalBackdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-shield-halved" style="background: var(--rainbow-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> Como Bloquear Anúncios</h3>
+                <button class="close-modal" id="closeTutorialModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- TABS PARA SELECIONAR DISPOSITIVO -->
+            <div class="tutorial-tabs">
+                <button class="tab-btn active" onclick="switchTab('mobile')">
+                    <i class="fa-solid fa-mobile-screen"></i> Celular
+                </button>
+                <button class="tab-btn" onclick="switchTab('pc')">
+                    <i class="fa-solid fa-desktop"></i> PC
+                </button>
+            </div>
+
+            <!-- CONTEÚDO CELULAR -->
+            <div id="tab-mobile" class="tab-content active">
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;">
+                    Configure o DNS do seu aparelho para bloquear anúncios automaticamente em todos os sites e aplicativos.
+                </p>
+
+                <div class="step-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Configurações do Celular</h4>
+                            <p>Acesse o menu <strong>Configurações</strong> do seu aparelho e procure pela opção de Rede ou Conexões.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>DNS Privado</h4>
+                            <p>Encontre a opção <strong>DNS Privado</strong> (ou Private DNS) e selecione o modo "Nome do host do provedor de DNS".</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Adicionar DNS</h4>
+                            <p>No campo de texto, insira o seguinte endereço:</p>
+                            <div class="dns-container">
+                                <div class="dns-code-box">dns.adguard.com</div>
+                                <button class="copy-dns-btn" onclick="copyDNS()" title="Copiar DNS">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Salvar</h4>
+                            <p>Clique em <strong>Salvar</strong> (ou conectar). O bloqueio será ativado imediatamente em todo o sistema.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO PC -->
+            <div id="tab-pc" class="tab-content">
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;">
+                    A forma mais eficiente de remover anúncios no computador é através de uma extensão de navegador.
+                </p>
+
+                <div class="step-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Instale a Extensão AdGuard</h4>
+                            <p>Selecione o seu navegador e instale a extensão AdGuard:</p>
+                            
+                            <!-- Botão Chrome (Só colorido no hover) -->
+                            <a href="https://chromewebstore.google.com/detail/bloqueador-adguard/bgnkhhnnamicmpeenaelnjfhikgbkllg" target="_blank" class="modal-btn btn-primary">
+                                <i class="fa-brands fa-chrome"></i> AdGuard (Chrome)
+                            </a>
+                            
+                            <!-- Botão Firefox (Só colorido no hover) -->
+                            <a href="https://addons.mozilla.org/firefox/addon/adguard-adblocker/" target="_blank" class="modal-btn btn-primary">
+                                <i class="fa-brands fa-firefox-browser"></i> AdGuard (Firefox)
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Ative o Filtro</h4>
+                            <p>Após instalar, clique no ícone do AdGuard na barra do navegador e ative-o.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Reinicie a Página</h4>
+                            <p>Recarregue qualquer Portal (F5). Os anúncios desaparecerão magicamente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <script>
         /* --- LÓGICA DE MÚSICA --- */
         const audio = document.getElementById('bgMusic');
@@ -675,56 +1071,39 @@
         const musicIconContainer = document.getElementById('musicIconContainer');
         const musicLabel = document.getElementById('musicLabel');
         
-        // Definir volume padrão
         audio.volume = 0.5;
 
-        // Função para atualizar a UI baseada no estado real de reprodução
         function updateMusicUI() {
-            // Sempre define o ícone como Colcheia
             musicStateIcon.className = "fa-solid fa-music";
-
             if (!audio.paused) {
-                // Tocando -> Ícone Colcheia (Animado) e Texto "Parar Música"
                 musicIconContainer.classList.add('playing');
                 musicLabel.textContent = "Parar Música";
             } else {
-                // Pausado -> Ícone Colcheia (Parado) e Texto "Ligar Música"
                 musicIconContainer.classList.remove('playing');
                 musicLabel.textContent = "Ligar Música";
             }
         }
 
-        // Tentar iniciar automaticamente (RESPEITANDO A PREFERÊNCIA)
         function attemptAutoplay() {
             const savedPlaying = localStorage.getItem('ldx_music_playing');
             const savedTime = localStorage.getItem('ldx_music_time');
             const savedVol = localStorage.getItem('ldx_music_volume');
 
-            // Restaurar volume salvo
             if (savedVol) audio.volume = parseFloat(savedVol);
-
-            // Restaurar tempo salvo (mesmo se não for tocar)
             if (savedTime) audio.currentTime = parseFloat(savedTime);
 
-            // VERIFICAÇÃO CRÍTICA: O usuário desligou antes?
             if (savedPlaying === 'false') {
-                // Se desligou, força o estado de pausado e não tenta tocar.
                 updateMusicUI();
                 return;
             }
 
-            // Se estava ligado ou não existe registro (primeira vez), tenta tocar
             const playPromise = audio.play();
-
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
-                    // Reprodução iniciada com sucesso
                     updateMusicUI();
                     localStorage.setItem('ldx_music_playing', 'true');
-                })
-                .catch(error => {
-                    // Autoplay bloqueado pelo navegador. Música pausada.
-                    console.log("Autoplay bloqueado pelo navegador.");
+                }).catch(error => {
+                    console.log("Autoplay bloqueado.");
                     updateMusicUI();
                     localStorage.setItem('ldx_music_playing', 'false');
                 });
@@ -733,17 +1112,12 @@
             }
         }
 
-        // Botão de Toggle
         function toggleMusic() {
             if (audio.paused) {
-                // Se estiver pausado, liga (Tocar)
                 audio.play().then(() => {
                     localStorage.setItem('ldx_music_playing', 'true');
-                }).catch(e => {
-                    alert("Não foi possível reproduzir. Verifique se o arquivo 'song.mpeg' existe.");
-                });
+                }).catch(e => alert("Erro ao reproduzir áudio."));
             } else {
-                // Se estiver tocando, desliga (Pausar)
                 audio.pause();
                 localStorage.setItem('ldx_music_playing', 'false');
             }
@@ -752,21 +1126,16 @@
 
         musicToggleBtn.addEventListener('click', toggleMusic);
 
-        /* --- LOOP DE SINCRONIZAÇÃO DE TEMPO (PARA CONECTAR AS PÁGINAS) --- */
-        // Este loop roda a cada 1 segundo e salva o tempo exato da música no localStorage.
-        // Assim, o NexusHub sabe exatamente onde continuar.
         setInterval(() => {
             if (!audio.paused) {
                 localStorage.setItem('ldx_music_time', audio.currentTime);
                 localStorage.setItem('ldx_music_playing', 'true');
                 localStorage.setItem('ldx_music_volume', audio.volume);
             } else {
-                // Mesmo pausado, salvamos 'false' para garantir consistência
                 localStorage.setItem('ldx_music_playing', 'false');
             }
         }, 1000);
 
-        // Atualiza o estado nativamente também
         audio.onplay = () => {
             localStorage.setItem('ldx_music_playing', 'true');
             updateMusicUI();
@@ -775,9 +1144,8 @@
             localStorage.setItem('ldx_music_playing', 'false');
             updateMusicUI();
         };
-        /* --- FIM DO LOOP DE SINCRONIZAÇÃO --- */
 
-        /* --- DROPDOWN MENU LOGIC --- */
+        /* --- DROPDOWN --- */
         const settingsTrigger = document.getElementById('settingsTrigger');
         const settingsDropdown = document.getElementById('settingsDropdown');
         const bgTriggerBtn = document.getElementById('bgTriggerBtn');
@@ -802,24 +1170,23 @@
             bgModal.classList.add('active');
         });
 
-        /* --- LÓGICA DE FUNDO PADRÃO --- */
+        /* --- BACKGROUND DEFAULT --- */
         const defaultBackground = 'img2.jpg';
         if (!localStorage.getItem('ldx_custom_bg')) {
             localStorage.setItem('ldx_custom_bg', defaultBackground);
             localStorage.setItem('ldx_bg_type', 'image');
         }
 
-        /* --- LOADER SYSTEM --- */
+        /* --- LOADER --- */
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
             setTimeout(() => {
                 document.body.classList.add('loaded');
-                // Tentar iniciar a música APÓS o loader sair (Respeitando o estado salvo)
                 attemptAutoplay();
             }, 1800);
         });
 
-        /* --- GREETING & CLOCK --- */
+        /* --- CLOCK & GREETING --- */
         function updateTimeAndGreeting() {
             const now = new Date();
             const hours = now.getHours();
@@ -829,7 +1196,7 @@
             const greetingEl = document.getElementById('greeting-text');
             let greeting = "Seja bem-vindo.";
             
-            if (hours >= 5 && hours < 12) greeting = "Bom dia, viajante.";
+            if (hours >=5 && hours < 12) greeting = "Bom dia, viajante.";
             else if (hours >= 12 && hours < 18) greeting = "Boa tarde, viajante.";
             else if (hours >= 18 && hours < 24) greeting = "Boa noite, viajante.";
             else greeting = "Boa madrugada, insone.";
@@ -841,7 +1208,7 @@
         setInterval(updateTimeAndGreeting, 1000);
         updateTimeAndGreeting();
 
-        /* --- TILT3D & RIPPLE CLICK --- */
+        /* --- TILT & CLICK EFFECTS (CARDS) --- */
         const hubCards = document.querySelectorAll('.hub-card');
         
         hubCards.forEach(card => {
@@ -889,22 +1256,69 @@
             });
         });
 
-        /* --- GRID CONTROL (ATUALIZADO PARA 5 COLUNAS PADRÃO) --- */
+        /* --- TUTORIAL BANNER CLICK --- */
+        const tutorialBanner = document.getElementById('tutorialBanner');
+        
+        tutorialBanner.addEventListener('click', function() {
+            document.getElementById('tutorialModal').classList.add('active');
+        });
+
+        /* --- TABS LOGIC (CELULAR / PC) --- */
+        function switchTab(device) {
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Hide all contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Activate selected
+            if (device === 'mobile') {
+                buttons[0].classList.add('active');
+                document.getElementById('tab-mobile').classList.add('active');
+            } else {
+                buttons[1].classList.add('active');
+                document.getElementById('tab-pc').classList.add('active');
+            }
+        }
+
+        /* --- COPIAR DNS --- */
+        function copyDNS() {
+            const dns = "dns.adguard.com";
+            
+            // Tenta usar a API moderna Clipboard
+            navigator.clipboard.writeText(dns).then(() => {
+                showToast("DNS copiado!");
+            }).catch(err => {
+                // Fallback para compatibilidade (arquivo local, etc)
+                const textArea = document.createElement("textarea");
+                textArea.value = dns;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast("DNS copiado!");
+                } catch (err) {
+                    showToast("Erro ao copiar");
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        /* --- GRID CONTROL --- */
         const bentoGrid = document.getElementById('bentoGrid');
         const gridOptions = document.querySelectorAll('.grid-option');
         const gridStorageKey = 'ldx_portal_grid'; 
 
         function setGrid(cols) {
-            // Lógica: Se for 2, adiciona classe. Se for 5 (ou qualquer outra), remove classe (volta ao padrão)
             if (cols === '2') {
                 bentoGrid.classList.add('cols-2');
             } else {
                 bentoGrid.classList.remove('cols-2');
             }
-            // Salva a preferência
             localStorage.setItem(gridStorageKey, cols);
 
-            // Atualiza a UI (classe .selected)
             gridOptions.forEach(opt => {
                 opt.classList.remove('selected');
                 if (opt.dataset.cols === cols) opt.classList.add('selected');
@@ -912,18 +1326,14 @@
         }
 
         function loadGrid() {
-            // Se for mobile, força 1 coluna e ignora o resto
             if (window.innerWidth <= 900) {
                 bentoGrid.classList.remove('cols-2');
                 return;
             }
-
-            // Carrega do localStorage ou usa '5' como padrão
             const savedCols = localStorage.getItem(gridStorageKey) || '5';
             setGrid(savedCols);
         }
 
-        // Event Listeners para os botões de coluna
         gridOptions.forEach(opt => {
             opt.addEventListener('click', () => {
                 const cols = opt.getAttribute('data-cols');
@@ -931,7 +1341,6 @@
             });
         });
 
-        // Inicializa e monitora resize
         loadGrid();
         let lastWidth = window.innerWidth;
         window.addEventListener('resize', () => {
@@ -941,9 +1350,22 @@
             }
         });
 
-        /* --- BACKGROUND CUSTOMIZATION SYSTEM --- */
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modalBackdrop = document.getElementById('modalBackdrop');
+        /* --- MODAL SYSTEM --- */
+        function setupModal(modalId, closeBtnId, backdropId) {
+            const modal = document.getElementById(modalId);
+            const closeBtn = document.getElementById(closeBtnId);
+            const backdrop = document.getElementById(backdropId);
+
+            function closeModal() { modal.classList.remove('active'); }
+            
+            closeBtn.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+        }
+
+        setupModal('bgModal', 'closeBgModalBtn', 'bgModalBackdrop');
+        setupModal('tutorialModal', 'closeTutorialModalBtn', 'tutorialModalBackdrop');
+
+        /* --- BG UPLOAD --- */
         const bgFileInput = document.getElementById('bgFileInput');
         const uploadTriggerBtn = document.getElementById('uploadTriggerBtn');
         const resetBgBtn = document.getElementById('resetBgBtn');
@@ -955,10 +1377,6 @@
             toast.classList.add('show');
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
-
-        function closeModal() { bgModal.classList.remove('active'); }
-        closeModalBtn.addEventListener('click', closeModal);
-        modalBackdrop.addEventListener('click', closeModal);
 
         uploadTriggerBtn.addEventListener('click', () => { bgFileInput.click(); });
 
@@ -976,7 +1394,7 @@
                 localStorage.setItem('ldx_custom_bg', value);
                 localStorage.setItem('ldx_bg_type', 'color');
             }
-            closeModal();
+            document.getElementById('bgModal').classList.remove('active');
         }
 
         const savedBg = localStorage.getItem('ldx_custom_bg');

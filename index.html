@@ -12,6 +12,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- SCRIPT ANTI-FLASH (Head) - Aplica estilos salvos INSTANTANEAMENTE antes de renderizar -->
+    <script>
+        (function() {
+            const savedStyle = localStorage.getItem('ldx_card_style');
+            if (savedStyle === 'transparent' || savedStyle === 'invisible') {
+                document.documentElement.classList.add(savedStyle + '-mode');
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.body.classList.add(savedStyle + '-mode');
+                });
+            }
+            const savedBg = localStorage.getItem('ldx_custom_bg');
+            const savedBgType = localStorage.getItem('ldx_bg_type');
+            if(savedBg) {
+                 document.addEventListener('DOMContentLoaded', () => {
+                     document.body.classList.add('has-custom-bg');
+                     const bgLayer = document.getElementById('custom-bg-layer');
+                     if(bgLayer) {
+                         if(savedBgType === 'image') bgLayer.style.backgroundImage = `url('${savedBg}')`;
+                         else document.body.style.backgroundImage = savedBg;
+                     }
+                 });
+            }
+        })();
+    </script>
+
     <style>
         /* --- DESIGN SYSTEM --- */
         :root {
@@ -85,7 +110,7 @@
         body.invisible-mode .hub-card {
             background: transparent;
             backdrop-filter: none; 
-            border: 1px solid rgba(255, 255, 255, 0.15); /* Borda bem sutil de leve (Alterado) */
+            border: 1px solid rgba(255, 255, 255, 0.15); 
             box-shadow: none;
         }
         body.invisible-mode .tutorial-banner {
@@ -95,7 +120,7 @@
         }
         body.invisible-mode .hub-card:hover {
             background: transparent;
-            border-color: rgba(255, 255, 255, 0.4); /* Destaque leve apenas no hover */
+            border-color: rgba(255, 255, 255, 0.4);
             box-shadow: 0 0 30px rgba(0,0,0,0.5); 
             transform: translateY(-5px) scale(1.02); 
         }
@@ -104,62 +129,6 @@
         body.invisible-mode .hub-card p {
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
-
-        /* --- LOADING SCREEN --- */
-        #loader {
-            position: fixed;
-            inset: 0;
-            background: #050507;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-        
-        .loader-content { text-align: center; position: relative; }
-        
-        .loader-logo { 
-            font-size: 3rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif;
-            background: var(--rainbow-gradient);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeUp 0.8s forwards 0.2s;
-        }
-
-        .loader-bar-container {
-            width: 200px; height: 2px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
-            overflow: hidden;
-            position: relative;
-            opacity: 0;
-            animation: fadeUp 0.8s forwards 0.4s;
-        }
-
-        .loader-bar {
-            width: 0%; height: 100%;
-            background: var(--accent-cyan);
-            box-shadow: 0 0 15px var(--accent-cyan);
-            animation: loadProgress 1.5s ease-in-out forwards 0.6s;
-        }
-
-        .loader-text {
-            margin-top: 10px; font-size: 0.8rem;
-            color: var(--text-muted); letter-spacing: 2px;
-            text-transform: uppercase; opacity: 0;
-            animation: fadeUp 0.8s forwards 0.5s;
-        }
-
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
-        @keyframes colorCycle { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        .loaded #loader { opacity: 0; visibility: hidden; }
 
         /* --- BACKGROUND --- */
         .ambient-light {
@@ -179,8 +148,9 @@
 
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
         @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(1.1); } }
+        @keyframes colorCycle { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* --- CONTAINER E HEADER SEPARADOS --- */
+        /* --- CONTAINER E HEADER --- */
         .main-header {
             width: 100%; 
             display: flex; 
@@ -201,10 +171,8 @@
             position: relative; 
             z-index: 1; 
             padding-bottom: 2rem; 
-            opacity: 0; 
-            transition: opacity 1s ease 1s; 
+            opacity: 1; 
         }
-        .loaded .container { opacity: 1; }
         
         .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
@@ -247,24 +215,24 @@
         }
         @keyframes specialPulse { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(15deg); } }
 
+        /* --- CLOCK & BUTTONS (PC BASE SIZE - LARGER) --- */
         .clock {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
-            padding: 8px 12px; border-radius: 100px; font-family: 'Space Grotesk', monospace; 
-            font-size: 0.85rem; color: #fff;
+            padding: 10px 16px; border-radius: 100px; font-family: 'Space Grotesk', monospace; 
+            font-size: 1rem; color: #fff; /* Aumentado */
             backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); 
             font-weight: 600; letter-spacing: 1px; user-select: none; cursor: default;
             flex-shrink: 0;
         }
 
-        /* --- BOTÕES GERAIS --- */
         .share-trigger-btn, .settings-trigger-btn {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
-            padding: 8px 12px; border-radius: 100px; font-size: 1rem; 
+            padding: 8px 12px; border-radius: 100px; font-size: 1.1rem; /* Aumentado */
             color: #ffffff; backdrop-filter: blur(20px); 
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
             cursor: pointer; transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center;
-            width: 36px; height: 36px; 
+            width: 42px; height: 42px; /* Aumentado */
             flex-shrink: 0;
         }
 
@@ -434,6 +402,8 @@
             backdrop-filter: blur(25px); display: flex; flex-direction: column;
             align-items: center; justify-content: center; transform-style: preserve-3d;
             will-change: transform; user-select: none; text-align: center; cursor: pointer;
+            
+            opacity: 0; 
         }
 
         .hubs-grid:not(.cols-2) .hub-card { padding: 1.8rem 1rem; }
@@ -443,6 +413,12 @@
 
         .hubs-grid.cols-2 .hub-card h2 { font-size: 2rem; }
         .hubs-grid.cols-2 .hub-card p { font-size: 1rem; }
+
+        @keyframes hubEntrance {
+            0% { opacity: 0; transform: scale(0.8); }
+            70% { transform: scale(1.05); opacity: 1; }
+            100% { opacity: 1; transform: scale(1); }
+        }
 
         .hub-card::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
@@ -632,7 +608,10 @@
             .logo { font-size: 1.5rem; gap: 8px; }
             .logo-icon-special { font-size: 1.5rem; }
             .header-right { gap: 6px; }
+
+            /* Reduz tamanho no celular para caber bem */
             .clock { font-size: 0.7rem; padding: 6px 8px; }
+            .share-trigger-btn, .settings-trigger-btn { width: 36px; height: 36px; font-size: 1rem; }
 
             .tutorial-banner {
                 flex-direction: column; text-align: center; padding: 1.5rem; gap: 1rem; margin-bottom: 1rem;
@@ -651,8 +630,26 @@
             .hub-card p { font-size: 0.85rem !important; margin: 0; }
             .hub-bg-icon { display: none; }
             
-            .grid-submenu, .style-submenu { display: none; } 
-            .layout-option-wrapper, .style-option-wrapper { display: none; }
+            /* Grid submenu permanece escondido no mobile (não se aplica) */
+            .grid-submenu { display: none; } 
+
+            /* Style Submenu: Agora VISÍVEL no mobile, mas com posição ajustada */
+            .style-submenu {
+                /* Override da posição PC */
+                top: 100% !important; 
+                left: 0 !important;
+                right: auto !important;
+                margin-right: 0 !important;
+                margin-top:5px; 
+                width: 100%; /* Largura total do pai */
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                /* Reset do transform X para abrir para baixo */
+                transform: translateY(5px) !important;
+            }
+
+            .dropdown-item-wrapper:hover .style-submenu {
+                transform: translateY(0) !important;
+            }
         }
     </style>
 </head>
@@ -666,17 +663,6 @@
 
     <!-- BACKGROUND LAYER -->
     <div id="custom-bg-layer"></div>
-
-    <!-- LOADING SCREEN -->
-    <div id="loader">
-        <div class="loader-content">
-            <div class="loader-logo">LDX</div>
-            <div class="loader-bar-container">
-                <div class="loader-bar"></div>
-            </div>
-            <div class="loader-text">Inicializando Sistemas</div>
-        </div>
-    </div>
 
     <div class="ambient-light">
         <div class="orb orb-1"></div>
@@ -735,7 +721,7 @@
                     <div class="dropdown-item-wrapper style-option-wrapper">
                         <button class="dropdown-item" id="styleTriggerBtn">
                             <span class="dropdown-item-content">
-                                <i class="fa-solid fa-layer-group"></i>
+                                <i class="fa-solid fa-swatchbook"></i>
                                 <span>Estilo dos Cartões</span>
                             </span>
                             <i class="fa-solid fa-chevron-left chevron-sub"></i>
@@ -1191,15 +1177,17 @@
             localStorage.setItem('ldx_bg_type', 'image');
         }
 
-        /* --- LOADER --- */
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                document.body.classList.add('loaded');
-                attemptAutoplay();
-                initAdblockToggle();
-                loadCardStyle();
-            }, 1800);
+        /* --- FAST STARTUP & ANIMATION (DOMContentLoaded) --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            attemptAutoplay();
+            initAdblockToggle();
+            loadCardStyle();
+
+            const hubCards = document.querySelectorAll('.hub-card');
+            hubCards.forEach((card, index) => {
+                card.style.animation = `hubEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards`;
+                card.style.animationDelay = `${index * 50}ms`; 
+            });
         });
 
         /* --- CLOCK & GREETING --- */
@@ -1390,14 +1378,6 @@
                 localStorage.setItem('ldx_bg_type', 'color');
             }
             document.getElementById('bgModal').classList.remove('active');
-        }
-
-        const savedBg = localStorage.getItem('ldx_custom_bg');
-        const savedType = localStorage.getItem('ldx_bg_type');
-        if (savedBg) {
-            if(savedType === 'image') customBgLayer.style.backgroundImage = `url('${savedBg}')`;
-            else document.body.style.backgroundImage = savedBg;
-            document.body.classList.add('has-custom-bg');
         }
 
         bgFileInput.addEventListener('change', (e) => {

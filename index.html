@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- SCRIPT ANTI-FLASH (Head) -->
+    <!-- SCRIPT ANTI-FLASH (Head) - Aplica estilos salvos INSTANTANEAMENTE antes de renderizar -->
     <script>
         (function() {
             const savedStyle = localStorage.getItem('ldx_card_style');
@@ -95,14 +95,7 @@
             -webkit-transform: translate3d(0,0,0);
         }
 
-        body.has-custom-bg .ambient-light {
-            opacity: 0 !important; /* Esconde luzes sobre imagem */
-            transition: opacity 0.5s ease;
-        }
-
-        body.has-custom-bg #custom-bg-layer {
-            opacity: 1;
-        }
+        /* Removemos a regra que escondia as luzes condicionalmente, pois agora elas estão ocultas por padrão no CSS abaixo */
 
         /* --- CARD STYLES MODES --- */
         body.transparent-mode .hub-card {
@@ -145,13 +138,17 @@
         /* --- BACKGROUND --- */
         .ambient-light {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden; pointer-events: none; transition: opacity 0.5s ease;
+            z-index: -1; overflow: hidden; pointer-events: none;
+            opacity: 0; /* ALTERADO DE 0.4 PARA 0 PARA REMOVER O FLASH */
         }
+
         .orb {
             position: absolute; border-radius: 50%;
-            filter: blur(90px); opacity: 0.4;
+            filter: blur(90px); 
+            /* Opacidade removida pois o pai (ambient-light) já está 0 */
             animation: floatOrb 25s infinite alternate ease-in-out;
         }
+
         .orb-1 { width: 500px; height: 500px; background: #ec4899; top: -150px; left: -150px; animation-duration: 30s; }
         .orb-2 { width: 600px; height: 600px; background: var(--accent-cyan); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
         .orb-3 { width: 350px; height: 350px; background: #facc15; top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.25; animation: pulseOrb 12s infinite ease-in-out; }
@@ -440,6 +437,7 @@
     <!-- BACKGROUND LAYER -->
     <div id="custom-bg-layer"></div>
 
+    <!-- Luzes de fundo desativadas por padrão no CSS para evitar flash -->
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -562,19 +560,7 @@
 
         <div class="hubs-grid" id="bentoGrid">
             
-            <!-- CARD: GAMEHUB -->
-            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card">
-                <div class="hub-bg-icon"><i class="fa-solid fa-gamepad"></i></div>
-                <div class="hub-content">
-                    <div class="hub-icon"><i class="fa-solid fa-gamepad"></i></div>
-                    <div>
-                        <h2>GameHub</h2>
-                        <p>O Universo dos Jogos.</p>
-                    </div>
-                </div>
-            </a>
-
-            <!-- CARD: NEXUSHUB -->
+            <!-- CARD: NEXUSHUB (PRIMEIRO) -->
             <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card">
                 <div class="hub-bg-icon"><i class="fa-solid fa-layer-group"></i></div>
                 <div class="hub-content">
@@ -582,6 +568,18 @@
                     <div>
                         <h2>NexusHub</h2>
                         <p>Utilidade e entretenimento.</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- CARD: GAMEHUB (SEGUNDO) -->
+            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card">
+                <div class="hub-bg-icon"><i class="fa-solid fa-gamepad"></i></div>
+                <div class="hub-content">
+                    <div class="hub-icon"><i class="fa-solid fa-gamepad"></i></div>
+                    <div>
+                        <h2>GameHub</h2>
+                        <p>O Universo dos Jogos.</p>
                     </div>
                 </div>
             </a>
@@ -1080,15 +1078,10 @@
         const gridStorageKey = 'ldx_portal_grid'; 
 
         function setGrid(cols) {
-            // Remove a classe de 2 colunas para resetar
             bentoGrid.classList.remove('cols-2');
-            
-            // Se for 2 colunas, adiciona a classe
-            // Se for 5 colunas, não precisa de classe especial (é o padrão no CSS)
             if (cols === '2') {
                 bentoGrid.classList.add('cols-2');
             }
-            
             localStorage.setItem(gridStorageKey, cols);
 
             gridOptions.forEach(opt => {

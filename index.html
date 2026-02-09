@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- SCRIPT ANTI-FLASH (Head) - Aplica estilos salvos INSTANTANEAMENTE antes de renderizar -->
+    <!-- SCRIPT ANTI-FLASH (Head) -->
     <script>
         (function() {
             const savedStyle = localStorage.getItem('ldx_card_style');
@@ -22,18 +22,30 @@
                     document.body.classList.add(savedStyle + '-mode');
                 });
             }
+            
+            // Inicializa o background padrão imediatamente se não houver nenhum salvo
+            const defaultBg = 'img2.jpg';
             const savedBg = localStorage.getItem('ldx_custom_bg');
             const savedBgType = localStorage.getItem('ldx_bg_type');
-            if(savedBg) {
-                 document.addEventListener('DOMContentLoaded', () => {
-                     document.body.classList.add('has-custom-bg');
-                     const bgLayer = document.getElementById('custom-bg-layer');
-                     if(bgLayer) {
-                         if(savedBgType === 'image') bgLayer.style.backgroundImage = `url('${savedBg}')`;
-                         else document.body.style.backgroundImage = savedBg;
-                     }
-                 });
+
+            if(!savedBg) {
+                // Primeira vez: Define o padrão
+                localStorage.setItem('ldx_custom_bg', defaultBg);
+                localStorage.setItem('ldx_bg_type', 'image');
             }
+            
+            // Aplica visualmente imediatamente
+            const activeBg = savedBg || defaultBg;
+            const activeType = savedBgType || 'image';
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                const bgLayer = document.getElementById('custom-bg-layer');
+                document.body.classList.add('has-custom-bg');
+                if(bgLayer) {
+                    if(activeType === 'image') bgLayer.style.backgroundImage = `url('${activeBg}')`;
+                    else document.body.style.backgroundImage = activeBg;
+                }
+            });
         })();
     </script>
 
@@ -57,6 +69,10 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
+            /* Carrega a imagem padrão instantaneamente para evitar tela preta */
+            background-image: url('img2.jpg');
+            background-size: cover;
+            background-position: center;
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
@@ -73,14 +89,14 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0;
+            opacity: 0; /* Começa invisível, o JS ativa */
             transition: opacity 0.5s ease;
             pointer-events: none;
             -webkit-transform: translate3d(0,0,0);
         }
 
         body.has-custom-bg .ambient-light {
-            opacity: 0;
+            opacity: 0 !important; /* Garante que as luzes não apareçam sobre a imagem */
             transition: opacity 0.5s ease;
         }
 
@@ -215,11 +231,11 @@
         }
         @keyframes specialPulse { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(15deg); } }
 
-        /* --- CLOCK & BUTTONS (PC BASE SIZE - LARGER) --- */
+        /* --- CLOCK & BUTTONS --- */
         .clock {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
             padding: 10px 16px; border-radius: 100px; font-family: 'Space Grotesk', monospace; 
-            font-size: 1rem; color: #fff; /* Aumentado */
+            font-size: 1rem; color: #fff;
             backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); 
             font-weight: 600; letter-spacing: 1px; user-select: none; cursor: default;
             flex-shrink: 0;
@@ -227,12 +243,12 @@
 
         .share-trigger-btn, .settings-trigger-btn {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); 
-            padding: 8px 12px; border-radius: 100px; font-size: 1.1rem; /* Aumentado */
+            padding: 8px 12px; border-radius: 100px; font-size: 1.1rem; 
             color: #ffffff; backdrop-filter: blur(20px); 
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
             cursor: pointer; transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center;
-            width: 42px; height: 42px; /* Aumentado */
+            width: 42px; height: 42px; 
             flex-shrink: 0;
         }
 
@@ -313,7 +329,6 @@
         .grid-option:hover, .style-option:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
         .grid-option.selected, .style-option.selected { background: rgba(255, 255, 255, 0.05); color: #fff; font-weight: 600; }
         
-        /* ÍCONES BRANCOS */
         .grid-option i, .style-option i { font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
         .grid-option.selected i, .style-option.selected i { color: #fff; }
 
@@ -556,7 +571,6 @@
             border: none; font-size: 0.9rem;
         }
 
-        /* --- BOTÕES DE DOWNLOAD --- */
         .btn-primary {
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;
         }
@@ -609,7 +623,7 @@
             .logo-icon-special { font-size: 1.5rem; }
             .header-right { gap: 6px; }
 
-            /* Reduz tamanho no celular para caber bem */
+            /* Reduz tamanho no celular */
             .clock { font-size: 0.7rem; padding: 6px 8px; }
             .share-trigger-btn, .settings-trigger-btn { width: 36px; height: 36px; font-size: 1rem; }
 
@@ -619,7 +633,19 @@
             .tutorial-content { flex-direction: column; text-align: center; }
             .tutorial-btn { width: 100%; }
 
-            .hubs-grid { grid-template-columns: 1fr !important; gap: 1rem; padding: 1rem 0; }
+            /* --- CORREÇÃO LAYOUT MOBILE --- */
+            /* Opcão 1 Colunas (Padrão no mobile) */
+            .hubs-grid { 
+                grid-template-columns: 1fr !important; /* Força 1 coluna por padrão */
+                gap: 1rem; 
+                padding: 1rem 0; 
+            }
+            
+            /* Opcão 2 Colunas (Se selecionado) */
+            .hubs-grid.cols-2 {
+                grid-template-columns: 1fr 1fr !important; /* Permite 2 colunas no mobile */
+            }
+
             .hub-card { 
                 flex-direction: row; justify-content: flex-start; align-items: center; 
                 text-align: left; padding: 1.25rem 1.5rem !important; min-height: auto; height: auto; gap: 1.5rem; 
@@ -630,20 +656,37 @@
             .hub-card p { font-size: 0.85rem !important; margin: 0; }
             .hub-bg-icon { display: none; }
             
-            /* Grid submenu permanece escondido no mobile (não se aplica) */
-            .grid-submenu { display: none; } 
-
-            /* Style Submenu: Agora VISÍVEL no mobile, mas com posição ajustada */
-            .style-submenu {
-                /* Override da posição PC */
+            /* --- CORREÇÃO MENU GRID MOBILE --- */
+            /* Remove o display: none e ajusta a posição igual ao Style Submenu */
+            .grid-submenu {
+                display: flex !important;
                 top: 100% !important; 
                 left: 0 !important;
                 right: auto !important;
                 margin-right: 0 !important;
-                margin-top:5px; 
-                width: 100%; /* Largura total do pai */
+                margin-top: 5px; 
+                width: 100%; 
                 box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                /* Reset do transform X para abrir para baixo */
+                transform: translateY(5px) !important;
+                visibility: hidden; /* Mantém oculto até hover */
+                opacity: 0;
+            }
+
+            .dropdown-item-wrapper:hover .grid-submenu {
+                transform: translateY(0) !important;
+                visibility: visible;
+                opacity: 1;
+            }
+
+            .style-submenu {
+                /* Mantém lógica existente, apenas garantindo consistência */
+                top: 100% !important; 
+                left: 0 !important;
+                right: auto !important;
+                margin-right: 0 !important;
+                margin-top: 5px; 
+                width: 100%; 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
                 transform: translateY(5px) !important;
             }
 
@@ -739,7 +782,7 @@
                         </div>
                     </div>
 
-                    <!-- LAYOUT (APENAS PC) -->
+                    <!-- LAYOUT (AGORA FUNCIONA NO MOBILE) -->
                     <div class="dropdown-item-wrapper layout-option-wrapper">
                         <button class="dropdown-item" id="gridTriggerBtn">
                             <span class="dropdown-item-content">
@@ -750,10 +793,10 @@
                         </button>
                         <div class="grid-submenu" id="gridSubmenu">
                             <button class="grid-option selected" data-cols="5">
-                                <i class="fa-solid fa-table-cells"></i> 5 Colunas <!-- Ícone trocado -->
+                                <i class="fa-solid fa-table-cells"></i> Lista (5 Col)
                             </button>
                             <button class="grid-option" data-cols="2">
-                                <i class="fa-solid fa-table-columns"></i> 2 Colunas <!-- Ícone trocado -->
+                                <i class="fa-solid fa-table-columns"></i> Grid (2 Col)
                             </button>
                         </div>
                     </div>
@@ -1170,8 +1213,10 @@
             bgModal.classList.add('active');
         });
 
-        /* --- BACKGROUND DEFAULT --- */
+        /* --- DEFAULT BACKGROUND --- */
         const defaultBackground = 'img2.jpg';
+        // Garante que o padrão seja definido se o usuário nunca entrou
+        // (A lógica principal está no <head> script, mas reforçamos aqui)
         if (!localStorage.getItem('ldx_custom_bg')) {
             localStorage.setItem('ldx_custom_bg', defaultBackground);
             localStorage.setItem('ldx_bg_type', 'image');
@@ -1304,8 +1349,17 @@
         const gridStorageKey = 'ldx_portal_grid'; 
 
         function setGrid(cols) {
-            if (cols === '2') bentoGrid.classList.add('cols-2');
-            else bentoGrid.classList.remove('cols-2');
+            // Remove todas as classes de coluna primeiro para resetar
+            bentoGrid.classList.remove('cols-2'); 
+            
+            // Lógica atualizada:
+            // No Desktop: 5 cols = padrão (vazio), 2 cols = classe .cols-2
+            // No Mobile (CSS): Sem classe = 1 coluna, .cols-2 = 2 colunas
+            
+            if (cols === '2') {
+                bentoGrid.classList.add('cols-2');
+            }
+            
             localStorage.setItem(gridStorageKey, cols);
 
             gridOptions.forEach(opt => {
@@ -1315,10 +1369,6 @@
         }
 
         function loadGrid() {
-            if (window.innerWidth <= 900) {
-                bentoGrid.classList.remove('cols-2');
-                return;
-            }
             const savedCols = localStorage.getItem(gridStorageKey) || '5';
             setGrid(savedCols);
         }
@@ -1328,10 +1378,14 @@
         });
 
         loadGrid();
+        
+        // Opcional: Reload ao mudar orientação se necessário, 
+        // mas CSS grid com media query lida bem.
         let lastWidth = window.innerWidth;
         window.addEventListener('resize', () => {
             if (window.innerWidth !== lastWidth) {
                 lastWidth = window.innerWidth;
+                // Força reavaliação do grid se precisar
                 loadGrid();
             }
         });

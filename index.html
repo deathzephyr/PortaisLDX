@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- SCRIPT ANTI-FLASH (Head) - Aplica estilos salvos INSTANTANEAMENTE antes de renderizar -->
+    <!-- SCRIPT ANTI-FLASH (Head) -->
     <script>
         (function() {
             const savedStyle = localStorage.getItem('ldx_card_style');
@@ -23,18 +23,15 @@
                 });
             }
             
-            // Inicializa o background padrão imediatamente se não houver nenhum salvo
             const defaultBg = 'img2.jpg';
             const savedBg = localStorage.getItem('ldx_custom_bg');
             const savedBgType = localStorage.getItem('ldx_bg_type');
 
             if(!savedBg) {
-                // Primeira vez: Define o padrão
                 localStorage.setItem('ldx_custom_bg', defaultBg);
                 localStorage.setItem('ldx_bg_type', 'image');
             }
             
-            // Aplica visualmente imediatamente
             const activeBg = savedBg || defaultBg;
             const activeType = savedBgType || 'image';
             
@@ -58,8 +55,6 @@
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             --accent-cyan: #06b6d4; 
-            
-            /* Gradiente Arco-íris Animado */
             --rainbow-gradient: linear-gradient(90deg, #facc15, #8b5cf6, #ec4899, #06b6d4, #22c55e, #ef4444, #f59e0b, #ffffff, #facc15);
         }
 
@@ -69,7 +64,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
-            /* Carrega a imagem padrão instantaneamente */
             background-image: url('img2.jpg');
             background-size: cover;
             background-position: center;
@@ -94,8 +88,6 @@
             pointer-events: none;
             -webkit-transform: translate3d(0,0,0);
         }
-
-        /* Removemos a regra que escondia as luzes condicionalmente, pois agora elas estão ocultas por padrão no CSS abaixo */
 
         /* --- CARD STYLES MODES --- */
         body.transparent-mode .hub-card {
@@ -139,13 +131,12 @@
         .ambient-light {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; overflow: hidden; pointer-events: none;
-            opacity: 0; /* ALTERADO DE 0.4 PARA 0 PARA REMOVER O FLASH */
+            opacity: 0;
         }
 
         .orb {
             position: absolute; border-radius: 50%;
             filter: blur(90px); 
-            /* Opacidade removida pois o pai (ambient-light) já está 0 */
             animation: floatOrb 25s infinite alternate ease-in-out;
         }
 
@@ -293,6 +284,7 @@
             backdrop-filter: blur(25px); display: flex; flex-direction: column; align-items: center; justify-content: center; transform-style: preserve-3d;
             will-change: transform; user-select: none; text-align: center; cursor: pointer; opacity: 0; 
         }
+
         .hubs-grid:not(.cols-2) .hub-card { padding: 1.8rem 1rem; }
         .hubs-grid:not(.cols-2) .hub-card h2 { font-size: 1.3rem; }
         .hubs-grid:not(.cols-2) .hub-card p { font-size: 0.75rem; }
@@ -347,6 +339,47 @@
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
         
+        /* --- EDIT MODAL SPECIFIC --- */
+        .edit-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .edit-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 16px; }
+        
+        .edit-section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; font-weight: 700; }
+        
+        .edit-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
+        .edit-label { width: 60px; font-size: 0.8rem; color: var(--text-muted); text-align: right; flex-shrink: 0; }
+        .edit-input { 
+            flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); 
+            color: #fff; padding: 10px; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+        }
+        .edit-input:focus { border-color: var(--accent-cyan); outline: none; }
+        
+        .icon-preview-container {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 10px; padding: 10px;
+            background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .current-icon-display {
+            width: 45px; height: 45px; background: rgba(255,255,255,0.05); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff;
+        }
+        .current-icon-text { font-size: 0.85rem; color: var(--text-muted); font-family: monospace; }
+
+        .icon-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 8px;
+            max-height: 150px; overflow-y: auto; padding: 4px; border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 12px; background: rgba(0,0,0,0.2);
+        }
+        .icon-btn {
+            width: 100%; aspect-ratio: 1; border-radius: 8px; background: transparent;
+            border: 1px solid transparent; color: rgba(255,255,255,0.5); font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;
+        }
+        .icon-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: scale(1.1); }
+        .icon-btn.selected { background: var(--accent-cyan); color: #fff; border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); }
+
+        .edit-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .fav-toggle-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: #fff; user-select: none; font-weight: 500; }
+        .fav-toggle-label input { accent-color: #fff; width: 18px; height: 18px; }
+
         /* --- TUTORIAL TABS --- */
         .tutorial-tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
         .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -396,15 +429,8 @@
             .tutorial-content { flex-direction: column; text-align: center; }
             .tutorial-btn { width: 100%; }
 
-            /* --- ESCONDE BOTÃO DE LAYOUT NO MOBILE --- */
             .layout-option-wrapper { display: none !important; }
-            
-            /* --- FORÇA 1 COLUNA NO MOBILE --- */
-            .hubs-grid { 
-                grid-template-columns: 1fr !important; 
-                gap: 1rem; 
-                padding: 1rem 0; 
-            }
+            .hubs-grid { grid-template-columns: 1fr !important; gap: 1rem; padding: 1rem 0; }
 
             .hub-card { 
                 flex-direction: row; justify-content: flex-start; align-items: center; 
@@ -415,8 +441,7 @@
             .hub-card h2 { font-size: 1.2rem !important; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem !important; margin: 0; }
             .hub-bg-icon { display: none; }
-            
-            /* Style Submenu: Mantém visível para customizar estilo */
+
             .style-submenu {
                 top: 100% !important; left: 0 !important; right: auto !important; margin-right: 0 !important;
                 margin-top:5px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -437,7 +462,7 @@
     <!-- BACKGROUND LAYER -->
     <div id="custom-bg-layer"></div>
 
-    <!-- Luzes de fundo desativadas por padrão no CSS para evitar flash -->
+    <!-- Luzes de fundo -->
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -481,6 +506,14 @@
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-lock-open" id="adblockIcon"></i>
                             <span id="adblockLabel">Ocultar Tutorial</span>
+                        </span>
+                    </button>
+                    
+                    <!-- EDITAR HUBS -->
+                    <button class="dropdown-item" id="editHubsTriggerBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            <span>Editar Hubs</span>
                         </span>
                     </button>
 
@@ -558,69 +591,8 @@
             <button class="tutorial-btn">Ver Tutorial</button>
         </div>
 
-        <div class="hubs-grid" id="bentoGrid">
-            
-            <!-- CARD: NEXUSHUB (PRIMEIRO) -->
-            <a href="https://deathzephyr.github.io/NexusHub/" target="_self" class="hub-card">
-                <div class="hub-bg-icon"><i class="fa-solid fa-layer-group"></i></div>
-                <div class="hub-content">
-                    <div class="hub-icon"><i class="fa-solid fa-layer-group"></i></div>
-                    <div>
-                        <h2>NexusHub</h2>
-                        <p>Utilidade e entretenimento.</p>
-                    </div>
-                </div>
-            </a>
-
-            <!-- CARD: GAMEHUB (SEGUNDO) -->
-            <a href="https://deathzephyr.github.io/GameHub/" target="_self" class="hub-card">
-                <div class="hub-bg-icon"><i class="fa-solid fa-gamepad"></i></div>
-                <div class="hub-content">
-                    <div class="hub-icon"><i class="fa-solid fa-gamepad"></i></div>
-                    <div>
-                        <h2>GameHub</h2>
-                        <p>O Universo dos Jogos.</p>
-                    </div>
-                </div>
-            </a>
-
-            <!-- CARD: CENTRALHUB -->
-            <a href="https://deathzephyr.github.io/CentralHub/" target="_self" class="hub-card">
-                <div class="hub-bg-icon"><i class="fa-solid fa-globe"></i></div>
-                <div class="hub-content">
-                    <div class="hub-icon"><i class="fa-solid fa-globe"></i></div>
-                    <div>
-                        <h2>CentralHub</h2>
-                        <p>Serviços Oficiais.</p>
-                    </div>
-                </div>
-            </a>
-
-            <!-- CARD: AXIOMHUB -->
-            <a href="https://deathzephyr.github.io/AxiomHub/" target="_self" class="hub-card">
-                <div class="hub-bg-icon"><i class="fa-solid fa-robot"></i></div>
-                <div class="hub-content">
-                    <div class="hub-icon"><i class="fa-solid fa-robot"></i></div>
-                    <div>
-                        <h2>AxiomHub</h2>
-                        <p>Inteligência Artificial.</p>
-                    </div>
-                </div>
-            </a>
-
-            <!-- CARD: VERTEXHUB -->
-            <a href="https://deathzephyr.github.io/VertexHub/" target="_self" class="hub-card">
-                <div class="hub-bg-icon"><i class="fa-solid fa-cube"></i></div>
-                <div class="hub-content">
-                    <div class="hub-icon"><i class="fa-solid fa-cube"></i></div>
-                    <div>
-                        <h2>VertexHub</h2>
-                        <p>Utilidades Essenciais.</p>
-                    </div>
-                </div>
-            </a>
-
-        </div>
+        <!-- GRID (VAI SER PREENCHIDO PELO JS) -->
+        <div class="hubs-grid" id="bentoGrid"></div>
 
         <footer>
             <p>DESIGN BY LDX ©2026</p>
@@ -650,6 +622,26 @@
 
             <button class="reset-btn" id="resetBgBtn">
                 <i class="fa-solid fa-rotate-left"></i> Restaurar Padrão
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR HUBS -->
+    <div class="modal-overlay" id="editHubsModal">
+        <div class="modal-backdrop" id="editHubsModalBackdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-pen-to-square" style="color: #fff;"></i> Editar Portais</h3>
+                <button class="close-modal" id="closeEditHubsModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div id="editListContainer" class="edit-list">
+                <!-- Itens de edição serão injetados aqui via JS -->
+            </div>
+
+            <button class="modal-btn btn-primary" id="saveHubsBtn">Salvar Alterações</button>
+            <button class="reset-btn" id="resetHubsConfigBtn" style="margin-top: 10px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
+                <i class="fa-solid fa-trash-can"></i> Restaurar Padrões de Fábrica
             </button>
         </div>
     </div>
@@ -763,253 +755,198 @@
     </div>
 
     <script>
-        /* --- LOGO CLICK ANIMATION --- */
-        const logo = document.getElementById('mainLogo');
-        logo.addEventListener('click', function(e) {
-            logo.classList.remove('logo-click-anim');
-            void logo.offsetWidth;
-            logo.classList.add('logo-click-anim');
+        /* --- DADOS DOS HUBS (DEFAULT) --- */
+        const defaultHubsConfig = [
+            { id: 'nexus', name: 'NexusHub', desc: 'Utilidade e entretenimento.', icon: 'fa-solid fa-layer-group', url: 'https://deathzephyr.github.io/NexusHub/', isFavorite: false },
+            { id: 'game', name: 'GameHub', desc: 'O Universo dos Jogos.', icon: 'fa-solid fa-gamepad', url: 'https://deathzephyr.github.io/GameHub/', isFavorite: false },
+            { id: 'central', name: 'CentralHub', desc: 'Serviços Oficiais.', icon: 'fa-solid fa-globe', url: 'https://deathzephyr.github.io/CentralHub/', isFavorite: false },
+            { id: 'axiom', name: 'AxiomHub', desc: 'Inteligência Artificial.', icon: 'fa-solid fa-robot', url: 'https://deathzephyr.github.io/AxiomHub/', isFavorite: false },
+            { id: 'vertex', name: 'VertexHub', desc: 'Utilidades Essenciais.', icon: 'fa-solid fa-cube', url: 'https://deathzephyr.github.io/VertexHub/', isFavorite: false }
+        ];
 
-            const ripple = document.createElement('span');
-            ripple.classList.add('logo-ripple');
-            const rect = logo.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
-            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
-            logo.appendChild(ripple);
-            setTimeout(() => { ripple.remove(); }, 600);
-            setTimeout(() => { logo.classList.remove('logo-click-anim'); }, 500);
-        });
+        /* --- LISTA DE ÍCONES POPULARES PARA ESCOLHA --- */
+        const popularIcons = [
+            'fa-solid fa-house', 'fa-solid fa-gamepad', 'fa-solid fa-robot', 'fa-solid fa-globe',
+            'fa-solid fa-layer-group', 'fa-solid fa-cube', 'fa-solid fa-rocket', 'fa-solid fa-bolt',
+            'fa-solid fa-gem', 'fa-solid fa-shield', 'fa-solid fa-cloud', 'fa-solid fa-code',
+            'fa-solid fa-wifi', 'fa-solid fa-music', 'fa-solid fa-film', 'fa-solid fa-book',
+            'fa-solid fa-graduation-cap', 'fa-solid fa-cart-shopping', 'fa-solid fa-wrench',
+            'fa-solid fa-microchip', 'fa-solid fa-database', 'fa-solid fa-server',
+            'fa-solid fa-network-wired', 'fa-solid fa-lock', 'fa-solid fa-unlock',
+            'fa-solid fa-envelope', 'fa-solid fa-user', 'fa-solid fa-users', 'fa-solid fa-comments',
+            'fa-solid fa-calendar', 'fa-solid fa-clock', 'fa-solid fa-stopwatch',
+            'fa-solid fa-chart-line', 'fa-solid fa-chart-pie', 'fa-solid fa-coins',
+            'fa-solid fa-credit-card', 'fa-solid fa-wallet', 'fa-solid fa-ticket',
+            'fa-solid fa-images', 'fa-solid fa-video', 'fa-solid fa-headphones',
+            'fa-solid fa-game-console', 'fa-solid fa-dice', 'fa-solid fa-chess',
+            'fa-solid fa-landmark', 'fa-solid fa-building', 'fa-solid fa-city',
+            'fa-solid fa-car', 'fa-solid fa-plane', 'fa-solid fa-train',
+            'fa-solid fa-utensils', 'fa-solid fa-mug-hot', 'fa-solid fa-pizza-slice',
+            'fa-solid fa-heart', 'fa-solid fa-star', 'fa-solid fa-fire'
+        ];
 
-        /* --- LÓGICA DE COMPARTILHAR --- */
-        const shareTriggerBtn = document.getElementById('shareTrigger');
-        const shareUrl = 'https://deathzephyr.github.io/PortaisLDX/';
-        shareTriggerBtn.addEventListener('click', async () => {
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: 'LDX Portais', text: 'Confira os Portais LDX!', url: shareUrl });
-                } catch (err) { console.error('Erro ao compartilhar', err); }
+        let hubsData = [];
+
+        /* --- CARREGAR E SALVAR DADOS --- */
+        function loadHubsData() {
+            const stored = localStorage.getItem('ldx_hubs_config');
+            if (stored) {
+                hubsData = JSON.parse(stored);
             } else {
-                navigator.clipboard.writeText(shareUrl).then(() => {
-                    showToast("Link copiado!");
-                }).catch(() => showToast("Link: " + shareUrl));
-            }
-        });
-
-        /* --- LÓGICA DE MÚSICA --- */
-        const audio = document.getElementById('bgMusic');
-        const musicToggleBtn = document.getElementById('musicToggleBtn');
-        const musicStateIcon = document.getElementById('musicStateIcon');
-        const musicIconContainer = document.getElementById('musicIconContainer');
-        const musicLabel = document.getElementById('musicLabel');
-        audio.volume = 0.5;
-
-        function updateMusicUI() {
-            musicStateIcon.className = "fa-solid fa-music";
-            if (!audio.paused) {
-                musicIconContainer.classList.add('playing');
-                musicLabel.textContent = "Parar Música";
-            } else {
-                musicIconContainer.classList.remove('playing');
-                musicLabel.textContent = "Ligar Música";
-            }
-        }
-
-        function attemptAutoplay() {
-            const savedPlaying = localStorage.getItem('ldx_music_playing');
-            const savedTime = localStorage.getItem('ldx_music_time');
-            if (savedTime) audio.currentTime = parseFloat(savedTime);
-            
-            if (savedPlaying === 'false') { updateMusicUI(); return; }
-
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    updateMusicUI();
-                    localStorage.setItem('ldx_music_playing', 'true');
-                }).catch(() => {
-                    updateMusicUI();
-                    localStorage.setItem('ldx_music_playing', 'false');
-                });
-            } else { updateMusicUI(); }
-        }
-
-        function toggleMusic() {
-            if (audio.paused) {
-                audio.play().then(() => localStorage.setItem('ldx_music_playing', 'true')).catch(() => alert("Erro ao tocar áudio."));
-            } else {
-                audio.pause();
-                localStorage.setItem('ldx_music_playing', 'false');
-            }
-            setTimeout(updateMusicUI, 50);
-        }
-        musicToggleBtn.addEventListener('click', toggleMusic);
-
-        setInterval(() => {
-            if (!audio.paused) {
-                localStorage.setItem('ldx_music_time', audio.currentTime);
-                localStorage.setItem('ldx_music_playing', 'true');
-            } else { localStorage.setItem('ldx_music_playing', 'false'); }
-        }, 1000);
-
-        audio.onplay = () => { localStorage.setItem('ldx_music_playing', 'true'); updateMusicUI(); };
-        audio.onpause = () => { localStorage.setItem('ldx_music_playing', 'false'); updateMusicUI(); };
-
-        /* --- TOGGLE TUTORIAL BANNER (CADEADO) --- */
-        const adblockToggleBtn = document.getElementById('adblockToggleBtn');
-        const tutorialBanner = document.getElementById('tutorialBanner');
-        const adblockIcon = document.getElementById('adblockIcon');
-        const adblockLabel = document.getElementById('adblockLabel');
-        const ADBLOCK_STORAGE_KEY = 'ldx_adblock_visible';
-
-        function initAdblockToggle() {
-            const isVisible = localStorage.getItem(ADBLOCK_STORAGE_KEY) !== 'false';
-            updateAdblockUI(isVisible);
-        }
-
-        function updateAdblockUI(isVisible) {
-            if (isVisible) {
-                tutorialBanner.style.display = 'flex';
-                adblockIcon.className = 'fa-solid fa-lock-open';
-                adblockLabel.textContent = "Ocultar Tutorial";
-            } else {
-                tutorialBanner.style.display = 'none';
-                adblockIcon.className = 'fa-solid fa-lock';
-                adblockLabel.textContent = "Exibir Tutorial";
-            }
-        }
-
-        adblockToggleBtn.addEventListener('click', () => {
-            const currentState = localStorage.getItem(ADBLOCK_STORAGE_KEY) !== 'false';
-            const newState = !currentState;
-            localStorage.setItem(ADBLOCK_STORAGE_KEY, newState);
-            updateAdblockUI(newState);
-            adblockToggleBtn.style.transform = "scale(0.95)";
-            setTimeout(() => adblockToggleBtn.style.transform = "scale(1)", 150);
-        });
-
-        /* --- CARD STYLE TOGGLE (3 OPTIONS) --- */
-        const styleOptions = document.querySelectorAll('.style-option');
-        const STYLE_STORAGE_KEY = 'ldx_card_style';
-
-        function setCardStyle(style) {
-            document.body.classList.remove('transparent-mode', 'invisible-mode');
-            
-            if (style === 'transparent') {
-                document.body.classList.add('transparent-mode');
-            } else if (style === 'invisible') {
-                document.body.classList.add('invisible-mode');
-            }
-
-            localStorage.setItem(STYLE_STORAGE_KEY, style);
-            
-            styleOptions.forEach(opt => {
-                opt.classList.remove('selected');
-                if (opt.dataset.style === style) opt.classList.add('selected');
-            });
-        }
-
-        function loadCardStyle() {
-            const savedStyle = localStorage.getItem(STYLE_STORAGE_KEY) || 'default';
-            setCardStyle(savedStyle);
-        }
-
-        styleOptions.forEach(opt => {
-            opt.addEventListener('click', () => setCardStyle(opt.dataset.style));
-        });
-
-        /* --- DROPDOWN --- */
-        const settingsTrigger = document.getElementById('settingsTrigger');
-        const settingsDropdown = document.getElementById('settingsDropdown');
-        const bgTriggerBtn = document.getElementById('bgTriggerBtn');
-        const bgModal = document.getElementById('bgModal');
-
-        settingsTrigger.addEventListener('click', (e) => {
-            e.stopPropagation();
-            settingsDropdown.classList.toggle('active');
-            settingsTrigger.classList.toggle('active');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!settingsDropdown.contains(e.target) && !settingsTrigger.contains(e.target)) {
-                settingsDropdown.classList.remove('active');
-                settingsTrigger.classList.remove('active');
-            }
-        });
-
-        bgTriggerBtn.addEventListener('click', () => {
-            settingsDropdown.classList.remove('active');
-            settingsTrigger.classList.remove('active');
-            bgModal.classList.add('active');
-        });
-
-        /* --- DEFAULT BACKGROUND --- */
-        const defaultBackground = 'img2.jpg';
-        if (!localStorage.getItem('ldx_custom_bg')) {
-            localStorage.setItem('ldx_custom_bg', defaultBackground);
-            localStorage.setItem('ldx_bg_type', 'image');
-        }
-
-        /* --- FAST STARTUP & ANIMATION (DOMContentLoaded) --- */
-        document.addEventListener('DOMContentLoaded', () => {
-            attemptAutoplay();
-            initAdblockToggle();
-            loadCardStyle();
-
-            const hubCards = document.querySelectorAll('.hub-card');
-            hubCards.forEach((card, index) => {
-                card.style.animation = `hubEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards`;
-                card.style.animationDelay = `${index * 50}ms`; 
-            });
-        });
-
-        /* --- CLOCK & GREETING --- */
-        function updateTimeAndGreeting() {
-            const now = new Date();
-            const hours = now.getHours();
-            const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('clock').textContent = timeString;
-
-            const greetingEl = document.getElementById('greeting-text');
-            let greeting = "Seja bem-vindo.";
-            if (hours >= 5 && hours < 12) greeting = "Bom dia, viajante.";
-            else if (hours >= 12 && hours < 18) greeting = "Boa tarde, viajante.";
-            else if (hours >= 18 && hours < 24) greeting = "Boa noite, viajante.";
-            else greeting = "Boa madrugada, insone.";
-            
-            if (greetingEl.textContent !== greeting + " Selecione seu destino e acesse o melhor conteúdo.") {
-                greetingEl.textContent = greeting + " Selecione seu destino e acesse o melhor conteúdo.";
-            }
-        }
-        setInterval(updateTimeAndGreeting, 1000);
-        updateTimeAndGreeting();
-
-        /* --- TILT & CLICK EFFECTS (CARDS) --- */
-        const hubCards = document.querySelectorAll('.hub-card');
-        hubCards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                if(window.innerWidth > 900 && !document.body.classList.contains('invisible-mode')) {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = ((y - centerY) / centerY) * -10;
-                    const rotateY = ((x - centerX) / centerX) * 10;
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-                } else if (document.body.classList.contains('invisible-mode') && window.innerWidth > 900) {
-                    card.style.transform = `scale(1.02)`;
+                hubsData = JSON.parse(JSON.stringify(defaultHubsConfig));
+                const oldFavId = localStorage.getItem('ldx_favorite_hub');
+                if (oldFavId) {
+                    const favIndex = hubsData.findIndex(h => h.id === oldFavId);
+                    if (favIndex !== -1) hubsData[favIndex].isFavorite = true;
+                    localStorage.removeItem('ldx_favorite_hub');
+                    saveHubsData();
                 }
+            }
+            renderGrid();
+        }
+
+        function saveHubsData() {
+            localStorage.setItem('ldx_hubs_config', JSON.stringify(hubsData));
+        }
+
+        /* --- RENDERIZAR GRID DINÂMICO --- */
+        function renderGrid() {
+            const grid = document.getElementById('bentoGrid');
+            grid.innerHTML = '';
+
+            // Ordenar: Favoritos primeiro
+            const sortedHubs = [...hubsData].sort((a, b) => {
+                return (a.isFavorite === b.isFavorite) ? 0 : a.isFavorite ? -1 : 1;
             });
 
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-            });
+            sortedHubs.forEach((hub, index) => {
+                const card = document.createElement('a');
+                card.href = hub.url;
+                card.className = 'hub-card';
+                card.dataset.id = hub.id;
+                card.style.animation = `hubEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards`;
+                card.style.animationDelay = `${index * 50}ms`;
 
-            card.addEventListener('click', function(e) {
+                // REMOVIDO: Botão de estrela visual do card
+                // Adicionamos apenas o conteúdo principal
+                card.innerHTML = `
+                    <div class="hub-bg-icon"><i class="${hub.icon}"></i></div>
+                    <div class="hub-content">
+                        <div class="hub-icon"><i class="${hub.icon}"></i></div>
+                        <div>
+                            <h2>${hub.name}</h2>
+                            <p>${hub.desc}</p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        /* --- SISTEMA DE EDIÇÃO DE HUBS (MELHORADO) --- */
+        const editHubsModal = document.getElementById('editHubsModal');
+        const editListContainer = document.getElementById('editListContainer');
+        const editHubsTriggerBtn = document.getElementById('editHubsTriggerBtn');
+
+        function openEditModal() {
+            editListContainer.innerHTML = '';
+            
+            hubsData.forEach((hub, index) => {
+                const item = document.createElement('div');
+                item.className = 'edit-item';
+                
+                // Gerar Grid de Ícones
+                let iconGridHtml = '';
+                popularIcons.forEach(iconClass => {
+                    const isSelected = hub.icon === iconClass ? 'selected' : '';
+                    iconGridHtml += `<button type="button" class="icon-btn ${isSelected}" onclick="selectIcon(${index}, '${iconClass}')" title="${iconClass}"><i class="${iconClass}"></i></button>`;
+                });
+
+                item.innerHTML = `
+                    <div class="edit-section-title">Nome do Portal</div>
+                    <div class="edit-row">
+                        <input type="text" class="edit-input" name="name" value="${hub.name}" data-index="${index}" placeholder="Ex: Meu Hub">
+                    </div>
+
+                    <div class="edit-section-title">Ícone</div>
+                    <div class="icon-preview-container">
+                        <div class="current-icon-display" id="icon-preview-${index}"><i class="${hub.icon}"></i></div>
+                        <span class="current-icon-text">${hub.icon}</span>
+                    </div>
+                    <!-- Input invisível para guardar o valor selecionado -->
+                    <input type="hidden" name="icon" id="icon-input-${index}" value="${hub.icon}" data-index="${index}">
+                    
+                    <div class="icon-grid">
+                        ${iconGridHtml}
+                    </div>
+
+                    <div class="edit-actions">
+                        <label class="fav-toggle-label">
+                            <input type="checkbox" name="isFavorite" ${hub.isFavorite ? 'checked' : ''} data-index="${index}">
+                            <span>Favoritar (Primeiro)</span>
+                        </label>
+                    </div>
+                `;
+                editListContainer.appendChild(item);
+            });
+            editHubsModal.classList.add('active');
+        }
+
+        // Função global para lidar com o clique no ícone na grade
+        window.selectIcon = function(index, iconClass) {
+            // Atualiza input oculto
+            const input = document.getElementById(`icon-input-${index}`);
+            input.value = iconClass;
+
+            // Atualiza Preview
+            const previewIcon = document.querySelector(`#icon-preview-${index} i`);
+            previewIcon.className = iconClass;
+            document.querySelector(`#icon-preview-${index} + .current-icon-text`).textContent = iconClass;
+
+            // Atualiza visual da grade (remove selected de todos, adiciona no clicado)
+            const gridBtns = input.parentElement.nextElementSibling.querySelectorAll('.icon-btn');
+            gridBtns.forEach(btn => btn.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        };
+
+        document.getElementById('saveHubsBtn').addEventListener('click', () => {
+            const nameInputs = document.querySelectorAll('input[name="name"]');
+            const iconInputs = document.querySelectorAll('input[name="icon"]');
+            const favInputs = document.querySelectorAll('input[name="isFavorite"]');
+
+            nameInputs.forEach((input, i) => hubsData[i].name = input.value);
+            iconInputs.forEach((input, i) => hubsData[i].icon = input.value);
+            favInputs.forEach((input, i) => hubsData[i].isFavorite = input.checked);
+
+            saveHubsData();
+            renderGrid();
+            editHubsModal.classList.remove('active');
+            showToast("Configurações dos Hubs salvas!");
+        });
+
+        document.getElementById('resetHubsConfigBtn').addEventListener('click', () => {
+            if(confirm("Tem certeza que deseja restaurar os Hubs para o padrão?")) {
+                hubsData = JSON.parse(JSON.stringify(defaultHubsConfig));
+                saveHubsData();
+                renderGrid();
+                editHubsModal.classList.remove('active');
+                showToast("Hubs restaurados.");
+            }
+        });
+
+        editHubsTriggerBtn.addEventListener('click', () => {
+            document.getElementById('settingsDropdown').classList.remove('active');
+            openEditModal();
+        });
+
+        /* --- EVENT DELEGATION PARA O GRID (CLIQUES) --- */
+        const grid = document.getElementById('bentoGrid');
+        grid.addEventListener('click', (e) => {
+            // Clique no card (não tem mais estrela para tratar separadamente)
+            const card = e.target.closest('.hub-card');
+            if (card) {
                 if(e.button === 0) {
-                    e.preventDefault(); 
+                    e.preventDefault();
                     const ripple = document.createElement('span');
                     ripple.classList.add('ripple');
                     const rect = card.getBoundingClientRect();
@@ -1022,153 +959,215 @@
                     card.appendChild(ripple);
                     setTimeout(() => { ripple.remove(); }, 600);
 
-                    const href = this.getAttribute('href');
-                    const target = this.getAttribute('target');
+                    const href = card.getAttribute('href');
                     setTimeout(() => {
-                        if (href) {
-                            if (target === '_blank') window.open(href, '_blank');
-                            else window.location.href = href;
-                        }
+                        if (href) window.location.href = href;
                     }, 300);
                 }
-            });
+            }
         });
 
-        /* --- TUTORIAL BANNER CLICK --- */
-        const tutorialBannerClick = document.getElementById('tutorialBanner');
-        tutorialBannerClick.addEventListener('click', function() {
-            document.getElementById('tutorialModal').classList.add('active');
+        // Tilt Effect (Reaplicado para elementos dinâmicos)
+        grid.addEventListener('mousemove', (e) => {
+            const card = e.target.closest('.hub-card');
+            if (card && window.innerWidth > 900 && !document.body.classList.contains('invisible-mode')) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+            } else if (card && document.body.classList.contains('invisible-mode') && window.innerWidth > 900) {
+                card.style.transform = `scale(1.02)`;
+            }
         });
 
-        /* --- TABS LOGIC --- */
-        function switchTab(device) {
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => content.classList.remove('active'));
+        grid.addEventListener('mouseleave', (e) => {
+            const card = e.target.closest('.hub-card');
+            if(card) card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+        });
 
-            if (device === 'mobile') {
-                buttons[0].classList.add('active');
-                document.getElementById('tab-mobile').classList.add('active');
+        /* --- LOGO CLICK ANIMATION --- */
+        const logo = document.getElementById('mainLogo');
+        logo.addEventListener('click', function(e) {
+            logo.classList.remove('logo-click-anim');
+            void logo.offsetWidth;
+            logo.classList.add('logo-click-anim');
+            const ripple = document.createElement('span');
+            ripple.classList.add('logo-ripple');
+            const rect = logo.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+            logo.appendChild(ripple);
+            setTimeout(() => { ripple.remove(); }, 600);
+        });
+
+        /* --- COMPARTILHAR --- */
+        document.getElementById('shareTrigger').addEventListener('click', async () => {
+            const shareUrl = 'https://deathzephyr.github.io/PortaisLDX/';
+            if (navigator.share) {
+                try { await navigator.share({ title: 'LDX Portais', text: 'Confira os Portais LDX!', url: shareUrl }); }
+                catch (err) { console.error('Erro ao compartilhar', err); }
             } else {
-                buttons[1].classList.add('active');
-                document.getElementById('tab-pc').classList.add('active');
+                navigator.clipboard.writeText(shareUrl).then(() => showToast("Link copiado!"));
+            }
+        });
+
+        /* --- MÚSICA --- */
+        const audio = document.getElementById('bgMusic');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        audio.volume = 0.5;
+        function updateMusicUI() {
+            document.getElementById('musicStateIcon').className = "fa-solid fa-music";
+            if (!audio.paused) {
+                document.getElementById('musicIconContainer').classList.add('playing');
+                document.getElementById('musicLabel').textContent = "Parar Música";
+            } else {
+                document.getElementById('musicIconContainer').classList.remove('playing');
+                document.getElementById('musicLabel').textContent = "Ligar Música";
             }
         }
+        function attemptAutoplay() {
+            const savedPlaying = localStorage.getItem('ldx_music_playing');
+            const savedTime = localStorage.getItem('ldx_music_time');
+            if (savedTime) audio.currentTime = parseFloat(savedTime);
+            if (savedPlaying === 'false') { updateMusicUI(); return; }
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => { updateMusicUI(); localStorage.setItem('ldx_music_playing', 'true'); })
+                .catch(() => { updateMusicUI(); localStorage.setItem('ldx_music_playing', 'false'); });
+            } else { updateMusicUI(); }
+        }
+        function toggleMusic() {
+            if (audio.paused) audio.play().then(() => localStorage.setItem('ldx_music_playing', 'true')).catch(() => alert("Erro ao tocar áudio."));
+            else { audio.pause(); localStorage.setItem('ldx_music_playing', 'false'); }
+            setTimeout(updateMusicUI, 50);
+        }
+        musicToggleBtn.addEventListener('click', toggleMusic);
+        setInterval(() => {
+            if (!audio.paused) { localStorage.setItem('ldx_music_time', audio.currentTime); localStorage.setItem('ldx_music_playing', 'true'); }
+            else { localStorage.setItem('ldx_music_playing', 'false'); }
+        }, 1000);
+        audio.onplay = () => { localStorage.setItem('ldx_music_playing', 'true'); updateMusicUI(); };
+        audio.onpause = () => { localStorage.setItem('ldx_music_playing', 'false'); updateMusicUI(); };
 
-        /* --- COPIAR DNS --- */
+        /* --- TUTORIAL --- */
+        document.getElementById('adblockToggleBtn').addEventListener('click', () => {
+            const isVisible = localStorage.getItem('ldx_adblock_visible') !== 'false';
+            const newState = !isVisible;
+            localStorage.setItem('ldx_adblock_visible', newState);
+            const banner = document.getElementById('tutorialBanner');
+            const icon = document.getElementById('adblockIcon');
+            const label = document.getElementById('adblockLabel');
+            if (newState) {
+                banner.style.display = 'flex'; icon.className = 'fa-solid fa-lock-open'; label.textContent = "Ocultar Tutorial";
+            } else {
+                banner.style.display = 'none'; icon.className = 'fa-solid fa-lock'; label.textContent = "Exibir Tutorial";
+            }
+        });
+        document.getElementById('tutorialBanner').addEventListener('click', () => document.getElementById('tutorialModal').classList.add('active'));
+        function switchTab(device) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            if(device === 'mobile') { document.querySelectorAll('.tab-btn')[0].classList.add('active'); document.getElementById('tab-mobile').classList.add('active'); }
+            else { document.querySelectorAll('.tab-btn')[1].classList.add('active'); document.getElementById('tab-pc').classList.add('active'); }
+        }
         function copyDNS() {
-            const dns = "dns.adguard.com";
-            navigator.clipboard.writeText(dns).then(() => {
-                showToast("DNS copiado!");
-            }).catch(() => {
-                const textArea = document.createElement("textarea");
-                textArea.value = dns;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try { document.execCommand('copy'); showToast("DNS copiado!"); } 
-                catch (err) { showToast("Erro ao copiar"); }
-                document.body.removeChild(textArea);
-            });
+            navigator.clipboard.writeText("dns.adguard.com").then(() => showToast("DNS copiado!"));
         }
 
-        /* --- GRID CONTROL --- */
+        /* --- ESTILOS E LAYOUT --- */
+        const settingsTrigger = document.getElementById('settingsTrigger');
+        const settingsDropdown = document.getElementById('settingsDropdown');
+        settingsTrigger.addEventListener('click', (e) => { e.stopPropagation(); settingsDropdown.classList.toggle('active'); });
+        document.addEventListener('click', (e) => { if (!settingsDropdown.contains(e.target) && !settingsTrigger.contains(e.target)) settingsDropdown.classList.remove('active'); });
+
+        document.querySelectorAll('.style-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.body.classList.remove('transparent-mode', 'invisible-mode');
+                if(opt.dataset.style === 'transparent') document.body.classList.add('transparent-mode');
+                else if(opt.dataset.style === 'invisible') document.body.classList.add('invisible-mode');
+                localStorage.setItem('ldx_card_style', opt.dataset.style);
+                document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+            });
+        });
+
         const bentoGrid = document.getElementById('bentoGrid');
-        const gridOptions = document.querySelectorAll('.grid-option');
-        const gridStorageKey = 'ldx_portal_grid'; 
-
-        function setGrid(cols) {
-            bentoGrid.classList.remove('cols-2');
-            if (cols === '2') {
-                bentoGrid.classList.add('cols-2');
-            }
-            localStorage.setItem(gridStorageKey, cols);
-
-            gridOptions.forEach(opt => {
-                opt.classList.remove('selected');
-                if (opt.dataset.cols === cols) opt.classList.add('selected');
+        document.querySelectorAll('.grid-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                bentoGrid.classList.remove('cols-2');
+                if(opt.dataset.cols === '2') bentoGrid.classList.add('cols-2');
+                localStorage.setItem('ldx_portal_grid', opt.dataset.cols);
+                document.querySelectorAll('.grid-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
             });
-        }
-
-        function loadGrid() {
-            const savedCols = localStorage.getItem(gridStorageKey) || '5';
-            setGrid(savedCols);
-        }
-
-        gridOptions.forEach(opt => {
-            opt.addEventListener('click', () => setGrid(opt.getAttribute('data-cols')));
         });
+        (function(){ const c = localStorage.getItem('ldx_card_style'); if(c==='transparent') document.body.classList.add('transparent-mode'); else if(c==='invisible') document.body.classList.add('invisible-mode'); })();
+        (function(){ const c = localStorage.getItem('ldx_portal_grid'); if(c==='2') bentoGrid.classList.add('cols-2'); })();
 
-        loadGrid();
-        let lastWidth = window.innerWidth;
-        window.addEventListener('resize', () => {
-            if (window.innerWidth !== lastWidth) {
-                lastWidth = window.innerWidth;
-                loadGrid();
-            }
+        /* --- BACKGROUND --- */
+        document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
+        document.getElementById('bgFileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0]; if(!file) return;
+            if(file.size > 5*1024*1024) { showToast("Imagem muito grande!"); return; }
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                document.getElementById('custom-bg-layer').style.backgroundImage = `url('${ev.target.result}')`;
+                document.body.style.backgroundImage = 'none';
+                localStorage.setItem('ldx_custom_bg', ev.target.result);
+                localStorage.setItem('ldx_bg_type', 'image');
+                document.getElementById('bgModal').classList.remove('active');
+                showToast("Fundo atualizado!");
+            };
+            reader.readAsDataURL(file);
         });
+        document.getElementById('resetBgBtn').addEventListener('click', () => { localStorage.removeItem('ldx_custom_bg'); location.reload(); });
 
-        /* --- MODAL SYSTEM --- */
-        function setupModal(modalId, closeBtnId, backdropId) {
-            const modal = document.getElementById(modalId);
-            const closeBtn = document.getElementById(closeBtnId);
-            const backdrop = document.getElementById(backdropId);
-            function closeModal() { modal.classList.remove('active'); }
-            closeBtn.addEventListener('click', closeModal);
-            backdrop.addEventListener('click', closeModal);
+        /* --- MODAIS GERAIS --- */
+        function setupModal(id, closeId, backId) {
+            const m = document.getElementById(id); const c = document.getElementById(closeId); const b = document.getElementById(backId);
+            const cl = () => m.classList.remove('active');
+            c.addEventListener('click', cl); b.addEventListener('click', cl);
         }
         setupModal('bgModal', 'closeBgModalBtn', 'bgModalBackdrop');
+        setupModal('editHubsModal', 'closeEditHubsModalBtn', 'editHubsModalBackdrop');
         setupModal('tutorialModal', 'closeTutorialModalBtn', 'tutorialModalBackdrop');
 
-        /* --- BG UPLOAD --- */
-        const bgFileInput = document.getElementById('bgFileInput');
-        const uploadTriggerBtn = document.getElementById('uploadTriggerBtn');
-        const resetBgBtn = document.getElementById('resetBgBtn');
-        const customBgLayer = document.getElementById('custom-bg-layer');
-        const toast = document.getElementById('toast');
-
-        function showToast(message) {
-            toast.querySelector('span').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        /* --- UTILS --- */
+        function showToast(msg) {
+            const t = document.getElementById('toast'); t.querySelector('span').textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
-
-        uploadTriggerBtn.addEventListener('click', () => { bgFileInput.click(); });
-
-        function setBackground(value, type) {
-            if (type === 'image') {
-                customBgLayer.style.backgroundImage = `url('${value}')`;
-                document.body.style.backgroundImage = 'none';
-                document.body.classList.add('has-custom-bg');
-                localStorage.setItem('ldx_custom_bg', value);
-                localStorage.setItem('ldx_bg_type', 'image');
-            } else if (type === 'color') {
-                customBgLayer.style.backgroundImage = 'none';
-                document.body.style.backgroundImage = value;
-                document.body.classList.add('has-custom-bg');
-                localStorage.setItem('ldx_custom_bg', value);
-                localStorage.setItem('ldx_bg_type', 'color');
-            }
-            document.getElementById('bgModal').classList.remove('active');
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+            const h = now.getHours();
+            let g = "Seja bem-vindo.";
+            if(h>=5 && h<12) g="Bom dia, viajante.";
+            else if(h>=12 && h<18) g="Boa tarde, viajante.";
+            else if(h>=18 && h<24) g="Boa noite, viajante.";
+            else g="Boa madrugada, insone.";
+            document.getElementById('greeting-text').textContent = g + " Selecione seu destino.";
         }
+        setInterval(updateTime, 1000);
 
-        bgFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                if (file.size > 5 * 1024 * 1024) { showToast("Imagem muito grande! (Max 5MB)"); return; }
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    setBackground(event.target.result, 'image');
-                    showToast("Imagem carregada com sucesso!");
-                };
-                reader.readAsDataURL(file);
+        /* --- INICIALIZAÇÃO --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            attemptAutoplay();
+            loadHubsData();
+            updateTime();
+            
+            // Inicializa visibilidade do tutorial
+            if(localStorage.getItem('ldx_adblock_visible') === 'false') {
+                document.getElementById('tutorialBanner').style.display = 'none';
+                document.getElementById('adblockIcon').className = 'fa-solid fa-lock';
+                document.getElementById('adblockLabel').textContent = "Exibir Tutorial";
             }
-        });
-
-        resetBgBtn.addEventListener('click', () => {
-            localStorage.removeItem('ldx_custom_bg');
-            localStorage.removeItem('ldx_bg_type');
-            location.reload(); 
         });
 
     </script>

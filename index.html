@@ -89,7 +89,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 1; /* CORREÇÃO ANTERIOR: Garantido 1 para visibilidade */
+            opacity: 1;
             transition: opacity 0.5s ease;
             pointer-events: none;
             -webkit-transform: translate3d(0,0,0);
@@ -137,8 +137,10 @@
         .ambient-light {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; overflow: hidden; pointer-events: none;
-            opacity: 0;
+            opacity: 0.3; /* Visível por padrão */
+            transition: opacity 0.5s ease;
         }
+        body.ambient-hidden .ambient-light { opacity: 0; }
 
         .orb {
             position: absolute; border-radius: 50%;
@@ -224,6 +226,10 @@
         .dropdown-item i { width: 24px; text-align: center; font-size: 1.1rem; }
         .chevron-sub { font-size: 0.8rem; opacity: 0.6; transition: transform 0.2s; }
         .dropdown-item-wrapper:hover .chevron-sub { transform: translateX(-3px); }
+        
+        /* Estilo especial para o botão de Reset (Vermelho) */
+        .dropdown-item.danger-text { color: #f87171; }
+        .dropdown-item.danger-text:hover { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
 
         /* --- SUBMENUS --- */
         .grid-submenu, .style-submenu {
@@ -318,7 +324,7 @@
             font-size: 1.4rem;
             color: #ffffff;
             z-index: 20;
-            pointer-events: none; /* Não interfere no clique do card */
+            pointer-events: none;
             text-shadow: 0 2px 5px rgba(0,0,0,0.3);
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
@@ -399,7 +405,7 @@
             color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
             cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
         }
-        /* Estado Ativo (Amarelo/Gold no modal de edição) */
+        /* Estado Ativo (Amarelo) */
         .btn-fav-toggle.active {
             background: rgba(251, 191, 36, 0.2); border-color: var(--gold-color); color: var(--gold-color);
             box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
@@ -636,6 +642,33 @@
                             </button>
                         </div>
                     </div>
+                    
+                    <!-- NOVOS BOTÕES -->
+                    <div style="width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0;"></div>
+                    
+                    <!-- AMBIENTE (LUZES) -->
+                    <button class="dropdown-item" id="orbToggleBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-wand-magic-sparkles" id="orbIcon"></i>
+                            <span id="orbLabel">Ambiente (Luzes)</span>
+                        </span>
+                    </button>
+
+                    <!-- TELA CHEIA -->
+                    <button class="dropdown-item" id="fullscreenToggleBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-expand" id="fsIcon"></i>
+                            <span id="fsLabel">Tela Cheia</span>
+                        </span>
+                    </button>
+
+                    <!-- RESETAR TUDO -->
+                    <button class="dropdown-item danger-text" id="resetAllBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-bomb"></i>
+                            <span>Resetar Tudo</span>
+                        </span>
+                    </button>
 
                 </div>
             </div>
@@ -1238,10 +1271,68 @@
         (function(){ const c = localStorage.getItem('ldx_card_style'); if(c==='transparent') document.body.classList.add('transparent-mode'); else if(c==='invisible') document.body.classList.add('invisible-mode'); })();
         (function(){ const c = localStorage.getItem('ldx_portal_grid'); if(c==='2') bentoGrid.classList.add('cols-2'); })();
 
+        /* --- FUNÇÕES NOVAS --- */
+        
+        // 1. Alternar Luzes (Ambiente)
+        const orbToggleBtn = document.getElementById('orbToggleBtn');
+        orbToggleBtn.addEventListener('click', () => {
+            const isHidden = document.body.classList.contains('ambient-hidden');
+            if (isHidden) {
+                document.body.classList.remove('ambient-hidden');
+                document.getElementById('orbLabel').textContent = "Ambiente (Luzes)";
+                document.getElementById('orbIcon').className = "fa-solid fa-wand-magic-sparkles";
+                localStorage.setItem('ldx_ambient_active', 'true');
+            } else {
+                document.body.classList.add('ambient-hidden');
+                document.getElementById('orbLabel').textContent = "Luzes (Off)";
+                document.getElementById('orbIcon').className = "fa-regular fa-wand-magic-sparkles";
+                localStorage.setItem('ldx_ambient_active', 'false');
+            }
+        });
+        // Carregar estado inicial das luzes
+        if(localStorage.getItem('ldx_ambient_active') === 'false') {
+            document.body.classList.add('ambient-hidden');
+            document.getElementById('orbLabel').textContent = "Luzes (Off)";
+            document.getElementById('orbIcon').className = "fa-regular fa-wand-magic-sparkles";
+        }
+
+        // 2. Fullscreen
+        const fullscreenBtn = document.getElementById('fullscreenToggleBtn');
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch((err) => {
+                    console.log("Erro ao ativar fullscreen:", err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+        // Atualizar ícone ao sair do fullscreen
+        document.addEventListener('fullscreenchange', () => {
+            const fsIcon = document.getElementById('fsIcon');
+            if (document.fullscreenElement) {
+                fsIcon.className = "fa-solid fa-compress";
+                document.getElementById('fsLabel').textContent = "Sair da Cheia";
+            } else {
+                fsIcon.className = "fa-solid fa-expand";
+                document.getElementById('fsLabel').textContent = "Tela Cheia";
+            }
+        });
+
+        // 3. Resetar Tudo
+        document.getElementById('resetAllBtn').addEventListener('click', () => {
+            if(confirm("⚠️ ATENÇÃO: Isso apagará todas as suas configurações personalizadas (Hubs, Fundo, Música, etc.). Deseja continuar?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        });
+
         /* --- BACKGROUND (FIXADO) --- */
         document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
         
-        // AQUI ESTÁ A CORREÇÃO: Adicionado o listener ao botão de upload
+        // Listener para abrir o seletor de arquivos
         document.getElementById('uploadTriggerBtn').addEventListener('click', () => {
             document.getElementById('bgFileInput').click();
         });
@@ -1263,7 +1354,6 @@
                     document.getElementById('bgModal').classList.remove('active');
                     showToast("Fundo atualizado!");
                 } catch (err) {
-                    // Se a imagem for muito grande para o localStorage
                     showToast("Erro: Imagem muito grande para salvar.");
                     document.getElementById('bgModal').classList.remove('active');
                 }

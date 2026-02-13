@@ -56,6 +56,7 @@
             --text-muted: #94a3b8;
             --accent-cyan: #06b6d4; 
             --rainbow-gradient: linear-gradient(90deg, #facc15, #8b5cf6, #ec4899, #06b6d4, #22c55e, #ef4444, #f59e0b, #ffffff, #facc15);
+            --gold-color: #fbbf24;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -339,7 +340,7 @@
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
         
-        /* --- EDIT MODAL SPECIFIC (MOBILE FIX) --- */
+        /* --- EDIT MODAL SPECIFIC (MOBILE FIX V2) --- */
         .edit-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem; }
         .edit-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 16px; }
         
@@ -353,15 +354,35 @@
         }
         .edit-input:focus { border-color: var(--accent-cyan); outline: none; }
         
-        /* Novo Layout de Controles do Item */
+        /* Linha de Controles (Estrela e Ícone) - FIXADO */
         .edit-controls-row {
-            display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; gap: 1rem;
+            display: flex; gap: 10px; margin-top: 1rem; width: 100%;
         }
 
-        .change-icon-btn {
+        /* Botão de Favorito (Estrela) */
+        .btn-fav-toggle {
+            flex: 1; /* Ocupa 50% do espaço */
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
-            color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; 
-            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
+            cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
+        }
+        .btn-fav-toggle i { font-size: 1.1rem; color: #fff; transition: 0.2s; }
+        .btn-fav-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+        
+        /* Estado Ativo (Amarelo) */
+        .btn-fav-toggle.active {
+            background: rgba(251, 191, 36, 0.2); border-color: var(--gold-color); color: var(--gold-color);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+        }
+        .btn-fav-toggle.active i { color: var(--gold-color); transform: scale(1.1); }
+
+        /* Botão Trocar Ícone */
+        .change-icon-btn {
+            flex: 1; /* Ocupa 50% do espaço */
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
         }
         .change-icon-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
@@ -389,11 +410,6 @@
         .icon-btn:active { transform: scale(0.95); }
         .icon-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: scale(1.1); }
         .icon-btn.selected { background: var(--accent-cyan); color: #fff; border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); }
-
-        .fav-toggle-label { 
-            display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: #fff; user-select: none; font-weight: 500; white-space: nowrap;
-        }
-        .fav-toggle-label input { accent-color: #fff; width: 16px; height: 16px; }
 
         /* --- TUTORIAL TABS --- */
         .tutorial-tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
@@ -858,7 +874,7 @@
             });
         }
 
-        /* --- SISTEMA DE EDIÇÃO DE HUBS (MELHORADO PARA MOBILE) --- */
+        /* --- SISTEMA DE EDIÇÃO DE HUBS (MOBILE FIX V2) --- */
         const editHubsModal = document.getElementById('editHubsModal');
         const editListContainer = document.getElementById('editListContainer');
         const editHubsTriggerBtn = document.getElementById('editHubsTriggerBtn');
@@ -870,19 +886,35 @@
             
             if (gridWrapper.classList.contains('open')) {
                 gridWrapper.classList.remove('open');
-                // Pequeno delay para display:none funcionar com transição se necessário, 
-                // mas aqui usamos classe CSS para animação simples
                 setTimeout(() => { if(!gridWrapper.classList.contains('open')) gridWrapper.style.display = 'none'; }, 300);
-                btn.innerHTML = `<i class="${document.getElementById(`icon-input-${index}`).value}"></i> Trocar Ícone`;
+                btn.innerHTML = `<i class="${document.getElementById(`icon-input-${index}`).value}"></i> Ícone`;
             } else {
                 gridWrapper.style.display = 'block';
-                // Força reflow
                 void gridWrapper.offsetWidth;
                 gridWrapper.classList.add('open');
-                btn.innerHTML = `<i class="fa-solid fa-chevron-up"></i> Fechar Ícones`;
+                btn.innerHTML = `<i class="fa-solid fa-chevron-up"></i> Fechar`;
                 
                 // Rola suavemente até a grade para facilitar no celular
                 gridWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        };
+
+        // Função global para alternar o favorito via botão
+        window.toggleFavorite = function(index) {
+            const btn = document.getElementById(`fav-btn-${index}`);
+            const input = document.getElementById(`fav-input-${index}`);
+            const icon = btn.querySelector('i');
+            
+            if (input.value === 'true') {
+                // Desmarcar
+                input.value = 'false';
+                btn.classList.remove('active');
+                icon.className = 'fa-regular fa-star';
+            } else {
+                // Marcar
+                input.value = 'true';
+                btn.classList.add('active');
+                icon.className = 'fa-solid fa-star';
             }
         };
 
@@ -900,27 +932,36 @@
                     iconGridHtml += `<button type="button" class="icon-btn ${isSelected}" onclick="selectIcon(${index}, '${iconClass}')" title="${iconClass}"><i class="${iconClass}"></i></button>`;
                 });
 
+                // Definir estado inicial do botão de favorito
+                const isFav = hub.isFavorite;
+                const favActiveClass = isFav ? 'active' : '';
+                const favIconClass = isFav ? 'fa-solid fa-star' : 'fa-regular fa-star';
+
                 item.innerHTML = `
                     <div class="edit-section-title">Nome do Portal</div>
                     <div class="edit-row">
                         <input type="text" class="edit-input" name="name" value="${hub.name}" data-index="${index}" placeholder="Ex: Meu Hub">
                     </div>
 
-                    <!-- Linha de Controles (Favorito e Trocar Ícone) -->
-                    <div class="edit-controls-row">
-                        <label class="fav-toggle-label">
-                            <input type="checkbox" name="isFavorite" ${hub.isFavorite ? 'checked' : ''} data-index="${index}">
-                            <span>Favoritar</span>
-                        </label>
+                    <!-- Input oculto para guardar o ícone -->
+                    <input type="hidden" name="icon" id="icon-input-${index}" value="${hub.icon}" data-index="${index}">
+                    
+                    <!-- Input oculto para guardar o favorito -->
+                    <input type="hidden" id="fav-input-${index}" value="${isFav}" data-index="${index}">
 
-                        <!-- Botão para revelar grade de ícones -->
+                    <!-- Linha de Controles (50% cada) -->
+                    <div class="edit-controls-row">
+                        <!-- Botão Estrela -->
+                        <button type="button" class="btn-fav-toggle ${favActiveClass}" id="fav-btn-${index}" onclick="toggleFavorite(${index})">
+                            <i class="${favIconClass}"></i>
+                            <span>Favorito</span>
+                        </button>
+
+                        <!-- Botão Ícone -->
                         <button type="button" class="change-icon-btn" id="change-icon-btn-${index}" onclick="toggleIconGrid(${index})">
-                            <i class="${hub.icon}"></i> Trocar Ícone
+                            <i class="${hub.icon}"></i> Ícone
                         </button>
                     </div>
-
-                    <!-- Input invisível para guardar o valor selecionado -->
-                    <input type="hidden" name="icon" id="icon-input-${index}" value="${hub.icon}" data-index="${index}">
                     
                     <!-- Grade de Ícones (Colapsável) -->
                     <div class="icon-grid-wrapper" id="icon-grid-wrapper-${index}" style="display: none;">
@@ -940,9 +981,9 @@
             const input = document.getElementById(`icon-input-${index}`);
             input.value = iconClass;
 
-            // Atualiza botão "Trocar Ícone"
+            // Atualiza botão "Ícone"
             const btn = document.getElementById(`change-icon-btn-${index}`);
-            btn.innerHTML = `<i class="${iconClass}"></i> Trocar Ícone`;
+            btn.innerHTML = `<i class="${iconClass}"></i> Ícone`;
 
             // Atualiza visual da grade (remove selected de todos, adiciona no clicado)
             const gridBtns = input.parentElement.nextElementSibling.querySelector('.icon-grid').querySelectorAll('.icon-btn');
@@ -953,11 +994,12 @@
         document.getElementById('saveHubsBtn').addEventListener('click', () => {
             const nameInputs = document.querySelectorAll('input[name="name"]');
             const iconInputs = document.querySelectorAll('input[name="icon"]');
-            const favInputs = document.querySelectorAll('input[name="isFavorite"]');
+            // Agora lemos os inputs hidden de favorito
+            const favInputs = document.querySelectorAll('input[id^="fav-input-"]'); 
 
             nameInputs.forEach((input, i) => hubsData[i].name = input.value);
             iconInputs.forEach((input, i) => hubsData[i].icon = input.value);
-            favInputs.forEach((input, i) => hubsData[i].isFavorite = input.checked);
+            favInputs.forEach((input, i) => hubsData[i].isFavorite = (input.value === 'true'));
 
             saveHubsData();
             renderGrid();

@@ -41,7 +41,6 @@
                 if(bgLayer) {
                     if(activeType === 'image') {
                         bgLayer.style.backgroundImage = `url('${activeBg}')`;
-                        // GARANTE VISIBILIDADE NO CARREGAMENTO
                         bgLayer.style.opacity = '1';
                         document.body.style.backgroundImage = 'none';
                     } else {
@@ -90,7 +89,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 1; /* CORREÇÃO: De 0 para 1 para garantir visibilidade */
+            opacity: 1; /* CORREÇÃO ANTERIOR: Garantido 1 para visibilidade */
             transition: opacity 0.5s ease;
             pointer-events: none;
             -webkit-transform: translate3d(0,0,0);
@@ -310,6 +309,21 @@
         @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
         .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
         .hub-card:hover .hub-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.1); }
+        
+        /* --- INDICADOR DE FAVORITO (ESTRELA BRANCA) --- */
+        .hub-fav-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.4rem;
+            color: #ffffff;
+            z-index: 20;
+            pointer-events: none; /* Não interfere no clique do card */
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 80% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
+
         .hub-content { position: relative; z-index: 10 !important; transform: translateZ(30px); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; pointer-events: none; }
         .hub-icon {
             width: 90px; height: 90px; border-radius: 20px; background: rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center;
@@ -385,7 +399,7 @@
             color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
             cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
         }
-        /* Estado Ativo (Amarelo) */
+        /* Estado Ativo (Amarelo/Gold no modal de edição) */
         .btn-fav-toggle.active {
             background: rgba(251, 191, 36, 0.2); border-color: var(--gold-color); color: var(--gold-color);
             box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
@@ -484,6 +498,12 @@
             .hub-card h2 { font-size: 1.2rem !important; margin-bottom: 0.2rem; }
             .hub-card p { font-size: 0.85rem !important; margin: 0; }
             .hub-bg-icon { display: none; }
+
+            /* Ajuste da estrela no mobile para não cobrir o conteúdo */
+            .hub-fav-indicator {
+                top: 10px; right: 10px;
+                font-size: 1.2rem;
+            }
 
             .style-submenu {
                 top: 100% !important; left: 0 !important; right: auto !important; margin-right: 0 !important;
@@ -868,7 +888,7 @@
 
             // Ordenar: Favoritos primeiro
             const sortedHubs = [...hubsData].sort((a, b) => {
-                return (a.isFavorite === b.isFavorite) ?0 : a.isFavorite ? -1 : 1;
+                return (a.isFavorite === b.isFavorite) ? 0 : a.isFavorite ? -1 : 1;
             });
 
             sortedHubs.forEach((hub, index) => {
@@ -879,9 +899,13 @@
                 card.style.animation = `hubEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards`;
                 card.style.animationDelay = `${index * 50}ms`;
 
-                // REMOVIDO: Botão de estrela visual do card
-                // Adicionamos apenas o conteúdo principal
+                // Estrela Branca no Canto Superior Direito (Visual Only)
+                const favStarHtml = hub.isFavorite 
+                    ? `<div class="hub-fav-indicator"><i class="fa-solid fa-star"></i></div>` 
+                    : '';
+
                 card.innerHTML = `
+                    ${favStarHtml}
                     <div class="hub-bg-icon"><i class="${hub.icon}"></i></div>
                     <div class="hub-content">
                         <div class="hub-icon"><i class="${hub.icon}"></i></div>
@@ -1217,7 +1241,7 @@
         /* --- BACKGROUND (FIXADO) --- */
         document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
         
-        // Listener para abrir o seletor de arquivos
+        // AQUI ESTÁ A CORREÇÃO: Adicionado o listener ao botão de upload
         document.getElementById('uploadTriggerBtn').addEventListener('click', () => {
             document.getElementById('bgFileInput').click();
         });
@@ -1241,7 +1265,6 @@
                 } catch (err) {
                     // Se a imagem for muito grande para o localStorage
                     showToast("Erro: Imagem muito grande para salvar.");
-                    // Reverte visualmente em caso de erro
                     document.getElementById('bgModal').classList.remove('active');
                 }
             };

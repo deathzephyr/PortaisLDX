@@ -310,7 +310,7 @@
             transform: skewX(-25deg); transition: 0.6s; pointer-events: none; z-index: 2; 
         }
         .hub-card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
-        .hub-card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1); }
+        .hub-card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255, 255, 0.4); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1); }
         .ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3); transform: scale(0); animation: ripple-anim 0.6s ease-out; pointer-events: none; z-index: 1; }
         @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
         .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
@@ -458,8 +458,8 @@
         .step-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
         .dns-container { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
         .dns-code-box { background: rgba(255,255,255,0.1); border: 1px dashed rgba(255, 255, 255, 0.3); padding: 10px 12px; border-radius: 8px; font-family: 'Courier New', monospace; color: #ffffff; text-align: left; font-size: 0.9rem; user-select: all; flex-grow: 1; }
-        .copy-dns-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255, 255, 255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; flex-shrink: 0; }
-        .copy-dns-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255, 255, 255,0.4); }
+        .copy-dns-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; flex-shrink: 0; }
+        .copy-dns-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
         .modal-btn { display: block; width: 100%; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; text-decoration: none; transition: all 0.3s ease; margin-top: 8px; cursor: pointer; border: none; font-size: 0.9rem; }
         .btn-primary { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; }
         .btn-primary:hover { background: var(--rainbow-gradient); background-size: 200% auto; animation: colorCycle 4s linear infinite; filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
@@ -643,14 +643,14 @@
                         </div>
                     </div>
                     
-                    <!-- DIVISÓRIA PARA SEPARAR NOVOS ITENS -->
+                    <!-- NOVOS BOTÕES -->
                     <div style="width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0;"></div>
-
-                    <!-- ENVIAR IDEIA (NOVA OPÇÃO) -->
-                    <button class="dropdown-item" id="ideaTriggerBtn">
+                    
+                    <!-- AMBIENTE (LUZES) -->
+                    <button class="dropdown-item" id="orbToggleBtn">
                         <span class="dropdown-item-content">
-                            <i class="fa-solid fa-lightbulb"></i>
-                            <span>Enviar Ideia</span>
+                            <i class="fa-solid fa-wand-magic-sparkles" id="orbIcon"></i>
+                            <span id="orbLabel">Ambiente (Luzes)</span>
                         </span>
                     </button>
 
@@ -1211,7 +1211,7 @@
         musicToggleBtn.addEventListener('click', toggleMusic);
         setInterval(() => {
             if (!audio.paused) { localStorage.setItem('ldx_music_time', audio.currentTime); localStorage.setItem('ldx_music_playing', 'true'); }
-            else { localStorage.setItem('ldx_music_playing', 'offset: 0'); }
+            else { localStorage.setItem('ldx_music_playing', 'false'); }
         }, 1000);
         audio.onplay = () => { localStorage.setItem('ldx_music_playing', 'true'); updateMusicUI(); };
         audio.onpause = () => { localStorage.setItem('ldx_music_playing', 'false'); updateMusicUI(); };
@@ -1273,7 +1273,30 @@
 
         /* --- FUNÇÕES NOVAS --- */
         
-        // 1. Fullscreen
+        // 1. Alternar Luzes (Ambiente)
+        const orbToggleBtn = document.getElementById('orbToggleBtn');
+        orbToggleBtn.addEventListener('click', () => {
+            const isHidden = document.body.classList.contains('ambient-hidden');
+            if (isHidden) {
+                document.body.classList.remove('ambient-hidden');
+                document.getElementById('orbLabel').textContent = "Ambiente (Luzes)";
+                document.getElementById('orbIcon').className = "fa-solid fa-wand-magic-sparkles";
+                localStorage.setItem('ldx_ambient_active', 'true');
+            } else {
+                document.body.classList.add('ambient-hidden');
+                document.getElementById('orbLabel').textContent = "Luzes (Off)";
+                document.getElementById('orbIcon').className = "fa-regular fa-wand-magic-sparkles";
+                localStorage.setItem('ldx_ambient_active', 'false');
+            }
+        });
+        // Carregar estado inicial das luzes
+        if(localStorage.getItem('ldx_ambient_active') === 'false') {
+            document.body.classList.add('ambient-hidden');
+            document.getElementById('orbLabel').textContent = "Luzes (Off)";
+            document.getElementById('orbIcon').className = "fa-regular fa-wand-magic-sparkles";
+        }
+
+        // 2. Fullscreen
         const fullscreenBtn = document.getElementById('fullscreenToggleBtn');
         fullscreenBtn.addEventListener('click', () => {
             if (!document.fullscreenElement) {
@@ -1291,27 +1314,19 @@
             const fsIcon = document.getElementById('fsIcon');
             if (document.fullscreenElement) {
                 fsIcon.className = "fa-solid fa-compress";
-                document.getElementById('fsLabel').textContent = "Sair da Tela";
+                document.getElementById('fsLabel').textContent = "Sair da Cheia";
             } else {
                 fsIcon.className = "fa-solid fa-expand";
                 document.getElementById('fsLabel').textContent = "Tela Cheia";
             }
         });
 
-        // 2. Resetar Tudo
+        // 3. Resetar Tudo
         document.getElementById('resetAllBtn').addEventListener('click', () => {
             if(confirm("⚠️ ATENÇÃO: Isso apagará todas as suas configurações personalizadas (Hubs, Fundo, Música, etc.). Deseja continuar?")) {
                 localStorage.clear();
                 location.reload();
             }
-        });
-
-        // 3. Enviar Ideia (Substituindo Luzes)
-        const ideaBtn = document.getElementById('ideaTriggerBtn');
-        ideaBtn.addEventListener('click', () => {
-            document.getElementById('settingsDropdown').classList.remove('active');
-            showToast("Recebemos suas ideias em breve!");
-            // Opcional: window.location.href = "mailto:suporte@ldx.com";
         });
 
         /* --- BACKGROUND (FIXADO) --- */
@@ -1329,7 +1344,7 @@
             reader.onload = function(ev) {
                 const bgLayer = document.getElementById('custom-bg-layer');
                 bgLayer.style.backgroundImage = `url('${ev.target.result}')`;
-                bgLayer.style.opacity = '1'; 
+                bgLayer.style.opacity = '1'; // GARANTE VISIBILIDADE
                 
                 document.body.style.backgroundImage = 'none';
                 

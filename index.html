@@ -39,8 +39,14 @@
                 const bgLayer = document.getElementById('custom-bg-layer');
                 document.body.classList.add('has-custom-bg');
                 if(bgLayer) {
-                    if(activeType === 'image') bgLayer.style.backgroundImage = `url('${activeBg}')`;
-                    else document.body.style.backgroundImage = activeBg;
+                    if(activeType === 'image') {
+                        bgLayer.style.backgroundImage = `url('${activeBg}')`;
+                        // GARANTE VISIBILIDADE NO CARREGAMENTO
+                        bgLayer.style.opacity = '1';
+                        document.body.style.backgroundImage = 'none';
+                    } else {
+                        document.body.style.backgroundImage = activeBg;
+                    }
                 }
             });
         })();
@@ -84,7 +90,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0;
+            opacity: 1; /* CORREÇÃO: De 0 para 1 para garantir visibilidade */
             transition: opacity 0.5s ease;
             pointer-events: none;
             -webkit-transform: translate3d(0,0,0);
@@ -340,7 +346,7 @@
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
         
-        /* --- EDIT MODAL SPECIFIC (MOBILE FIX V2) --- */
+        /* --- EDIT MODAL SPECIFIC (MOBILE FIX V3) --- */
         .edit-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem; }
         .edit-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 16px; }
         
@@ -354,22 +360,31 @@
         }
         .edit-input:focus { border-color: var(--accent-cyan); outline: none; }
         
-        /* Linha de Controles (Estrela e Ícone) - FIXADO */
+        /* Linha de Controles (Estrela e Ícone) - FIXADO COM MIN-WIDTH: 0 */
         .edit-controls-row {
             display: flex; gap: 10px; margin-top: 1rem; width: 100%;
         }
 
-        /* Botão de Favorito (Estrela) */
-        .btn-fav-toggle {
-            flex: 1; /* Ocupa 50% do espaço */
+        /* Botões Gerais */
+        .btn-control-base {
+            flex: 1; /* Ocupa espaço igual */
+            min-width: 0; /* PERMITE QUE O BOTÃO ENCOLHA ABAIXO DO TAMANHO DO TEXTO */
             display: flex; align-items: center; justify-content: center; gap: 8px;
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
             color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
             cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
+            text-overflow: ellipsis; overflow: hidden; /* Segurança contra texto longo */
         }
-        .btn-fav-toggle i { font-size: 1.1rem; color: #fff; transition: 0.2s; }
-        .btn-fav-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
-        
+        .btn-control-base i { font-size: 1.1rem; color: #fff; transition: 0.2s; flex-shrink: 0; }
+        .btn-control-base:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+
+        /* Botão de Favorito (Estrela) */
+        .btn-fav-toggle {
+            /* Herda estilos da base */
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
+            cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
+        }
         /* Estado Ativo (Amarelo) */
         .btn-fav-toggle.active {
             background: rgba(251, 191, 36, 0.2); border-color: var(--gold-color); color: var(--gold-color);
@@ -379,14 +394,11 @@
 
         /* Botão Trocar Ícone */
         .change-icon-btn {
-            flex: 1; /* Ocupa 50% do espaço */
+            /* Herda estilos da base */
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
             color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
+            cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
         }
-        .change-icon-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
-        .change-icon-btn i { font-size: 1.1rem; color: #fff; }
 
         /* Área da Grade de Ícones (Colapsável) */
         .icon-grid-wrapper {
@@ -479,6 +491,15 @@
                 transform: translateY(5px) !important;
             }
             .dropdown-item-wrapper:hover .style-submenu { transform: translateY(0) !important; }
+
+            /* Ajuste extra para telas MUITO pequenas (iPhone SE) */
+            @media (max-width: 360px) {
+                .btn-control-base {
+                    padding: 10px;
+                    font-size: 0.8rem;
+                }
+                .edit-controls-row { gap: 8px; }
+            }
         }
     </style>
 </head>
@@ -847,7 +868,7 @@
 
             // Ordenar: Favoritos primeiro
             const sortedHubs = [...hubsData].sort((a, b) => {
-                return (a.isFavorite === b.isFavorite) ? 0 : a.isFavorite ? -1 : 1;
+                return (a.isFavorite === b.isFavorite) ?0 : a.isFavorite ? -1 : 1;
             });
 
             sortedHubs.forEach((hub, index) => {
@@ -874,7 +895,7 @@
             });
         }
 
-        /* --- SISTEMA DE EDIÇÃO DE HUBS (MOBILE FIX V2) --- */
+        /* --- SISTEMA DE EDIÇÃO DE HUBS (MOBILE FIX V3) --- */
         const editHubsModal = document.getElementById('editHubsModal');
         const editListContainer = document.getElementById('editListContainer');
         const editHubsTriggerBtn = document.getElementById('editHubsTriggerBtn');
@@ -949,16 +970,16 @@
                     <!-- Input oculto para guardar o favorito -->
                     <input type="hidden" id="fav-input-${index}" value="${isFav}" data-index="${index}">
 
-                    <!-- Linha de Controles (50% cada) -->
+                    <!-- Linha de Controles (50% cada) com CLASSE BASE UNIFICADA -->
                     <div class="edit-controls-row">
                         <!-- Botão Estrela -->
-                        <button type="button" class="btn-fav-toggle ${favActiveClass}" id="fav-btn-${index}" onclick="toggleFavorite(${index})">
+                        <button type="button" class="btn-fav-toggle btn-control-base ${favActiveClass}" id="fav-btn-${index}" onclick="toggleFavorite(${index})">
                             <i class="${favIconClass}"></i>
                             <span>Favorito</span>
                         </button>
 
                         <!-- Botão Ícone -->
-                        <button type="button" class="change-icon-btn" id="change-icon-btn-${index}" onclick="toggleIconGrid(${index})">
+                        <button type="button" class="change-icon-btn btn-control-base" id="change-icon-btn-${index}" onclick="toggleIconGrid(${index})">
                             <i class="${hub.icon}"></i> Ícone
                         </button>
                     </div>
@@ -1193,19 +1214,36 @@
         (function(){ const c = localStorage.getItem('ldx_card_style'); if(c==='transparent') document.body.classList.add('transparent-mode'); else if(c==='invisible') document.body.classList.add('invisible-mode'); })();
         (function(){ const c = localStorage.getItem('ldx_portal_grid'); if(c==='2') bentoGrid.classList.add('cols-2'); })();
 
-        /* --- BACKGROUND --- */
+        /* --- BACKGROUND (FIXADO) --- */
         document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
+        
+        // Listener para abrir o seletor de arquivos
+        document.getElementById('uploadTriggerBtn').addEventListener('click', () => {
+            document.getElementById('bgFileInput').click();
+        });
+
         document.getElementById('bgFileInput').addEventListener('change', (e) => {
             const file = e.target.files[0]; if(!file) return;
             if(file.size > 5*1024*1024) { showToast("Imagem muito grande!"); return; }
             const reader = new FileReader();
             reader.onload = function(ev) {
-                document.getElementById('custom-bg-layer').style.backgroundImage = `url('${ev.target.result}')`;
+                const bgLayer = document.getElementById('custom-bg-layer');
+                bgLayer.style.backgroundImage = `url('${ev.target.result}')`;
+                bgLayer.style.opacity = '1'; // GARANTE VISIBILIDADE
+                
                 document.body.style.backgroundImage = 'none';
-                localStorage.setItem('ldx_custom_bg', ev.target.result);
-                localStorage.setItem('ldx_bg_type', 'image');
-                document.getElementById('bgModal').classList.remove('active');
-                showToast("Fundo atualizado!");
+                
+                try {
+                    localStorage.setItem('ldx_custom_bg', ev.target.result);
+                    localStorage.setItem('ldx_bg_type', 'image');
+                    document.getElementById('bgModal').classList.remove('active');
+                    showToast("Fundo atualizado!");
+                } catch (err) {
+                    // Se a imagem for muito grande para o localStorage
+                    showToast("Erro: Imagem muito grande para salvar.");
+                    // Reverte visualmente em caso de erro
+                    document.getElementById('bgModal').classList.remove('active');
+                }
             };
             reader.readAsDataURL(file);
         });

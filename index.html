@@ -220,8 +220,9 @@
             opacity: 0; visibility: hidden; transform: translateX(10px); transition: all 0.2s ease;
             z-index: 101; display: flex; flex-direction: column; gap: 2px;
         }
-        .dropdown-item-wrapper:hover .grid-submenu,
-        .dropdown-item-wrapper:hover .style-submenu {
+        /* ALTERADO: Agora usa a classe .active em vez de :hover para abrir */
+        .dropdown-item-wrapper.active .grid-submenu,
+        .dropdown-item-wrapper.active .style-submenu {
             opacity: 1; visibility: visible; transform: translateX(0);
         }
         .grid-option, .style-option {
@@ -497,7 +498,7 @@
                 margin-top:5px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
                 transform: translateY(5px) !important;
             }
-            .dropdown-item-wrapper:hover .style-submenu { transform: translateY(0) !important; }
+            .dropdown-item-wrapper.active .style-submenu { transform: translateY(0) !important; }
 
             /* Ajuste extra para telas MUITO pequenas (iPhone SE) */
             @media (max-width: 360px) {
@@ -577,7 +578,7 @@
                     </button>
 
                     <!-- ESTILO DOS CARTÕES (SUBMENU) -->
-                    <div class="dropdown-item-wrapper style-option-wrapper">
+                    <div class="dropdown-item-wrapper style-option-wrapper" id="styleWrapper">
                         <button class="dropdown-item" id="styleTriggerBtn">
                             <span class="dropdown-item-content">
                                 <i class="fa-solid fa-swatchbook"></i>
@@ -599,7 +600,7 @@
                     </div>
 
                     <!-- LAYOUT (APENAS PC - ESCONDIDO NO MOBILE PELO CSS) -->
-                    <div class="dropdown-item-wrapper layout-option-wrapper">
+                    <div class="dropdown-item-wrapper layout-option-wrapper" id="gridWrapper">
                         <button class="dropdown-item" id="gridTriggerBtn">
                             <span class="dropdown-item-content">
                                 <i class="fa-solid fa-border-all"></i>
@@ -1211,7 +1212,38 @@
         const settingsTrigger = document.getElementById('settingsTrigger');
         const settingsDropdown = document.getElementById('settingsDropdown');
         settingsTrigger.addEventListener('click', (e) => { e.stopPropagation(); settingsDropdown.classList.toggle('active'); });
-        document.addEventListener('click', (e) => { if (!settingsDropdown.contains(e.target) && !settingsTrigger.contains(e.target)) settingsDropdown.classList.remove('active'); });
+        document.addEventListener('click', (e) => { 
+            if (!settingsDropdown.contains(e.target) && !settingsTrigger.contains(e.target)) {
+                settingsDropdown.classList.remove('active');
+                // Fecha submenus se o dropdown principal fechar
+                document.querySelectorAll('.dropdown-item-wrapper.active').forEach(el => el.classList.remove('active'));
+            }
+        });
+
+        // Lógica de Toggle para Submenus (Estilo e Layout)
+        const subMenuTriggers = [
+            { btnId: 'styleTriggerBtn', wrapperId: 'styleWrapper' },
+            { btnId: 'gridTriggerBtn', wrapperId: 'gridWrapper' }
+        ];
+
+        subMenuTriggers.forEach(item => {
+            const btn = document.getElementById(item.btnId);
+            const wrapper = document.getElementById(item.wrapperId);
+            
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita fechar o dropdown principal
+                
+                // Fecha outros submenus abertos
+                subMenuTriggers.forEach(other => {
+                    if(other.wrapperId !== item.wrapperId) {
+                        document.getElementById(other.wrapperId).classList.remove('active');
+                    }
+                });
+
+                // Alterna o estado atual
+                wrapper.classList.toggle('active');
+            });
+        });
 
         document.querySelectorAll('.style-option').forEach(opt => {
             opt.addEventListener('click', () => {
@@ -1221,6 +1253,8 @@
                 localStorage.setItem('ldx_card_style', opt.dataset.style);
                 document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
                 opt.classList.add('selected');
+                // Fecha o submenu após selecionar
+                document.getElementById('styleWrapper').classList.remove('active');
             });
         });
 
@@ -1232,6 +1266,8 @@
                 localStorage.setItem('ldx_portal_grid', opt.dataset.cols);
                 document.querySelectorAll('.grid-option').forEach(o => o.classList.remove('selected'));
                 opt.classList.add('selected');
+                // Fecha o submenu após selecionar
+                document.getElementById('gridWrapper').classList.remove('active');
             });
         });
         (function(){ const c = localStorage.getItem('ldx_card_style'); if(c==='transparent') document.body.classList.add('transparent-mode'); else if(c==='invisible') document.body.classList.add('invisible-mode'); })();

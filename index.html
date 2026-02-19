@@ -23,28 +23,40 @@
                 });
             }
             
-            const defaultBg = 'img2.jpeg';
+            // REMOVIDA A FORÇA DO DEFAULT BG (img2.jpeg)
+            // Agora verificamos se há um BG customizado. Se não, usamos o vídeo.
             const savedBg = localStorage.getItem('ldx_custom_bg');
             const savedBgType = localStorage.getItem('ldx_bg_type');
-
-            if(!savedBg) {
-                localStorage.setItem('ldx_custom_bg', defaultBg);
-                localStorage.setItem('ldx_bg_type', 'image');
-            }
-            
-            const activeBg = savedBg || defaultBg;
-            const activeType = savedBgType || 'image';
             
             document.addEventListener('DOMContentLoaded', () => {
                 const bgLayer = document.getElementById('custom-bg-layer');
-                document.body.classList.add('has-custom-bg');
-                if(bgLayer) {
-                    if(activeType === 'image') {
-                        bgLayer.style.backgroundImage = `url('${activeBg}')`;
-                        bgLayer.style.opacity = '1';
-                        document.body.style.backgroundImage = 'none';
-                    } else {
-                        document.body.style.backgroundImage = activeBg;
+                const videoBg = document.getElementById('video-bg');
+                
+                // Se existe um background customizado salvo
+                if(savedBg) {
+                    document.body.classList.add('has-custom-bg');
+                    // Mostra a camada de imagem, esconde o vídeo
+                    if(bgLayer) {
+                        if(activeType === 'image') {
+                            bgLayer.style.backgroundImage = `url('${activeBg}')`;
+                            bgLayer.style.opacity = '1';
+                            document.body.style.backgroundImage = 'none';
+                        } else {
+                            document.body.style.backgroundImage = activeBg;
+                        }
+                    }
+                    if(videoBg) {
+                        videoBg.style.display = 'none'; // Desativa vídeo se houver imagem customizada
+                    }
+                } else {
+                    // NÃO há background customizado: Mostrar o Vídeo Padrão
+                    document.body.classList.remove('has-custom-bg');
+                    if(bgLayer) {
+                        bgLayer.style.opacity = '0'; // Esconde layer de imagem
+                    }
+                    if(videoBg) {
+                        videoBg.style.display = 'block';
+                        videoBg.play().catch(e => console.log("Autoplay bloqueado pelo navegador, requer interação."));
                     }
                 }
             });
@@ -70,9 +82,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
-            background-image: url('img2.jpeg');
-            background-size: cover;
-            background-position: center;
+            /* Imagem de fundo removida do body por padrão, será controlada via JS ou Vídeo */
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
@@ -81,7 +91,16 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND LAYER SYSTEM --- */
+        /* --- VIDEO BACKGROUND SYSTEM --- */
+        #video-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            object-fit: cover;
+            z-index: -3;
+            pointer-events: none;
+        }
+
+        /* --- BACKGROUND LAYER SYSTEM (IMAGEM CUSTOMIZADA) --- */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -89,7 +108,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 1;
+            opacity: 0; /* Inicia invisível, JS controla */
             transition: opacity 0.5s ease;
             pointer-events: none;
             -webkit-transform: translate3d(0,0,0);
@@ -513,13 +532,19 @@
 </head>
 <body>
 
+    <!-- VÍDEO DE FUNDO PADRÃO -->
+    <video id="video-bg" autoplay muted loop playsinline>
+        <source src="video1.mp4" type="video/mp4">
+        Seu navegador não suporta a tag de vídeo.
+    </video>
+
     <!-- AUDIO PLAYER -->
     <audio id="bgMusic" loop>
         <source src="song.mpeg" type="audio/mpeg">
         Seu navegador não suporta o elemento de áudio.
     </audio>
 
-    <!-- BACKGROUND LAYER -->
+    <!-- BACKGROUND LAYER (PARA IMAGENS CUSTOMIZADAS) -->
     <div id="custom-bg-layer"></div>
 
     <!-- HEADER -->
@@ -693,7 +718,7 @@
             </div>
 
             <button class="reset-btn" id="resetBgBtn">
-                <i class="fa-solid fa-rotate-left"></i> Restaurar Padrão
+                <i class="fa-solid fa-rotate-left"></i> Restaurar Vídeo Padrão
             </button>
         </div>
     </div>
@@ -1308,7 +1333,7 @@
             }
         });
 
-        /* --- BACKGROUND (FIXADO) --- */
+        /* --- BACKGROUND (LÓGICA VÍDEO VS IMAGEM) --- */
         document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
         
         // Listener para abrir o seletor de arquivos
@@ -1316,30 +1341,55 @@
             document.getElementById('bgFileInput').click();
         });
 
+        // Função auxiliar para atualizar o estado visual do background
+        function updateBackgroundState(imageDataUrl) {
+            const bgLayer = document.getElementById('custom-bg-layer');
+            const videoBg = document.getElementById('video-bg');
+            const body = document.body;
+
+            if (imageDataUrl) {
+                // Tem imagem customizada
+                bgLayer.style.backgroundImage = `url('${imageDataUrl}')`;
+                bgLayer.style.opacity = '1';
+                videoBg.style.display = 'none'; // Para o vídeo e esconde
+                body.classList.add('has-custom-bg');
+            } else {
+                // Padrão: Vídeo
+                bgLayer.style.opacity = '0';
+                videoBg.style.display = 'block';
+                videoBg.play().catch(e => console.log("Autoplay vídeo bloqueado, espera interação"));
+                body.classList.remove('has-custom-bg');
+            }
+        }
+
         document.getElementById('bgFileInput').addEventListener('change', (e) => {
             const file = e.target.files[0]; if(!file) return;
             if(file.size > 5*1024*1024) { showToast("Imagem muito grande!"); return; }
             const reader = new FileReader();
             reader.onload = function(ev) {
-                const bgLayer = document.getElementById('custom-bg-layer');
-                bgLayer.style.backgroundImage = `url('${ev.target.result}')`;
-                bgLayer.style.opacity = '1'; // GARANTE VISIBILIDADE
-                
-                document.body.style.backgroundImage = 'none';
-                
                 try {
                     localStorage.setItem('ldx_custom_bg', ev.target.result);
                     localStorage.setItem('ldx_bg_type', 'image');
+                    
+                    // Atualiza a UI
+                    updateBackgroundState(ev.target.result);
+                    
                     document.getElementById('bgModal').classList.remove('active');
                     showToast("Fundo atualizado!");
                 } catch (err) {
                     showToast("Erro: Imagem muito grande para salvar.");
-                    document.getElementById('bgModal').classList.remove('active');
                 }
             };
             reader.readAsDataURL(file);
         });
-        document.getElementById('resetBgBtn').addEventListener('click', () => { localStorage.removeItem('ldx_custom_bg'); location.reload(); });
+        
+        document.getElementById('resetBgBtn').addEventListener('click', () => { 
+            localStorage.removeItem('ldx_custom_bg');
+            localStorage.removeItem('ldx_bg_type');
+            updateBackgroundState(null); // Volta para o vídeo
+            document.getElementById('bgModal').classList.remove('active');
+            showToast("Fundo restaurado para o vídeo padrão.");
+        });
 
         /* --- MODAIS GERAIS --- */
         function setupModal(id, closeId, backId) {

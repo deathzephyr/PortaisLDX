@@ -12,25 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- SCRIPT ANTI-FLASH & PRELOAD -->
-    <script>
-        (function() {
-            const savedStyle = localStorage.getItem('ldx_card_style');
-            if (savedStyle === 'transparent' || savedStyle === 'invisible') {
-                document.documentElement.classList.add(savedStyle + '-mode');
-                document.addEventListener('DOMContentLoaded', () => {
-                    document.body.classList.add(savedStyle + '-mode');
-                });
-            }
-            
-            // ANTI-FLASH DO VÍDEO: Se houver fundo customizado, esconde o vídeo via CSS antes de renderizar
-            const savedBg = localStorage.getItem('ldx_custom_bg');
-            if(savedBg) {
-                document.write('<style>#video-bg { display: none !important; } #custom-bg-layer { opacity: 0; }</style>');
-            }
-        })();
-    </script>
-
     <style>
         /* --- DESIGN SYSTEM --- */
         :root {
@@ -58,16 +39,7 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- VIDEO BACKGROUND SYSTEM --- */
-        #video-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            object-fit: cover;
-            z-index: -3;
-            pointer-events: none;
-        }
-
-        /* --- BACKGROUND LAYER SYSTEM (IMAGEM CUSTOMIZADA) --- */
+        /* --- BACKGROUND LAYER SYSTEM (IMAGEM PADRÃO E CUSTOMIZADA) --- */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -75,8 +47,10 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0; /* Inicia invisível */
-            transition: opacity 0.5s ease;
+            /* FUND PADRÃO DEFINIDO AQUI: img2.jpeg */
+            background-image: url('img2.jpeg'); 
+            opacity: 1; 
+            transition: background-image 0.5s ease;
             pointer-events: none;
             -webkit-transform: translate3d(0,0,0);
         }
@@ -495,20 +469,14 @@
 </head>
 <body>
 
-    <!-- VÍDEO DE FUNDO PADRÃO -->
-    <video id="video-bg" autoplay muted loop playsinline>
-        <source src="video1.mp4" type="video/mp4">
-        Seu navegador não suporta a tag de vídeo.
-    </video>
+    <!-- BACKGROUND LAYER (PADRÃO: img2.jpeg) -->
+    <div id="custom-bg-layer"></div>
 
     <!-- AUDIO PLAYER -->
     <audio id="bgMusic" loop>
         <source src="song.mpeg" type="audio/mpeg">
         Seu navegador não suporta o elemento de áudio.
     </audio>
-
-    <!-- BACKGROUND LAYER (PARA IMAGENS CUSTOMIZADAS) -->
-    <div id="custom-bg-layer"></div>
 
     <!-- HEADER -->
     <header class="main-header">
@@ -681,7 +649,7 @@
             </div>
 
             <button class="reset-btn" id="resetBgBtn">
-                <i class="fa-solid fa-rotate-left"></i> Restaurar Vídeo Padrão
+                <i class="fa-solid fa-rotate-left"></i> Restaurar Fundo Padrão
             </button>
         </div>
     </div>
@@ -1296,28 +1264,20 @@
             }
         });
 
-        /* --- BACKGROUND (LÓGICA CORRIGIDA) --- */
+        /* --- BACKGROUND (LÓGICA SOMENTE IMAGEM) --- */
         
-        // Função unificada para controlar o background
+        // Função para controlar o background
         function updateBackgroundState(imageDataUrl) {
             const bgLayer = document.getElementById('custom-bg-layer');
-            const videoBg = document.getElementById('video-bg');
-            const body = document.body;
 
             if (imageDataUrl) {
-                // Tem imagem customizada
+                // Tem imagem customizada (Upload)
                 bgLayer.style.backgroundImage = `url('${imageDataUrl}')`;
-                bgLayer.style.opacity = '1';
-                videoBg.style.display = 'none'; // Esconde o vídeo
-                videoBg.pause(); // Pausa o vídeo para economizar recursos
-                body.classList.add('has-custom-bg');
             } else {
-                // Padrão: Vídeo
-                bgLayer.style.opacity = '0'; // Esconde a camada de imagem
-                videoBg.style.display = 'block'; // Mostra o vídeo
-                videoBg.play().catch(e => console.log("Autoplay vídeo bloqueado, espera interação"));
-                body.classList.remove('has-custom-bg');
+                // Padrão: img2.jpeg
+                bgLayer.style.backgroundImage = `url('img2.jpeg')`;
             }
+            bgLayer.style.opacity = '1'; // Garante que está visível
         }
 
         document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
@@ -1334,7 +1294,6 @@
             reader.onload = function(ev) {
                 try {
                     localStorage.setItem('ldx_custom_bg', ev.target.result);
-                    localStorage.setItem('ldx_bg_type', 'image');
                     
                     // Atualiza a UI imediatamente
                     updateBackgroundState(ev.target.result);
@@ -1350,10 +1309,9 @@
         
         document.getElementById('resetBgBtn').addEventListener('click', () => { 
             localStorage.removeItem('ldx_custom_bg');
-            localStorage.removeItem('ldx_bg_type');
-            updateBackgroundState(null); // Volta para o vídeo
+            updateBackgroundState(null); // Volta para o padrão (img2.jpeg)
             document.getElementById('bgModal').classList.remove('active');
-            showToast("Fundo restaurado para o vídeo padrão.");
+            showToast("Fundo restaurado para o padrão.");
         });
 
         /* --- MODAIS GERAIS --- */
@@ -1390,7 +1348,7 @@
             loadHubsData();
             updateTime();
             
-            // CORREÇÃO: Inicializar o estado do background aqui
+            // Inicializa o estado do background: Se tiver customizado, usa ele. Se não, usa null (que puxa o img2.jpeg)
             const savedBg = localStorage.getItem('ldx_custom_bg');
             updateBackgroundState(savedBg);
             

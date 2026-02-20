@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- SCRIPT ANTI-FLASH (Head) -->
+    <!-- SCRIPT ANTI-FLASH & PRELOAD -->
     <script>
         (function() {
             const savedStyle = localStorage.getItem('ldx_card_style');
@@ -23,43 +23,11 @@
                 });
             }
             
-            // REMOVIDA A FORÇA DO DEFAULT BG (img2.jpeg)
-            // Agora verificamos se há um BG customizado. Se não, usamos o vídeo.
+            // ANTI-FLASH DO VÍDEO: Se houver fundo customizado, esconde o vídeo via CSS antes de renderizar
             const savedBg = localStorage.getItem('ldx_custom_bg');
-            const savedBgType = localStorage.getItem('ldx_bg_type');
-            
-            document.addEventListener('DOMContentLoaded', () => {
-                const bgLayer = document.getElementById('custom-bg-layer');
-                const videoBg = document.getElementById('video-bg');
-                
-                // Se existe um background customizado salvo
-                if(savedBg) {
-                    document.body.classList.add('has-custom-bg');
-                    // Mostra a camada de imagem, esconde o vídeo
-                    if(bgLayer) {
-                        if(activeType === 'image') {
-                            bgLayer.style.backgroundImage = `url('${activeBg}')`;
-                            bgLayer.style.opacity = '1';
-                            document.body.style.backgroundImage = 'none';
-                        } else {
-                            document.body.style.backgroundImage = activeBg;
-                        }
-                    }
-                    if(videoBg) {
-                        videoBg.style.display = 'none'; // Desativa vídeo se houver imagem customizada
-                    }
-                } else {
-                    // NÃO há background customizado: Mostrar o Vídeo Padrão
-                    document.body.classList.remove('has-custom-bg');
-                    if(bgLayer) {
-                        bgLayer.style.opacity = '0'; // Esconde layer de imagem
-                    }
-                    if(videoBg) {
-                        videoBg.style.display = 'block';
-                        videoBg.play().catch(e => console.log("Autoplay bloqueado pelo navegador, requer interação."));
-                    }
-                }
-            });
+            if(savedBg) {
+                document.write('<style>#video-bg { display: none !important; } #custom-bg-layer { opacity: 0; }</style>');
+            }
         })();
     </script>
 
@@ -82,7 +50,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
-            /* Imagem de fundo removida do body por padrão, será controlada via JS ou Vídeo */
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
@@ -108,7 +75,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0; /* Inicia invisível, JS controla */
+            opacity: 0; /* Inicia invisível */
             transition: opacity 0.5s ease;
             pointer-events: none;
             -webkit-transform: translate3d(0,0,0);
@@ -239,7 +206,6 @@
             opacity: 0; visibility: hidden; transform: translateX(10px); transition: all 0.2s ease;
             z-index: 101; display: flex; flex-direction: column; gap: 2px;
         }
-        /* ALTERADO: Agora usa a classe .active em vez de :hover para abrir */
         .dropdown-item-wrapper.active .grid-submenu,
         .dropdown-item-wrapper.active .style-submenu {
             opacity: 1; visibility: visible; transform: translateX(0);
@@ -388,25 +354,23 @@
 
         /* Botões Gerais */
         .btn-control-base {
-            flex: 1; /* Ocupa espaço igual */
-            min-width: 0; /* PERMITE QUE O BOTÃO ENCOLHA ABAIXO DO TAMANHO DO TEXTO */
+            flex: 1; 
+            min-width: 0; 
             display: flex; align-items: center; justify-content: center; gap: 8px;
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
             color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
             cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
-            text-overflow: ellipsis; overflow: hidden; /* Segurança contra texto longo */
+            text-overflow: ellipsis; overflow: hidden; 
         }
         .btn-control-base i { font-size: 1.1rem; color: #fff; transition: 0.2s; flex-shrink: 0; }
         .btn-control-base:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
 
         /* Botão de Favorito (Estrela) */
         .btn-fav-toggle {
-            /* Herda estilos da base */
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
             color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
             cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
         }
-        /* Estado Ativo (Amarelo) */
         .btn-fav-toggle.active {
             background: rgba(251, 191, 36, 0.2); border-color: var(--gold-color); color: var(--gold-color);
             box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
@@ -415,7 +379,6 @@
 
         /* Botão Trocar Ícone */
         .change-icon-btn {
-            /* Herda estilos da base */
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
             color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
             cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
@@ -424,7 +387,7 @@
         /* Área da Grade de Ícones (Colapsável) */
         .icon-grid-wrapper {
             margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);
-            display: none; /* Escondido por padrão */
+            display: none; 
             animation: slideDown 0.3s ease-out forwards;
         }
         .icon-grid-wrapper.open { display: block; }
@@ -1333,15 +1296,9 @@
             }
         });
 
-        /* --- BACKGROUND (LÓGICA VÍDEO VS IMAGEM) --- */
-        document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
+        /* --- BACKGROUND (LÓGICA CORRIGIDA) --- */
         
-        // Listener para abrir o seletor de arquivos
-        document.getElementById('uploadTriggerBtn').addEventListener('click', () => {
-            document.getElementById('bgFileInput').click();
-        });
-
-        // Função auxiliar para atualizar o estado visual do background
+        // Função unificada para controlar o background
         function updateBackgroundState(imageDataUrl) {
             const bgLayer = document.getElementById('custom-bg-layer');
             const videoBg = document.getElementById('video-bg');
@@ -1351,16 +1308,24 @@
                 // Tem imagem customizada
                 bgLayer.style.backgroundImage = `url('${imageDataUrl}')`;
                 bgLayer.style.opacity = '1';
-                videoBg.style.display = 'none'; // Para o vídeo e esconde
+                videoBg.style.display = 'none'; // Esconde o vídeo
+                videoBg.pause(); // Pausa o vídeo para economizar recursos
                 body.classList.add('has-custom-bg');
             } else {
                 // Padrão: Vídeo
-                bgLayer.style.opacity = '0';
-                videoBg.style.display = 'block';
+                bgLayer.style.opacity = '0'; // Esconde a camada de imagem
+                videoBg.style.display = 'block'; // Mostra o vídeo
                 videoBg.play().catch(e => console.log("Autoplay vídeo bloqueado, espera interação"));
                 body.classList.remove('has-custom-bg');
             }
         }
+
+        document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
+        
+        // Listener para abrir o seletor de arquivos
+        document.getElementById('uploadTriggerBtn').addEventListener('click', () => {
+            document.getElementById('bgFileInput').click();
+        });
 
         document.getElementById('bgFileInput').addEventListener('change', (e) => {
             const file = e.target.files[0]; if(!file) return;
@@ -1371,7 +1336,7 @@
                     localStorage.setItem('ldx_custom_bg', ev.target.result);
                     localStorage.setItem('ldx_bg_type', 'image');
                     
-                    // Atualiza a UI
+                    // Atualiza a UI imediatamente
                     updateBackgroundState(ev.target.result);
                     
                     document.getElementById('bgModal').classList.remove('active');
@@ -1424,6 +1389,10 @@
             attemptAutoplay();
             loadHubsData();
             updateTime();
+            
+            // CORREÇÃO: Inicializar o estado do background aqui
+            const savedBg = localStorage.getItem('ldx_custom_bg');
+            updateBackgroundState(savedBg);
             
             // Inicializa visibilidade do tutorial
             if(localStorage.getItem('ldx_adblock_visible') === 'false') {

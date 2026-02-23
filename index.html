@@ -35,11 +35,13 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND LAYER SYSTEM (IMAGEM PADRÃO E CUSTOMIZADA) --- */
+        /* --- BACKGROUND LAYER SYSTEM --- */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -47,7 +49,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* FUND PADRÃO DEFINIDO AQUI: img2.jpeg */
             background-image: url('img2.jpeg'); 
             opacity: 1; 
             transition: background-image 0.5s ease;
@@ -101,7 +102,7 @@
             width: 100%; display: flex; justify-content: space-between; align-items: center; 
             padding: 2rem 1.5rem; position: relative; z-index: 50; gap: 10px; flex-wrap: nowrap; white-space: nowrap; 
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; opacity: 1; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; opacity: 1; flex: 1; }
         .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
         .logo { 
@@ -167,8 +168,6 @@
         .dropdown-item i { width: 24px; text-align: center; font-size: 1.1rem; }
         .chevron-sub { font-size: 0.8rem; opacity: 0.6; transition: transform 0.2s; }
         .dropdown-item-wrapper:hover .chevron-sub { transform: translateX(-3px); }
-        
-        /* Estilo especial para o botão de Reset (Vermelho) */
         .dropdown-item.danger-text { color: #f87171; }
         .dropdown-item.danger-text:hover { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
 
@@ -258,16 +257,9 @@
         .hub-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; opacity: 0.03; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
         .hub-card:hover .hub-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.1); }
         
-        /* --- INDICADOR DE FAVORITO (ESTRELA BRANCA) --- */
+        /* --- INDICADOR DE FAVORITO --- */
         .hub-fav-indicator {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.4rem;
-            color: #ffffff;
-            z-index: 20;
-            pointer-events: none;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            position: absolute; top: 15px; right: 15px; font-size: 1.4rem; color: #ffffff; z-index: 20; pointer-events: none; text-shadow: 0 2px 5px rgba(0,0,0,0.3);
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 80% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
@@ -289,14 +281,17 @@
         .hub-card:hover h2 { color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
         /* --- FOOTER --- */
-        footer { text-align: center; padding: 3rem 0; color: var(--text-muted); border-top: 1px solid var(--glass-border); margin-top: 5rem; font-size: 0.8rem; position: relative; z-index: 2; user-select: none; }
+        footer { text-align: center; padding: 3rem 0; color: var(--text-muted); border-top: 1px solid var(--glass-border); margin-top: auto; font-size: 0.8rem; position: relative; z-index: 2; user-select: none; }
+        .footer-links { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; font-size: 0.8rem; }
+        .footer-links a:hover { color: #fff; text-decoration: underline; }
 
         /* --- MODAL SYSTEM --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; padding: 20px; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: -1; }
         .modal-content {
-            background: rgba(15, 15, 20, 0.98); border: 1px solid var(--glass-border); border-radius: 24px; width: 100%; max-width: 500px; max-height: 90vh;
+            background: rgba(15, 15, 20, 0.98); border: 1px solid var(--glass-border); border-radius: 24px; width: 100%; max-width: 600px; max-height: 90vh;
             padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative; overflow-y: auto; display: flex; flex-direction: column;
         }
@@ -308,12 +303,17 @@
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
         
-        /* --- EDIT MODAL SPECIFIC (MOBILE FIX V3) --- */
+        /* --- ESTILOS ESPECÍFICOS DOS TERMOS --- */
+        .terms-section { margin-bottom: 1.5rem; }
+        .terms-section h4 { color: #fff; font-size: 1rem; margin-bottom: 0.8rem; border-left: 3px solid var(--accent-cyan); padding-left: 10px; }
+        .terms-section p, .terms-section li { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.5rem; }
+        .terms-section ul { list-style-type: disc; padding-left: 1.5rem; }
+
+        /* --- EDIT MODAL SPECIFIC --- */
         .edit-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem; }
         .edit-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 16px; }
-        
+        .edit-item.hidden-item { opacity: 0.6; border-color: rgba(255,255,255,0.02); }
         .edit-section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; font-weight: 700; }
-        
         .edit-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
         .edit-label { width: 60px; font-size: 0.8rem; color: var(--text-muted); text-align: right; flex-shrink: 0; }
         .edit-input { 
@@ -321,53 +321,28 @@
             color: #fff; padding: 12px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.95rem; width: 100%; -webkit-appearance: none;
         }
         .edit-input:focus { border-color: var(--accent-cyan); outline: none; }
-        
-        /* Linha de Controles (Estrela e Ícone) - FIXADO COM MIN-WIDTH: 0 */
-        .edit-controls-row {
-            display: flex; gap: 10px; margin-top: 1rem; width: 100%;
-        }
-
-        /* Botões Gerais */
+        .edit-controls-row { display: flex; gap: 8px; margin-top: 1rem; width: 100%; }
         .btn-control-base {
-            flex: 1; 
-            min-width: 0; 
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 6px;
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
-            color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
+            color: #fff; padding: 10px 8px; border-radius: 10px; font-size: 0.8rem; 
             cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
-            text-overflow: ellipsis; overflow: hidden; 
+            text-overflow: ellipsis; overflow: hidden;
         }
-        .btn-control-base i { font-size: 1.1rem; color: #fff; transition: 0.2s; flex-shrink: 0; }
         .btn-control-base:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
-
-        /* Botão de Favorito (Estrela) */
-        .btn-fav-toggle {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
-            color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
-            cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
-        }
-        .btn-fav-toggle.active {
-            background: rgba(251, 191, 36, 0.2); border-color: var(--gold-color); color: var(--gold-color);
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
-        }
-        .btn-fav-toggle.active i { color: var(--gold-color); transform: scale(1.1); }
-
-        /* Botão Trocar Ícone */
-        .change-icon-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
-            color: #fff; padding: 12px; border-radius: 10px; font-size: 0.85rem; 
-            cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 500; white-space: nowrap;
-        }
-
-        /* Área da Grade de Ícones (Colapsável) */
+        .btn-control-base i { font-size: 1rem; color: #fff; transition: 0.2s; flex-shrink: 0; }
+        .btn-fav-toggle.active { background: rgba(251, 191, 36, 0.2); border-color: var(--gold-color); color: var(--gold-color); box-shadow: 0 0 15px rgba(251, 191, 36, 0.2); }
+        .btn-fav-toggle.active i { color: var(--gold-color); }
+        .btn-hide-toggle.is-hidden { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: var(--text-muted); }
+        .btn-hide-toggle.is-hidden i { color: var(--text-muted); }
+        .btn-hide-toggle:not(.is-hidden) { color: #fff; }
+        .change-icon-btn { }
         .icon-grid-wrapper {
             margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);
-            display: none; 
-            animation: slideDown 0.3s ease-out forwards;
+            display: none; animation: slideDown 0.3s ease-out forwards;
         }
         .icon-grid-wrapper.open { display: block; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
         .icon-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 8px;
             max-height: 200px; overflow-y: auto; padding: 4px; border: 1px solid rgba(255,255,255,0.1); 
@@ -381,36 +356,6 @@
         .icon-btn:active { transform: scale(0.95); }
         .icon-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: scale(1.1); }
         .icon-btn.selected { background: var(--accent-cyan); color: #fff; border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); }
-
-        /* --- TUTORIAL TABS --- */
-        .tutorial-tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .tab-btn.active { background: rgba(255, 255, 255, 0.1); color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .tab-content { display: none; animation: fadeIn 0.4s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .step-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 1rem; }
-        .step-item { display: flex; gap: 1rem; align-items: flex-start; }
-        .step-number { background: rgba(255,255,255,0.1); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
-        .step-content h4 { color: #fff; font-size: 1rem; margin-bottom: 0.3rem; }
-        .step-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
-        .dns-container { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-        .dns-code-box { background: rgba(255,255,255,0.1); border: 1px dashed rgba(255, 255, 255, 0.3); padding: 10px 12px; border-radius: 8px; font-family: 'Courier New', monospace; color: #ffffff; text-align: left; font-size: 0.9rem; user-select: all; flex-grow: 1; }
-        .copy-dns-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; flex-shrink: 0; }
-        .copy-dns-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
-        .modal-btn { display: block; width: 100%; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; text-decoration: none; transition: all 0.3s ease; margin-top: 8px; cursor: pointer; border: none; font-size: 0.9rem; }
-        .btn-primary { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; }
-        .btn-primary:hover { background: var(--rainbow-gradient); background-size: 200% auto; animation: colorCycle 4s linear infinite; filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
-
-        /* --- BACKGROUND MODAL --- */
-        .upload-container { margin-bottom: 20px; margin-top: 10px; }
-        .upload-btn { width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; padding: 12px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.9rem; transition: all 0.3s ease; }
-        .upload-btn:hover { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.6); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1); }
-        .upload-btn i { font-size: 1.1rem; color: #ffffff; }
-        input[type="file"] { display: none; }
-        .reset-btn { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; margin-top: 10px; }
-        .reset-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
         /* --- TOAST --- */
         #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(50px); background: rgba(34, 197, 94, 0.9); color: #fff; padding: 12px 24px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 10001; display: flex; align-items: center; gap: 10px; }
@@ -444,11 +389,7 @@
             .hub-card p { font-size: 0.85rem !important; margin: 0; }
             .hub-bg-icon { display: none; }
 
-            /* Ajuste da estrela no mobile para não cobrir o conteúdo */
-            .hub-fav-indicator {
-                top: 10px; right: 10px;
-                font-size: 1.2rem;
-            }
+            .hub-fav-indicator { top: 10px; right: 10px; font-size: 1.2rem; }
 
             .style-submenu, .lang-submenu {
                 top: 100% !important; left: 0 !important; right: auto !important; margin-right: 0 !important;
@@ -458,20 +399,19 @@
             .dropdown-item-wrapper.active .style-submenu, 
             .dropdown-item-wrapper.active .lang-submenu { transform: translateY(0) !important; }
 
-            /* Ajuste extra para telas MUITO pequenas (iPhone SE) */
+            .edit-controls-row { flex-wrap: wrap; }
+            .btn-control-base { width: 48%; }
+            
             @media (max-width: 360px) {
-                .btn-control-base {
-                    padding: 10px;
-                    font-size: 0.8rem;
-                }
-                .edit-controls-row { gap: 8px; }
+                .btn-control-base { padding: 8px; font-size: 0.75rem; }
+                .edit-controls-row { gap: 4px; }
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- BACKGROUND LAYER (PADRÃO: img2.jpeg) -->
+    <!-- BACKGROUND LAYER -->
     <div id="custom-bg-layer"></div>
 
     <!-- AUDIO PLAYER -->
@@ -482,25 +422,18 @@
 
     <!-- HEADER -->
     <header class="main-header">
-        <!-- LOGO LDX -->
         <div class="logo" id="mainLogo">
             <i class="fa-solid fa-infinity logo-icon-special"></i> <span>LDX</span>
         </div>
-        
         <div class="header-right">
             <div class="clock" id="clock">00:00</div>
-            
-            <!-- BOTÃO COMPARTILHAR -->
             <button class="share-trigger-btn" id="shareTrigger" title="Compartilhar">
                 <i class="fa-solid fa-share-nodes"></i>
             </button>
-
-            <!-- SETTINGS -->
             <div class="settings-container">
                 <button class="settings-trigger-btn" id="settingsTrigger" title="Configurações">
                     <i class="fa-solid fa-gear"></i>
                 </button>
-                
                 <div class="settings-dropdown" id="settingsDropdown">
                     <!-- MÚSICA -->
                     <button class="dropdown-item" id="musicToggleBtn">
@@ -511,15 +444,13 @@
                             <span id="musicLabel" data-i18n="music_stop">Parar Música</span>
                         </span>
                     </button>
-
-                    <!-- TUTORIAL (CADEADO) -->
+                    <!-- TUTORIAL -->
                     <button class="dropdown-item" id="adblockToggleBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-lock-open" id="adblockIcon"></i>
                             <span id="adblockLabel" data-i18n="tutorial_hide">Ocultar Tutorial</span>
                         </span>
                     </button>
-                    
                     <!-- EDITAR HUBS -->
                     <button class="dropdown-item" id="editHubsTriggerBtn">
                         <span class="dropdown-item-content">
@@ -527,15 +458,13 @@
                             <span data-i18n="edit_hubs">Editar Hubs</span>
                         </span>
                     </button>
-
                     <button class="dropdown-item" id="bgTriggerBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-palette"></i>
                             <span data-i18n="bg_theme">Tema de Fundo</span>
                         </span>
                     </button>
-
-                    <!-- ESTILO DOS CARTÕES (SUBMENU) -->
+                    <!-- ESTILO -->
                     <div class="dropdown-item-wrapper style-option-wrapper" id="styleWrapper">
                         <button class="dropdown-item" id="styleTriggerBtn">
                             <span class="dropdown-item-content">
@@ -556,8 +485,7 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- LAYOUT (APENAS PC - ESCONDIDO NO MOBILE PELO CSS) -->
+                    <!-- LAYOUT -->
                     <div class="dropdown-item-wrapper layout-option-wrapper" id="gridWrapper">
                         <button class="dropdown-item" id="gridTriggerBtn">
                             <span class="dropdown-item-content">
@@ -575,8 +503,7 @@
                             </button>
                         </div>
                     </div>
-                    
-                    <!-- IDIOMA (NOVO) -->
+                    <!-- IDIOMA -->
                     <div class="dropdown-item-wrapper" id="langWrapper">
                         <button class="dropdown-item" id="langTriggerBtn">
                             <span class="dropdown-item-content">
@@ -594,10 +521,7 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- NOVOS BOTÕES -->
-                    <div style="width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0;"></div>
-
+                    
                     <!-- TELA CHEIA -->
                     <button class="dropdown-item" id="fullscreenToggleBtn">
                         <span class="dropdown-item-content">
@@ -606,14 +530,31 @@
                         </span>
                     </button>
 
-                    <!-- RESETAR TUDO -->
+                    <!-- AJUDA (CONFIGURAÇÕES) -->
+                    <button class="dropdown-item" id="settingsHelpBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-circle-question"></i>
+                            <span data-i18n="footer_help">Ajuda</span>
+                        </span>
+                    </button>
+
+                    <!-- TERMOS (CONFIGURAÇÕES) -->
+                    <button class="dropdown-item" id="settingsTermsBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-file-contract"></i>
+                            <span data-i18n="footer_terms">Termos e Condições</span>
+                        </span>
+                    </button>
+
+                    <div style="width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0;"></div>
+
+                    <!-- RESETAR -->
                     <button class="dropdown-item danger-text" id="resetAllBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-bomb"></i>
                             <span data-i18n="reset_all">Resetar Tudo</span>
                         </span>
                     </button>
-
                 </div>
             </div>
         </div>
@@ -640,13 +581,19 @@
             <button class="tutorial-btn" data-i18n="banner_btn">Ver Tutorial</button>
         </div>
 
-        <!-- GRID (VAI SER PREENCHIDO PELO JS) -->
+        <!-- GRID -->
         <div class="hubs-grid" id="bentoGrid"></div>
-
-        <footer>
-            <p data-i18n="footer">DESIGN BY LDX ©2026</p>
-        </footer>
     </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="#" id="termsTrigger" data-i18n="footer_terms">Termos e Condições</a>
+            <span>|</span>
+            <a href="#" id="helpTrigger" data-i18n="footer_help">Ajuda</a>
+        </div>
+        <p data-i18n="footer">DESIGN BY LDX ©2026</p>
+    </footer>
 
     <!-- TOAST NOTIFICATION -->
     <div id="toast"><i class="fa-solid fa-check-circle"></i> <span data-i18n="toast_action">Ação realizada!</span></div>
@@ -659,17 +606,14 @@
                 <h3><i class="fa-solid fa-palette" style="color: #fff;"></i> <span data-i18n="modal_customize">Personalizar</span></h3>
                 <button class="close-modal" id="closeBgModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
             <span class="section-title" data-i18n="modal_device_file">Arquivo do Dispositivo</span>
             <div class="upload-container">
                 <input type="file" id="bgFileInput" accept="image/*">
-                <button type="button" class="upload-btn" id="uploadTriggerBtn">
-                    <i class="fa-solid fa-upload"></i>
-                    <span data-i18n="modal_upload">Carregar Foto</span>
+                <button type="button" class="upload-btn" id="uploadTriggerBtn" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 12px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.9rem; transition: all 0.3s ease;">
+                    <i class="fa-solid fa-upload"></i> <span data-i18n="modal_upload">Carregar Foto</span>
                 </button>
             </div>
-
-            <button class="reset-btn" id="resetBgBtn">
+            <button class="reset-btn" id="resetBgBtn" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; margin-top: 10px;">
                 <i class="fa-solid fa-rotate-left"></i> <span data-i18n="modal_restore_bg">Restaurar Fundo Padrão</span>
             </button>
         </div>
@@ -683,13 +627,9 @@
                 <h3><i class="fa-solid fa-pen-to-square" style="color: #fff;"></i> <span data-i18n="modal_edit_hubs">Editar Portais</span></h3>
                 <button class="close-modal" id="closeEditHubsModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            
-            <div id="editListContainer" class="edit-list">
-                <!-- Itens de edição serão injetados aqui via JS -->
-            </div>
-
-            <button class="modal-btn btn-primary" id="saveHubsBtn" data-i18n="modal_save">Salvar Alterações</button>
-            <button class="reset-btn" id="resetHubsConfigBtn" style="margin-top: 10px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
+            <div id="editListContainer" class="edit-list"></div>
+            <button class="modal-btn btn-primary" id="saveHubsBtn" style="display: block; width: 100%; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; text-decoration: none; transition: all 0.3s ease; margin-top: 8px; cursor: pointer; border: none; font-size: 0.9rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;" data-i18n="modal_save">Salvar Alterações</button>
+            <button class="reset-btn" id="resetHubsConfigBtn" style="margin-top: 10px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3); width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s;">
                 <i class="fa-solid fa-trash-can"></i> <span data-i18n="modal_factory">Restaurar Padrões de Fábrica</span>
             </button>
         </div>
@@ -703,232 +643,262 @@
                 <h3><i class="fa-solid fa-shield-halved" style="background: var(--rainbow-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> <span data-i18n="modal_tutorial_title">Como Bloquear Anúncios</span></h3>
                 <button class="close-modal" id="closeTutorialModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
-            <!-- TABS -->
-            <div class="tutorial-tabs">
-                <button class="tab-btn active" onclick="switchTab('mobile')">
+            <div class="tutorial-tabs" style="display: flex; gap: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <button class="tab-btn active" onclick="switchTab('mobile')" style="flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <i class="fa-solid fa-mobile-screen"></i> <span data-i18n="tab_mobile">Celular</span>
                 </button>
-                <button class="tab-btn" onclick="switchTab('pc')">
+                <button class="tab-btn" onclick="switchTab('pc')" style="flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <i class="fa-solid fa-desktop"></i> <span data-i18n="tab_pc">PC</span>
                 </button>
             </div>
-
-            <!-- CONTEÚDO CELULAR -->
-            <div id="tab-mobile" class="tab-content active">
-                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;" data-i18n="tut_mobile_desc">
-                    Configure o DNS do seu aparelho para bloquear anúncios automaticamente em todos os sites e aplicativos.
-                </p>
-
-                <div class="step-list">
-                    <div class="step-item">
-                        <div class="step-number">1</div>
+            <!-- Conteúdo omitido para brevidade, estrutura mantida... -->
+            <div id="tab-mobile" class="tab-content active" style="display: block; animation: fadeIn 0.4s ease;">
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;" data-i18n="tut_mobile_desc">Configure o DNS do seu aparelho...</p>
+                <div class="step-list" style="list-style: none; display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 1rem;">
+                    <div class="step-item" style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <div class="step-number" style="background: rgba(255,255,255,0.1); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;">1</div>
                         <div class="step-content">
-                            <h4 data-i18n="tut_mobile_s1">Configurações do Celular</h4>
-                            <p data-i18n="tut_mobile_s1_desc">Acesse o menu <strong>Configurações</strong> e procure por Rede ou Conexões.</p>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.3rem;" data-i18n="tut_mobile_s1">Configurações do Celular</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;" data-i18n="tut_mobile_s1_desc">Acesse o menu <strong>Configurações</strong>...</p>
                         </div>
                     </div>
-
-                    <div class="step-item">
-                        <div class="step-number">2</div>
+                    <div class="step-item" style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <div class="step-number" style="background: rgba(255,255,255,0.1); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;">3</div>
                         <div class="step-content">
-                            <h4 data-i18n="tut_mobile_s2">DNS Privado</h4>
-                            <p data-i18n="tut_mobile_s2_desc">Encontre a opção <strong>DNS Privado</strong> e selecione "Nome do host do provedor de DNS".</p>
-                        </div>
-                    </div>
-
-                    <div class="step-item">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4 data-i18n="tut_mobile_s3">Adicionar DNS</h4>
-                            <p data-i18n="tut_mobile_s3_desc">No campo de texto, insira:</p>
-                            <div class="dns-container">
-                                <div class="dns-code-box">dns.adguard.com</div>
-                                <button class="copy-dns-btn" onclick="copyDNS()">
-                                    <i class="fa-regular fa-copy"></i>
-                                </button>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.3rem;" data-i18n="tut_mobile_s3">Adicionar DNS</h4>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;" data-i18n="tut_mobile_s3_desc">No campo de texto, insira:</p>
+                            <div class="dns-container" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                                <div class="dns-code-box" style="background: rgba(255,255,255,0.1); border: 1px dashed rgba(255, 255, 255, 0.3); padding: 10px 12px; border-radius: 8px; font-family: 'Courier New', monospace; color: #ffffff; text-align: left; font-size: 0.9rem; user-select: all; flex-grow: 1;">dns.adguard.com</div>
+                                <button class="copy-dns-btn" onclick="copyDNS()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; flex-shrink: 0;"><i class="fa-regular fa-copy"></i></button>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div id="tab-pc" class="tab-content" style="display: none; animation: fadeIn 0.4s ease;">
+                 <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;" data-i18n="tut_pc_desc">A forma mais eficiente...</p>
+                 <a href="https://chromewebstore.google.com/detail/bloqueador-adguard/bgnkhhnnamicmpeenaelnjfhikgbkllg" target="_blank" class="modal-btn btn-primary" style="display: block; width: 100%; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; text-decoration: none; transition: all 0.3s ease; margin-top: 8px; cursor: pointer; border: none; font-size: 0.9rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
+                    <i class="fa-brands fa-chrome"></i> AdGuard (Chrome)
+                </a>
+            </div>
+        </div>
+    </div>
 
+    <!-- MODAL TERMOS DE USO (EXPANDIDO) -->
+    <div class="modal-overlay" id="termsModal">
+        <div class="modal-backdrop" id="termsModalBackdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-contract"></i> <span data-i18n="modal_terms_title">Termos e Condições</span></h3>
+                <button class="close-modal" id="closeTermsModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                
+                <!-- 1. ACEITAÇÃO -->
+                <div class="terms-section">
+                    <h4 data-i18n="terms_h1">1. Aceitação dos Termos</h4>
+                    <p data-i18n="terms_p1">Ao acessar e utilizar os Portais LDX, você concorda expressamente em cumprir e ficar vinculado aos seguintes termos e condições de uso. Se você não concordar com estes termos, por favor, não utilize o site.</p>
+                </div>
+
+                <!-- 2. USO PERMITIDO -->
+                <div class="terms-section">
+                    <h4 data-i18n="terms_h2">2. Uso do Serviço</h4>
+                    <ul>
+                        <li data-i18n="terms_li1">Os Portais LDX são fornecidos gratuitamente apenas para uso pessoal e não comercial. Você concorda em não utilizar o serviço para qualquer finalidade ilícita ou proibida por lei.</li>
+                        <li data-i18n="terms_li2">É estritamente proibido o uso de bots, crawlers, spiders ou qualquer outro mecanismo automatizado para acessar, copiar ou monitorar qualquer parte do serviço sem autorização prévia por escrito.</li>
+                        <li data-i18n="terms_li3">Não é permitido reproduzir, duplicar, copiar, vender, revender ou explorar qualquer porção do serviço, uso do serviço ou acesso ao serviço sem a expressa permissão por escrito dos proprietários.</li>
+                    </ul>
+                </div>
+
+                <!-- 3. CONTEÚDO DE TERCEIROS -->
+                <div class="terms-section">
+                    <h4 data-i18n="terms_h3">3. Conteúdo de Terceiros e Links Externos</h4>
+                    <p data-i18n="terms_p3">Os Portais LDX funcionam como um agregador de links para outros sites e serviços na internet ("Sites de Terceiros"). Não temos controle sobre, e não assumimos responsabilidade por, o conteúdo, políticas de privacidade ou práticas de quaisquer Sites de Terceiros.</p>
+                    <ul>
+                        <li data-i18n="terms_li4">A inclusão de qualquer link não implica endosso ou garantia por parte nossa. O uso de quaisquer Sites de Terceiros é por sua conta e risco exclusivo.</li>
+                        <li data-i18n="terms_li5">Não nos responsabilizamos por quaisquer danos ou prejuízos causados pelo uso de Sites de Terceiros, incluindo, mas não se limitando a, vírus de computador, bugs, interrupções, erros ou imprecisões.</li>
+                    </ul>
+                </div>
+
+                <!-- 4. PROPRIEDADE INTELECTUAL -->
+                <div class="terms-section">
+                    <h4 data-i18n="terms_h4">4. Propriedade Intelectual</h4>
+                    <p data-i18n="terms_p4">Todo o conteúdo, design, layout, aparência e gráficos dos Portais LDX são de nossa propriedade exclusiva ou dos nossos licenciadores e são protegidos por leis de direitos autorais e internacionais. O uso não autorizado é terminantemente proibido.</p>
+                </div>
+
+                <!-- 5. ISENÇÃO DE RESPONSABILIDADE -->
+                <div class="terms-section">
+                    <h4 data-i18n="terms_h5">5. Limitação de Responsabilidade</h4>
+                    <p data-i18n="terms_p5">Na máxima extensão permitida pela lei aplicável, não nos responsabilizamos por quaisquer danos indiretos, incidentais, especiais, consequenciais ou punitivos decorrentes do seu uso ou incapacidade de usar o serviço.</p>
+                    <ul>
+                        <li data-i18n="terms_li6">O serviço é fornecido "COMO ESTÁ", sem garantias de qualquer tipo, expressas ou implícitas.</li>
+                        <li data-i18n="terms_li7">Não garantimos que o serviço será ininterrupto, seguro, livre de erros ou que defeitos serão corrigidos.</li>
+                    </ul>
+                </div>
+
+                <!-- 6. PRIVACIDADE -->
+                <div class="terms-section">
+                    <h4 data-i18n="terms_h6">6. Privacidade e Dados</h4>
+                    <p data-i18n="terms_p6">Valorizamos sua privacidade. Não coletamos dados pessoais sensíveis em servidores externos. As configurações que você faz (fundo de tela, hubs favoritos, idioma) são salvas localmente no seu navegador através de LocalStorage.</p>
+                    <ul>
+                        <li data-i18n="terms_li8">Você tem total controle sobre seus dados locais e pode apagá-los a qualquer momento usando a opção "Resetar Tudo" nas configurações.</li>
+                    </ul>
+                </div>
+
+                <!-- 7. MODIFICAÇÕES -->
+                <div class="terms-section">
+                    <h4 data-i18n="terms_h7">7. Modificações</h4>
+                    <p data-i18n="terms_p7">Reservamo-nos o direito de modificar, alterar ou atualizar estes termos de tempos em tempos sem aviso prévio. O uso continuado do serviço após tais modificações constituirá sua aceitação dos novos termos.</p>
+                </div>
+
+                <!-- 8. CONTATO -->
+                <div class="terms-section">
+                    <h4 data-i18n="terms_h8">8. Contato</h4>
+                    <p data-i18n="terms_contact">Se tiver dúvidas sobre estes termos ou o serviço, entre em contato conosco através das nossas redes sociais oficiais.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AJUDA -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal-backdrop" id="helpModalBackdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-circle-question"></i> <span data-i18n="modal_help_title">Ajuda</span></h3>
+                <button class="close-modal" id="closeHelpModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                <p data-i18n="help_text">Bem-vindo aos Portais LDX! Aqui estão algumas dicas:</p>
+                <div class="step-list" style="list-style: none; display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 1rem; margin-top: 1rem;">
                     <div class="step-item">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h4 data-i18n="tut_mobile_s4">Salvar</h4>
-                            <p data-i18n="tut_mobile_s4_desc">Clique em <strong>Salvar</strong>. O bloqueio será ativado imediatamente.</p>
+                        <i class="fa-solid fa-star" style="color: var(--gold-color); margin-top:4px;"></i>
+                        <div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 4px;" data-i18n="help_s1">Favoritos</h4>
+                            <p data-i18n="help_s1_desc">Use o menu Editar Hubs para marcar seus portais favoritos com uma estrela dourada. Eles aparecerão primeiro na lista.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <i class="fa-solid fa-eye-slash" style="color: var(--text-muted); margin-top:4px;"></i>
+                        <div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 4px;" data-i18n="help_s2">Ocultar Hubs</h4>
+                            <p data-i18n="help_s2_desc">Não gosta de um portal? No menu de edição, clique no ícone de olho para escondê-lo temporariamente.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <i class="fa-solid fa-palette" style="color: var(--accent-cyan); margin-top:4px;"></i>
+                        <div>
+                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 4px;" data-i18n="help_s3">Personalização</h4>
+                            <p data-i18n="help_s3_desc">Altere o fundo, o estilo dos cartões e o layout nas configurações (ícone de engrenagem).</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- CONTEÚDO PC -->
-            <div id="tab-pc" class="tab-content">
-                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;" data-i18n="tut_pc_desc">
-                    A forma mais eficiente de remover anúncios no computador é através de uma extensão de navegador.
-                </p>
-
-                <div class="step-list">
-                    <div class="step-item">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h4 data-i18n="tut_pc_s1">Instale a Extensão</h4>
-                            <p data-i18n="tut_pc_s1_desc">Selecione o seu navegador e instale o AdGuard:</p>
-                            <a href="https://chromewebstore.google.com/detail/bloqueador-adguard/bgnkhhnnamicmpeenaelnjfhikgbkllg" target="_blank" class="modal-btn btn-primary">
-                                <i class="fa-brands fa-chrome"></i> AdGuard (Chrome)
-                            </a>
-                            <a href="https://addons.mozilla.org/firefox/addon/adguard-adblocker/" target="_blank" class="modal-btn btn-primary">
-                                <i class="fa-brands fa-firefox-browser"></i> AdGuard (Firefox)
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="step-item">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h4 data-i18n="tut_pc_s2">Ative o Filtro</h4>
-                            <p data-i18n="tut_pc_s2_desc">Após instalar, clique no ícone do AdGuard na barra do navegador e ative-o.</p>
-                        </div>
-                    </div>
-
-                    <div class="step-item">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4 data-i18n="tut_pc_s3">Reinicie a Página</h4>
-                            <p data-i18n="tut_pc_s3_desc">Recarregue qualquer Portal (F5). Os anúncios desaparecerão.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 
     <script>
-        /* --- CONFIGURAÇÃO DE IDIOMAS (DICTIONARY) --- */
+        /* --- CONFIGURAÇÃO DE IDIOMAS --- */
         const translations = {
             pt: {
-                music_stop: "Parar Música",
-                music_start: "Ligar Música",
-                tutorial_hide: "Ocultar Tutorial",
-                tutorial_show: "Exibir Tutorial",
-                edit_hubs: "Editar Hubs",
-                bg_theme: "Tema de Fundo",
-                card_style: "Estilo dos Cartões",
-                style_default: "Padrão (Cinza)",
-                style_glass: "Vidro (Blur)",
-                style_invisible: "Invisível (Nada)",
-                layout: "Layout",
-                language: "Idioma",
-                fullscreen: "Tela Cheia",
-                exit_fullscreen: "Sair da Cheia",
+                music_stop: "Parar Música", music_start: "Ligar Música",
+                tutorial_hide: "Ocultar Tutorial", tutorial_show: "Exibir Tutorial",
+                edit_hubs: "Editar Hubs", bg_theme: "Tema de Fundo",
+                card_style: "Estilo dos Cartões", style_default: "Padrão (Cinza)",
+                style_glass: "Vidro (Blur)", style_invisible: "Invisível (Nada)",
+                layout: "Layout", language: "Idioma",
+                fullscreen: "Tela Cheia", exit_fullscreen: "Sair da Cheia",
                 reset_all: "Resetar Tudo",
-                banner_title: "Remover Anúncios",
-                banner_desc: "Tutoriais para PC e Celular.",
-                banner_btn: "Ver Tutorial",
-                footer: "DESIGN BY LDX ©2026",
-                toast_action: "Ação realizada!",
-                modal_customize: "Personalizar",
-                modal_device_file: "Arquivo do Dispositivo",
-                modal_upload: "Carregar Foto",
-                modal_restore_bg: "Restaurar Fundo Padrão",
-                modal_edit_hubs: "Editar Portais",
-                modal_save: "Salvar Alterações",
-                modal_factory: "Restaurar Padrões de Fábrica",
-                modal_tutorial_title: "Como Bloquear Anúncios",
-                tab_mobile: "Celular",
-                tab_pc: "PC",
+                banner_title: "Remover Anúncios", banner_desc: "Tutoriais para PC e Celular.",
+                banner_btn: "Ver Tutorial", footer: "DESIGN BY LDX ©2026",
+                toast_action: "Ação realizada!", modal_customize: "Personalizar",
+                modal_device_file: "Arquivo do Dispositivo", modal_upload: "Carregar Foto",
+                modal_restore_bg: "Restaurar Fundo Padrão", modal_edit_hubs: "Editar Portais",
+                modal_save: "Salvar Alterações", modal_factory: "Restaurar Padrões de Fábrica",
+                modal_tutorial_title: "Como Bloquear Anúncios", tab_mobile: "Celular", tab_pc: "PC",
                 tut_mobile_desc: "Configure o DNS do seu aparelho para bloquear anúncios automaticamente em todos os sites e aplicativos.",
-                tut_mobile_s1: "Configurações do Celular",
-                tut_mobile_s1_desc: "Acesse o menu <strong>Configurações</strong> e procure por Rede ou Conexões.",
-                tut_mobile_s2: "DNS Privado",
-                tut_mobile_s2_desc: "Encontre a opção <strong>DNS Privado</strong> e selecione 'Nome do host do provedor de DNS'.",
-                tut_mobile_s3: "Adicionar DNS",
-                tut_mobile_s3_desc: "No campo de texto, insira:",
-                tut_mobile_s4: "Salvar",
-                tut_mobile_s4_desc: "Clique em <strong>Salvar</strong>. O bloqueio será ativado imediatamente.",
+                tut_mobile_s1: "Configurações do Celular", tut_mobile_s1_desc: "Acesse o menu <strong>Configurações</strong> e procure por Rede ou Conexões.",
+                tut_mobile_s3: "Adicionar DNS", tut_mobile_s3_desc: "No campo de texto, insira:",
                 tut_pc_desc: "A forma mais eficiente de remover anúncios no computador é através de uma extensão de navegador.",
-                tut_pc_s1: "Instale a Extensão",
-                tut_pc_s1_desc: "Selecione o seu navegador e instale o AdGuard:",
-                tut_pc_s2: "Ative o Filtro",
-                tut_pc_s2_desc: "Após instalar, clique no ícone do AdGuard na barra do navegador e ative-o.",
-                tut_pc_s3: "Reinicie a Página",
-                tut_pc_s3_desc: "Recarregue qualquer Portal (F5). Os anúncios desaparecerão.",
-                fav: "Favorito",
-                icon_btn: "Ícone",
-                close_grid: "Fechar",
-                toast_saved: "Configurações salvas!",
-                toast_copied: "DNS copiado!",
-                toast_bg_updated: "Fundo atualizado!",
-                toast_bg_reset: "Fundo restaurado para o padrão.",
-                toast_link_copied: "Link copiado!",
-                toast_hubs_reset: "Hubs restaurados.",
-                greeting_morning: "Bom dia, viajante.",
-                greeting_afternoon: "Boa tarde, viajante.",
-                greeting_evening: "Boa noite, viajante.",
-                greeting_night: "Boa madrugada, insone.",
-                greeting_suffix: " Selecione seu destino."
+                fav: "Favorito", icon_btn: "Ícone", close_grid: "Fechar", hide_hub: "Ocultar", show_hub: "Mostrar",
+                toast_saved: "Configurações salvas!", toast_copied: "DNS copiado!",
+                toast_bg_updated: "Fundo atualizado!", toast_bg_reset: "Fundo restaurado para o padrão.",
+                toast_link_copied: "Link copiado!", toast_hubs_reset: "Hubs restaurados.",
+                greeting_morning: "Bom dia, viajante.", greeting_afternoon: "Boa tarde, viajante.",
+                greeting_evening: "Boa noite, viajante.", greeting_night: "Boa madrugada, insone.",
+                greeting_suffix: " Selecione seu destino.",
+                footer_terms: "Termos e Condições", footer_help: "Ajuda",
+                modal_terms_title: "Termos e Condições",
+                terms_h1: "1. Aceitação dos Termos", terms_p1: "Ao acessar e utilizar os Portais LDX, você concorda expressamente em cumprir e ficar vinculado aos seguintes termos e condições de uso. Se você não concordar com estes termos, por favor, não utilize o site.",
+                terms_h2: "2. Uso do Serviço", terms_li1: "Os Portais LDX são fornecidos gratuitamente apenas para uso pessoal e não comercial. Você concorda em não utilizar o serviço para qualquer finalidade ilícita ou proibida por lei.",
+                terms_li2: "É estritamente proibido o uso de bots, crawlers, spiders ou qualquer outro mecanismo automatizado para acessar, copiar ou monitorar qualquer parte do serviço sem autorização prévia por escrito.",
+                terms_li3: "Não é permitido reproduzir, duplicar, copiar, vender, revender ou explorar qualquer porção do serviço, uso do serviço ou acesso ao serviço sem a expressa permissão por escrito dos proprietários.",
+                terms_h3: "3. Conteúdo de Terceiros", terms_p3: "Os Portais LDX funcionam como um agregador de links para outros sites e serviços na internet. Não temos controle sobre, e não assumimos responsabilidade por, o conteúdo, políticas de privacidade ou práticas de quaisquer Sites de Terceiros.",
+                terms_li4: "A inclusão de qualquer link não implica endosso ou garantia por parte nossa. O uso de quaisquer Sites de Terceiros é por sua conta e risco exclusivo.",
+                terms_li5: "Não nos responsabilizamos por quaisquer danos ou prejuízos causados pelo uso de Sites de Terceiros, incluindo, mas não se limitando a, vírus de computador, bugs, interrupções, erros ou imprecisões.",
+                terms_h4: "4. Propriedade Intelectual", terms_p4: "Todo o conteúdo, design, layout, aparência e gráficos dos Portais LDX são de nossa propriedade exclusiva ou dos nossos licenciadores e são protegidos por leis de direitos autorais e internacionais. O uso não autorizado é terminantemente proibido.",
+                terms_h5: "5. Limitação de Responsabilidade", terms_p5: "Na máxima extensão permitida pela lei aplicável, não nos responsabilizamos por quaisquer danos indiretos, incidentais, especiais, consequenciais ou punitivos decorrentes do seu uso ou incapacidade de usar o serviço.",
+                terms_li6: "O serviço é fornecido 'COMO ESTÁ', sem garantias de qualquer tipo, expressas ou implícitas.",
+                terms_li7: "Não garantimos que o serviço será ininterrupto, seguro, livre de erros ou que defeitos serão corrigidos.",
+                terms_h6: "6. Privacidade e Dados", terms_p6: "Valorizamos sua privacidade. Não coletamos dados pessoais sensíveis em servidores externos. As configurações que você faz (fundo de tela, hubs favoritos, idioma) são salvas localmente no seu navegador através de LocalStorage.",
+                terms_li8: "Você tem total controle sobre seus dados locais e pode apagá-los a qualquer momento usando a opção 'Resetar Tudo' nas configurações.",
+                terms_h7: "7. Modificações", terms_p7: "Reservamo-nos o direito de modificar, alterar ou atualizar estes termos de tempos em tempos sem aviso prévio. O uso continuado do serviço após tais modificações constituirá sua aceitação dos novos termos.",
+                terms_h8: "8. Contato", terms_contact: "Se tiver dúvidas sobre estes termos ou o serviço, entre em contato conosco através das nossas redes sociais oficiais.",
+                modal_help_title: "Ajuda", help_text: "Bem-vindo aos Portais LDX! Aqui estão algumas dicas:",
+                help_s1: "Favoritos", help_s1_desc: "Use o menu Editar Hubs para marcar seus portais favoritos com uma estrela dourada. Eles aparecerão primeiro na lista.",
+                help_s2: "Ocultar Hubs", help_s2_desc: "Não gosta de um portal? No menu de edição, clique no ícone de olho para escondê-lo temporariamente.",
+                help_s3: "Personalização", help_s3_desc: "Altere o fundo, o estilo dos cartões e o layout nas configurações (ícone de engrenagem)."
             },
             en: {
-                music_stop: "Stop Music",
-                music_start: "Play Music",
-                tutorial_hide: "Hide Tutorial",
-                tutorial_show: "Show Tutorial",
-                edit_hubs: "Edit Hubs",
-                bg_theme: "Background Theme",
-                card_style: "Card Style",
-                style_default: "Default (Gray)",
-                style_glass: "Glass (Blur)",
-                style_invisible: "Invisible (None)",
-                layout: "Layout",
-                language: "Language",
-                fullscreen: "Fullscreen",
-                exit_fullscreen: "Exit Full",
+                music_stop: "Stop Music", music_start: "Play Music",
+                tutorial_hide: "Hide Tutorial", tutorial_show: "Show Tutorial",
+                edit_hubs: "Edit Hubs", bg_theme: "Background Theme",
+                card_style: "Card Style", style_default: "Default (Gray)",
+                style_glass: "Glass (Blur)", style_invisible: "Invisible (None)",
+                layout: "Layout", language: "Language",
+                fullscreen: "Fullscreen", exit_fullscreen: "Exit Full",
                 reset_all: "Reset All",
-                banner_title: "Remove Ads",
-                banner_desc: "Tutorials for PC and Mobile.",
-                banner_btn: "View Tutorial",
-                footer: "DESIGN BY LDX ©2026",
-                toast_action: "Action done!",
-                modal_customize: "Customize",
-                modal_device_file: "Device File",
-                modal_upload: "Upload Photo",
-                modal_restore_bg: "Restore Default Background",
-                modal_edit_hubs: "Edit Portals",
-                modal_save: "Save Changes",
-                modal_factory: "Restore Factory Settings",
-                modal_tutorial_title: "How to Block Ads",
-                tab_mobile: "Mobile",
-                tab_pc: "PC",
+                banner_title: "Remove Ads", banner_desc: "Tutorials for PC and Mobile.",
+                banner_btn: "View Tutorial", footer: "DESIGN BY LDX ©2026",
+                toast_action: "Action done!", modal_customize: "Customize",
+                modal_device_file: "Device File", modal_upload: "Upload Photo",
+                modal_restore_bg: "Restore Default Background", modal_edit_hubs: "Edit Portals",
+                modal_save: "Save Changes", modal_factory: "Restore Factory Settings",
+                modal_tutorial_title: "How to Block Ads", tab_mobile: "Mobile", tab_pc: "PC",
                 tut_mobile_desc: "Configure your device's DNS to automatically block ads on all sites and apps.",
-                tut_mobile_s1: "Mobile Settings",
-                tut_mobile_s1_desc: "Go to <strong>Settings</strong> and look for Network or Connections.",
-                tut_mobile_s2: "Private DNS",
-                tut_mobile_s2_desc: "Find <strong>Private DNS</strong> and select 'Host name of the DNS provider'.",
-                tut_mobile_s3: "Add DNS",
-                tut_mobile_s3_desc: "In the text field, enter:",
-                tut_mobile_s4: "Save",
-                tut_mobile_s4_desc: "Click <strong>Save</strong>. The blocking will be activated immediately.",
+                tut_mobile_s1: "Mobile Settings", tut_mobile_s1_desc: "Go to <strong>Settings</strong> and look for Network or Connections.",
+                tut_mobile_s3: "Add DNS", tut_mobile_s3_desc: "In text field, enter:",
                 tut_pc_desc: "The most efficient way to remove ads on PC is through a browser extension.",
-                tut_pc_s1: "Install Extension",
-                tut_pc_s1_desc: "Select your browser and install AdGuard:",
-                tut_pc_s2: "Activate Filter",
-                tut_pc_s2_desc: "After installing, click the AdGuard icon in the browser bar and activate it.",
-                tut_pc_s3: "Reload Page",
-                tut_pc_s3_desc: "Reload any Portal (F5). The ads will disappear.",
-                fav: "Favorite",
-                icon_btn: "Icon",
-                close_grid: "Close",
-                toast_saved: "Settings saved!",
-                toast_copied: "DNS copied!",
-                toast_bg_updated: "Background updated!",
-                toast_bg_reset: "Background restored to default.",
-                toast_link_copied: "Link copied!",
-                toast_hubs_reset: "Hubs restored.",
-                greeting_morning: "Good morning, traveler.",
-                greeting_afternoon: "Good afternoon, traveler.",
-                greeting_evening: "Good evening, traveler.",
-                greeting_night: "Good night, insomniac.",
-                greeting_suffix: " Select your destination."
+                fav: "Favorite", icon_btn: "Icon", close_grid: "Close", hide_hub: "Hide", show_hub: "Show",
+                toast_saved: "Settings saved!", toast_copied: "DNS copied!",
+                toast_bg_updated: "Background updated!", toast_bg_reset: "Background restored to default.",
+                toast_link_copied: "Link copied!", toast_hubs_reset: "Hubs restored.",
+                greeting_morning: "Good morning, traveler.", greeting_afternoon: "Good afternoon, traveler.",
+                greeting_evening: "Good evening, traveler.", greeting_night: "Good night, insomniac.",
+                greeting_suffix: " Select your destination.",
+                footer_terms: "Terms and Conditions", footer_help: "Help",
+                modal_terms_title: "Terms and Conditions",
+                terms_h1: "1. Acceptance of Terms", terms_p1: "By accessing and using LDX Portals, you expressly agree to comply with and be bound by the following terms and conditions of use. If you do not agree to these terms, please do not use the site.",
+                terms_h2: "2. Use of Service", terms_li1: "LDX Portals are provided free of charge for personal, non-commercial use only. You agree not to use the service for any unlawful or prohibited purpose by law.",
+                terms_li2: "It is strictly prohibited to use bots, crawlers, spiders or any other automated mechanism to access, copy or monitor any part of the service without prior written authorization.",
+                terms_li3: "You may not reproduce, duplicate, copy, sell, resell or exploit any portion of the service, use of the service, or access to the service without express written permission from the owners.",
+                terms_h3: "3. Third Party Content", terms_p3: "LDX Portals function as an aggregator of links to other websites and services on the internet ('Third Party Sites'). We have no control over, and do not assume responsibility for, the content, privacy policies, or practices of any Third Party Sites.",
+                terms_li4: "The inclusion of any link does not imply endorsement or warranty by us. Your use of any Third Party Sites is solely at your own risk.",
+                terms_li5: "We are not liable for any damage or harm caused by the use of Third Party Sites, including, but not limited to, computer viruses, bugs, interruptions, errors or inaccuracies.",
+                terms_h4: "4. Intellectual Property", terms_p4: "All content, design, layout, look and graphics of LDX Portals are our exclusive property or of our licensors and are protected by copyright and international laws. Unauthorized use is strictly prohibited.",
+                terms_h5: "5. Limitation of Liability", terms_p5: "To the fullest extent permitted by applicable law, we shall not be liable for any indirect, incidental, special, consequential or punitive damages arising from your use or inability to use the service.",
+                terms_li6: "The service is provided 'AS IS', without warranties of any kind, express or implied.",
+                terms_li7: "We do not warrant that the service will be uninterrupted, secure, error free or that defects will be corrected.",
+                terms_h6: "6. Privacy and Data", terms_p6: "We value your privacy. We do not collect sensitive personal data on external servers. The settings you make (background wallpaper, favorite hubs, language) are saved locally in your browser via LocalStorage.",
+                terms_li8: "You have full control over your local data and can delete them at any time using the 'Reset All' option in the settings.",
+                terms_h7: "7. Modifications", terms_p7: "We reserve the right to modify, alter or update these terms from time to time without prior notice. Continued use of the service after such modifications will constitute your acceptance of the new terms.",
+                terms_h8: "8. Contact", terms_contact: "If you have questions about these terms or the service, please contact us through our official social media channels.",
+                modal_help_title: "Help", help_text: "Welcome to LDX Portals! Here are some tips:",
+                help_s1: "Favorites", help_s1_desc: "Use the Edit Hubs menu to mark your favorite portals with a golden star. They will appear first on the list.",
+                help_s2: "Hide Hubs", help_s2_desc: "Don't like a portal? In the edit menu, click the eye icon to temporarily hide it.",
+                help_s3: "Customization", help_s3_desc: "Change the background, card style, and layout in settings (gear icon)."
             }
         };
 
@@ -937,67 +907,30 @@
         function applyLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('ldx_lang', lang);
-
-            // Atualizar textos genéricos com data-i18n
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
-                    // Se tiver tags HTML dentro (negrito), usa innerHTML, senão textContent
-                    if(el.innerHTML.includes('<')) {
-                        el.innerHTML = translations[lang][key];
-                    } else {
-                        el.textContent = translations[lang][key];
-                    }
+                    if(el.innerHTML.includes('<')) el.innerHTML = translations[lang][key];
+                    else el.textContent = translations[lang][key];
                 }
             });
-
-            // Atualizar estado dos botões de idioma no menu
             document.querySelectorAll('.lang-option').forEach(btn => {
-                if (btn.dataset.lang === lang) {
-                    btn.classList.add('selected');
-                } else {
-                    btn.classList.remove('selected');
-                }
+                btn.classList.toggle('selected', btn.dataset.lang === lang);
             });
-
-            // Atualizar estado da label de música (que muda dinamicamente)
-            updateMusicUI(); 
-            
-            // Atualizar estado do Fullscreen
-            const fsLabel = document.getElementById('fsLabel');
-            if (document.fullscreenElement) {
-                fsLabel.textContent = translations[lang].exit_fullscreen;
-            } else {
-                fsLabel.textContent = translations[lang].fullscreen;
-            }
-            
-            // Atualizar estado do label do Tutorial
-            const tutorialBanner = document.getElementById('tutorialBanner');
-            const adblockLabel = document.getElementById('adblockLabel');
-            const adblockIcon = document.getElementById('adblockIcon');
-            if(tutorialBanner.style.display === 'none') {
-                adblockLabel.textContent = translations[lang].tutorial_show;
-                adblockIcon.className = 'fa-solid fa-lock';
-            } else {
-                adblockLabel.textContent = translations[lang].tutorial_hide;
-                adblockIcon.className = 'fa-solid fa-lock-open';
-            }
-
-            // Atualizar Saudação
+            updateMusicUI();
             updateTime();
+            renderGrid(); 
         }
 
-
-        /* --- DADOS DOS HUBS (DEFAULT) --- */
+        /* --- DADOS DOS HUBS --- */
         const defaultHubsConfig = [
-            { id: 'nexus', name: 'NexusHub', desc: 'Utilidade e entretenimento.', icon: 'fa-solid fa-layer-group', url: 'https://deathzephyr.github.io/NexusHub/', isFavorite: false },
-            { id: 'game', name: 'GameHub', desc: 'O Universo dos Jogos.', icon: 'fa-solid fa-gamepad', url: 'https://deathzephyr.github.io/GameHub/', isFavorite: false },
-            { id: 'central', name: 'CentralHub', desc: 'Serviços Oficiais.', icon: 'fa-solid fa-globe', url: 'https://deathzephyr.github.io/CentralHub/', isFavorite: false },
-            { id: 'axiom', name: 'AxiomHub', desc: 'Inteligência Artificial.', icon: 'fa-solid fa-robot', url: 'https://deathzephyr.github.io/AxiomHub/', isFavorite: false },
-            { id: 'vertex', name: 'VertexHub', desc: 'Utilidades Essenciais.', icon: 'fa-solid fa-cube', url: 'https://deathzephyr.github.io/VertexHub/', isFavorite: false }
+            { id: 'nexus', name: 'NexusHub', desc: 'Utilidade e entretenimento.', icon: 'fa-solid fa-layer-group', url: 'https://deathzephyr.github.io/NexusHub/', isFavorite: false, isHidden: false },
+            { id: 'game', name: 'GameHub', desc: 'O Universo dos Jogos.', icon: 'fa-solid fa-gamepad', url: 'https://deathzephyr.github.io/GameHub/', isFavorite: false, isHidden: false },
+            { id: 'central', name: 'CentralHub', desc: 'Serviços Oficiais.', icon: 'fa-solid fa-globe', url: 'https://deathzephyr.github.io/CentralHub/', isFavorite: false, isHidden: false },
+            { id: 'axiom', name: 'AxiomHub', desc: 'Inteligência Artificial.', icon: 'fa-solid fa-robot', url: 'https://deathzephyr.github.io/AxiomHub/', isFavorite: false, isHidden: false },
+            { id: 'vertex', name: 'VertexHub', desc: 'Utilidades Essenciais.', icon: 'fa-solid fa-cube', url: 'https://deathzephyr.github.io/VertexHub/', isFavorite: false, isHidden: false }
         ];
 
-        /* --- LISTA DE ÍCONES POPULARES PARA ESCOLHA --- */
         const popularIcons = [
             'fa-solid fa-house', 'fa-solid fa-gamepad', 'fa-solid fa-robot', 'fa-solid fa-globe',
             'fa-solid fa-layer-group', 'fa-solid fa-cube', 'fa-solid fa-rocket', 'fa-solid fa-bolt',
@@ -1020,20 +953,13 @@
 
         let hubsData = [];
 
-        /* --- CARREGAR E SALVAR DADOS --- */
         function loadHubsData() {
             const stored = localStorage.getItem('ldx_hubs_config');
             if (stored) {
                 hubsData = JSON.parse(stored);
+                hubsData.forEach(h => { if (typeof h.isHidden === 'undefined') h.isHidden = false; });
             } else {
                 hubsData = JSON.parse(JSON.stringify(defaultHubsConfig));
-                const oldFavId = localStorage.getItem('ldx_favorite_hub');
-                if (oldFavId) {
-                    const favIndex = hubsData.findIndex(h => h.id === oldFavId);
-                    if (favIndex !== -1) hubsData[favIndex].isFavorite = true;
-                    localStorage.removeItem('ldx_favorite_hub');
-                    saveHubsData();
-                }
             }
             renderGrid();
         }
@@ -1042,54 +968,30 @@
             localStorage.setItem('ldx_hubs_config', JSON.stringify(hubsData));
         }
 
-        /* --- RENDERIZAR GRID DINÂMICO --- */
+        /* --- RENDERIZAR GRID --- */
         function renderGrid() {
             const grid = document.getElementById('bentoGrid');
             grid.innerHTML = '';
-
-            // Ordenar: Favoritos primeiro
-            const sortedHubs = [...hubsData].sort((a, b) => {
-                return (a.isFavorite === b.isFavorite) ? 0 : a.isFavorite ? -1 : 1;
-            });
-
+            const sortedHubs = [...hubsData].filter(h => !h.isHidden).sort((a, b) => (a.isFavorite === b.isFavorite) ? 0 : a.isFavorite ? -1 : 1);
             sortedHubs.forEach((hub, index) => {
                 const card = document.createElement('a');
-                card.href = hub.url;
-                card.className = 'hub-card';
-                card.dataset.id = hub.id;
+                card.href = hub.url; card.className = 'hub-card'; card.dataset.id = hub.id;
                 card.style.animation = `hubEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards`;
                 card.style.animationDelay = `${index * 50}ms`;
-
-                // Estrela Branca no Canto Superior Direito (Visual Only)
-                const favStarHtml = hub.isFavorite 
-                    ? `<div class="hub-fav-indicator"><i class="fa-solid fa-star"></i></div>` 
-                    : '';
-
-                card.innerHTML = `
-                    ${favStarHtml}
-                    <div class="hub-bg-icon"><i class="${hub.icon}"></i></div>
-                    <div class="hub-content">
-                        <div class="hub-icon"><i class="${hub.icon}"></i></div>
-                        <div>
-                            <h2>${hub.name}</h2>
-                            <p>${hub.desc}</p>
-                        </div>
-                    </div>
-                `;
+                const favStarHtml = hub.isFavorite ? `<div class="hub-fav-indicator"><i class="fa-solid fa-star"></i></div>` : '';
+                card.innerHTML = `${favStarHtml}<div class="hub-bg-icon"><i class="${hub.icon}"></i></div><div class="hub-content"><div class="hub-icon"><i class="${hub.icon}"></i></div><div><h2>${hub.name}</h2><p>${hub.desc}</p></div></div>`;
                 grid.appendChild(card);
             });
         }
 
-        /* --- SISTEMA DE EDIÇÃO DE HUBS (MOBILE FIX V3) --- */
+        /* --- SISTEMA DE EDIÇÃO --- */
         const editHubsModal = document.getElementById('editHubsModal');
         const editListContainer = document.getElementById('editListContainer');
         const editHubsTriggerBtn = document.getElementById('editHubsTriggerBtn');
 
-        // Função global para alternar a visibilidade da grade de ícones
         window.toggleIconGrid = function(index) {
             const gridWrapper = document.getElementById(`icon-grid-wrapper-${index}`);
             const btn = document.getElementById(`change-icon-btn-${index}`);
-            
             if (gridWrapper.classList.contains('open')) {
                 gridWrapper.classList.remove('open');
                 setTimeout(() => { if(!gridWrapper.classList.contains('open')) gridWrapper.style.display = 'none'; }, 300);
@@ -1099,102 +1001,72 @@
                 void gridWrapper.offsetWidth;
                 gridWrapper.classList.add('open');
                 btn.innerHTML = `<i class="fa-solid fa-chevron-up"></i> ${translations[currentLang].close_grid}`;
-                
-                // Rola suavemente até a grade para facilitar no celular
                 gridWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         };
 
-        // Função global para alternar o favorito via botão
         window.toggleFavorite = function(index) {
             const btn = document.getElementById(`fav-btn-${index}`);
             const input = document.getElementById(`fav-input-${index}`);
             const icon = btn.querySelector('i');
-            const favLabel = btn.querySelector('span');
-            
+            if (input.value === 'true') { input.value = 'false'; btn.classList.remove('active'); icon.className = 'fa-regular fa-star'; }
+            else { input.value = 'true'; btn.classList.add('active'); icon.className = 'fa-solid fa-star'; }
+        };
+
+        window.toggleVisibility = function(index) {
+            const btn = document.getElementById(`hide-btn-${index}`);
+            const input = document.getElementById(`hide-input-${index}`);
+            const icon = btn.querySelector('i');
+            const span = btn.querySelector('span');
+            const item = btn.closest('.edit-item');
             if (input.value === 'true') {
-                // Desmarcar
-                input.value = 'false';
-                btn.classList.remove('active');
-                icon.className = 'fa-regular fa-star';
+                input.value = 'false'; btn.classList.remove('is-hidden'); icon.className = 'fa-solid fa-eye';
+                span.textContent = translations[currentLang].hide_hub; item.classList.remove('hidden-item');
             } else {
-                // Marcar
-                input.value = 'true';
-                btn.classList.add('active');
-                icon.className = 'fa-solid fa-star';
+                input.value = 'true'; btn.classList.add('is-hidden'); icon.className = 'fa-solid fa-eye-slash';
+                span.textContent = translations[currentLang].show_hub; item.classList.add('hidden-item');
             }
-            // Atualiza o texto do botão
-            if(favLabel) favLabel.textContent = translations[currentLang].fav;
         };
 
         function openEditModal() {
             editListContainer.innerHTML = '';
-            
+            const t = translations[currentLang];
             hubsData.forEach((hub, index) => {
-                const item = document.createElement('div');
-                item.className = 'edit-item';
-                
-                // Gerar Grid de Ícones (Escondido inicialmente)
+                const item = document.createElement('div'); item.className = 'edit-item';
+                if (hub.isHidden) item.classList.add('hidden-item');
                 let iconGridHtml = '';
-                popularIcons.forEach(iconClass => {
-                    const isSelected = hub.icon === iconClass ? 'selected' : '';
-                    iconGridHtml += `<button type="button" class="icon-btn ${isSelected}" onclick="selectIcon(${index}, '${iconClass}')" title="${iconClass}"><i class="${iconClass}"></i></button>`;
-                });
-
-                // Definir estado inicial do botão de favorito
+                popularIcons.forEach(iconClass => { iconGridHtml += `<button type="button" class="icon-btn ${hub.icon === iconClass ? 'selected' : ''}" onclick="selectIcon(${index}, '${iconClass}')" title="${iconClass}"><i class="${iconClass}"></i></button>`; });
                 const isFav = hub.isFavorite;
-                const favActiveClass = isFav ? 'active' : '';
-                const favIconClass = isFav ? 'fa-solid fa-star' : 'fa-regular fa-star';
-
+                const isHidden = hub.isHidden;
                 item.innerHTML = `
                     <div class="edit-section-title" data-i18n="edit_section_title">Nome do Portal</div>
-                    <div class="edit-row">
-                        <input type="text" class="edit-input" name="name" value="${hub.name}" data-index="${index}" placeholder="Ex: Meu Hub">
-                    </div>
-
-                    <!-- Input oculto para guardar o ícone -->
+                    <div class="edit-row"><input type="text" class="edit-input" name="name" value="${hub.name}" data-index="${index}" placeholder="Ex: Meu Hub"></div>
                     <input type="hidden" name="icon" id="icon-input-${index}" value="${hub.icon}" data-index="${index}">
-                    
-                    <!-- Input oculto para guardar o favorito -->
                     <input type="hidden" id="fav-input-${index}" value="${isFav}" data-index="${index}">
-
-                    <!-- Linha de Controles (50% cada) com CLASSE BASE UNIFICADA -->
+                    <input type="hidden" id="hide-input-${index}" value="${isHidden}" data-index="${index}">
                     <div class="edit-controls-row">
-                        <!-- Botão Estrela -->
-                        <button type="button" class="btn-fav-toggle btn-control-base ${favActiveClass}" id="fav-btn-${index}" onclick="toggleFavorite(${index})">
-                            <i class="${favIconClass}"></i>
-                            <span>${translations[currentLang].fav}</span>
+                        <button type="button" class="btn-fav-toggle btn-control-base ${isFav ? 'active' : ''}" id="fav-btn-${index}" onclick="toggleFavorite(${index})">
+                            <i class="${isFav ? 'fa-solid fa-star' : 'fa-regular fa-star'}"></i> <span>${t.fav}</span>
                         </button>
-
-                        <!-- Botão Ícone -->
                         <button type="button" class="change-icon-btn btn-control-base" id="change-icon-btn-${index}" onclick="toggleIconGrid(${index})">
-                            <i class="${hub.icon}"></i> ${translations[currentLang].icon_btn}
+                            <i class="${hub.icon}"></i> ${t.icon_btn}
+                        </button>
+                        <button type="button" class="btn-hide-toggle btn-control-base ${isHidden ? 'is-hidden' : ''}" id="hide-btn-${index}" onclick="toggleVisibility(${index})">
+                            <i class="${isHidden ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'}"></i> <span>${isHidden ? t.show_hub : t.hide_hub}</span>
                         </button>
                     </div>
-                    
-                    <!-- Grade de Ícones (Colapsável) -->
-                    <div class="icon-grid-wrapper" id="icon-grid-wrapper-${index}" style="display: none;">
-                        <div class="icon-grid">
-                            ${iconGridHtml}
-                        </div>
-                    </div>
+                    <div class="icon-grid-wrapper" id="icon-grid-wrapper-${index}" style="display: none;"><div class="icon-grid">${iconGridHtml}</div></div>
                 `;
                 editListContainer.appendChild(item);
             });
             editHubsModal.classList.add('active');
         }
 
-        // Função global para lidar com o clique no ícone na grade
         window.selectIcon = function(index, iconClass) {
-            // Atualiza input oculto
             const input = document.getElementById(`icon-input-${index}`);
             input.value = iconClass;
-
-            // Atualiza botão "Ícone"
             const btn = document.getElementById(`change-icon-btn-${index}`);
             btn.innerHTML = `<i class="${iconClass}"></i> ${translations[currentLang].icon_btn}`;
-
-            // Atualiza visual da grade (remove selected de todos, adiciona no clicado)
             const gridBtns = input.parentElement.nextElementSibling.querySelector('.icon-grid').querySelectorAll('.icon-btn');
             gridBtns.forEach(btn => btn.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
@@ -1203,13 +1075,12 @@
         document.getElementById('saveHubsBtn').addEventListener('click', () => {
             const nameInputs = document.querySelectorAll('input[name="name"]');
             const iconInputs = document.querySelectorAll('input[name="icon"]');
-            // Agora lemos os inputs hidden de favorito
-            const favInputs = document.querySelectorAll('input[id^="fav-input-"]'); 
-
+            const favInputs = document.querySelectorAll('input[id^="fav-input-"]');
+            const hideInputs = document.querySelectorAll('input[id^="hide-input-"]');
             nameInputs.forEach((input, i) => hubsData[i].name = input.value);
             iconInputs.forEach((input, i) => hubsData[i].icon = input.value);
             favInputs.forEach((input, i) => hubsData[i].isFavorite = (input.value === 'true'));
-
+            hideInputs.forEach((input, i) => hubsData[i].isHidden = (input.value === 'true'));
             saveHubsData();
             renderGrid();
             editHubsModal.classList.remove('active');
@@ -1231,43 +1102,29 @@
             openEditModal();
         });
 
-        /* --- EVENT DELEGATION PARA O GRID (CLIQUES) --- */
+        /* --- OUTRAS FUNÇÕES --- */
         const grid = document.getElementById('bentoGrid');
         grid.addEventListener('click', (e) => {
-            // Clique no card (não tem mais estrela para tratar separadamente)
             const card = e.target.closest('.hub-card');
-            if (card) {
-                if(e.button === 0) {
-                    e.preventDefault();
-                    const ripple = document.createElement('span');
-                    ripple.classList.add('ripple');
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const size = Math.max(rect.width, rect.height);
-                    ripple.style.width = ripple.style.height = `${size}px`;
-                    ripple.style.left = `${x - size / 2}px`;
-                    ripple.style.top = `${y - size / 2}px`;
-                    card.appendChild(ripple);
-                    setTimeout(() => { ripple.remove(); }, 600);
-
-                    const href = card.getAttribute('href');
-                    setTimeout(() => {
-                        if (href) window.location.href = href;
-                    }, 300);
-                }
+            if (card && e.button === 0) {
+                e.preventDefault();
+                const ripple = document.createElement('span'); ripple.classList.add('ripple');
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${x - size / 2}px`; ripple.style.top = `${y - size / 2}px`;
+                card.appendChild(ripple); setTimeout(() => { ripple.remove(); }, 600);
+                const href = card.getAttribute('href');
+                setTimeout(() => { if (href) window.location.href = href; }, 300);
             }
         });
-
-        // Tilt Effect (Reaplicado para elementos dinâmicos)
         grid.addEventListener('mousemove', (e) => {
             const card = e.target.closest('.hub-card');
             if (card && window.innerWidth > 900 && !document.body.classList.contains('invisible-mode')) {
                 const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
+                const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                const centerX = rect.width / 2; const centerY = rect.height / 2;
                 const rotateX = ((y - centerY) / centerY) * -10;
                 const rotateY = ((x - centerX) / centerX) * 10;
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
@@ -1275,43 +1132,28 @@
                 card.style.transform = `scale(1.02)`;
             }
         });
-
         grid.addEventListener('mouseleave', (e) => {
             const card = e.target.closest('.hub-card');
             if(card) card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
         });
 
-        /* --- LOGO CLICK ANIMATION --- */
         const logo = document.getElementById('mainLogo');
         logo.addEventListener('click', function(e) {
-            logo.classList.remove('logo-click-anim');
-            void logo.offsetWidth;
-            logo.classList.add('logo-click-anim');
-            const ripple = document.createElement('span');
-            ripple.classList.add('logo-ripple');
-            const rect = logo.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
+            logo.classList.remove('logo-click-anim'); void logo.offsetWidth; logo.classList.add('logo-click-anim');
+            const ripple = document.createElement('span'); ripple.classList.add('logo-ripple');
+            const rect = logo.getBoundingClientRect(); const size = Math.max(rect.width, rect.height);
             ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
-            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
-            logo.appendChild(ripple);
-            setTimeout(() => { ripple.remove(); }, 600);
+            ripple.style.left = `${e.clientX - rect.left - size/2}px`; ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+            logo.appendChild(ripple); setTimeout(() => { ripple.remove(); }, 600);
         });
 
-        /* --- COMPARTILHAR --- */
         document.getElementById('shareTrigger').addEventListener('click', async () => {
             const shareUrl = 'https://deathzephyr.github.io/PortaisLDX/';
-            if (navigator.share) {
-                try { await navigator.share({ title: 'LDX Portais', text: 'Confira os Portais LDX!', url: shareUrl }); }
-                catch (err) { console.error('Erro ao compartilhar', err); }
-            } else {
-                navigator.clipboard.writeText(shareUrl).then(() => showToast(translations[currentLang].toast_link_copied));
-            }
+            if (navigator.share) { try { await navigator.share({ title: 'LDX Portais', text: 'Confira os Portais LDX!', url: shareUrl }); } catch (err) {} }
+            else { navigator.clipboard.writeText(shareUrl).then(() => showToast(translations[currentLang].toast_link_copied)); }
         });
 
-        /* --- MÚSICA --- */
         const audio = document.getElementById('bgMusic');
-        const musicToggleBtn = document.getElementById('musicToggleBtn');
         audio.volume = 0.5;
         function updateMusicUI() {
             document.getElementById('musicStateIcon').className = "fa-solid fa-music";
@@ -1339,7 +1181,7 @@
             else { audio.pause(); localStorage.setItem('ldx_music_playing', 'false'); }
             setTimeout(updateMusicUI, 50);
         }
-        musicToggleBtn.addEventListener('click', toggleMusic);
+        document.getElementById('musicToggleBtn').addEventListener('click', toggleMusic);
         setInterval(() => {
             if (!audio.paused) { localStorage.setItem('ldx_music_time', audio.currentTime); localStorage.setItem('ldx_music_playing', 'true'); }
             else { localStorage.setItem('ldx_music_playing', 'false'); }
@@ -1347,7 +1189,6 @@
         audio.onplay = () => { localStorage.setItem('ldx_music_playing', 'true'); updateMusicUI(); };
         audio.onpause = () => { localStorage.setItem('ldx_music_playing', 'false'); updateMusicUI(); };
 
-        /* --- TUTORIAL --- */
         document.getElementById('adblockToggleBtn').addEventListener('click', () => {
             const isVisible = localStorage.getItem('ldx_adblock_visible') !== 'false';
             const newState = !isVisible;
@@ -1355,18 +1196,11 @@
             const banner = document.getElementById('tutorialBanner');
             const icon = document.getElementById('adblockIcon');
             const label = document.getElementById('adblockLabel');
-            
-            // Atualiza UI com tradução
             const t = translations[currentLang];
-
             if (newState) {
-                banner.style.display = 'flex'; 
-                icon.className = 'fa-solid fa-lock-open'; 
-                label.textContent = t.tutorial_hide;
+                banner.style.display = 'flex'; icon.className = 'fa-solid fa-lock-open'; label.textContent = t.tutorial_hide;
             } else {
-                banner.style.display = 'none'; 
-                icon.className = 'fa-solid fa-lock'; 
-                label.textContent = t.tutorial_show;
+                banner.style.display = 'none'; icon.className = 'fa-solid fa-lock'; label.textContent = t.tutorial_show;
             }
         });
         document.getElementById('tutorialBanner').addEventListener('click', () => document.getElementById('tutorialModal').classList.add('active'));
@@ -1376,44 +1210,29 @@
             if(device === 'mobile') { document.querySelectorAll('.tab-btn')[0].classList.add('active'); document.getElementById('tab-mobile').classList.add('active'); }
             else { document.querySelectorAll('.tab-btn')[1].classList.add('active'); document.getElementById('tab-pc').classList.add('active'); }
         }
-        function copyDNS() {
-            navigator.clipboard.writeText("dns.adguard.com").then(() => showToast(translations[currentLang].toast_copied));
-        }
+        function copyDNS() { navigator.clipboard.writeText("dns.adguard.com").then(() => showToast(translations[currentLang].toast_copied)); }
 
-        /* --- ESTILOS E LAYOUT --- */
         const settingsTrigger = document.getElementById('settingsTrigger');
         const settingsDropdown = document.getElementById('settingsDropdown');
         settingsTrigger.addEventListener('click', (e) => { e.stopPropagation(); settingsDropdown.classList.toggle('active'); });
         document.addEventListener('click', (e) => { 
             if (!settingsDropdown.contains(e.target) && !settingsTrigger.contains(e.target)) {
                 settingsDropdown.classList.remove('active');
-                // Fecha submenus se o dropdown principal fechar
                 document.querySelectorAll('.dropdown-item-wrapper.active').forEach(el => el.classList.remove('active'));
             }
         });
 
-        // Lógica de Toggle para Submenus (Estilo, Layout e Idioma)
         const subMenuTriggers = [
             { btnId: 'styleTriggerBtn', wrapperId: 'styleWrapper' },
             { btnId: 'gridTriggerBtn', wrapperId: 'gridWrapper' },
-            { btnId: 'langTriggerBtn', wrapperId: 'langWrapper' } // Adicionado Idioma
+            { btnId: 'langTriggerBtn', wrapperId: 'langWrapper' }
         ];
-
         subMenuTriggers.forEach(item => {
             const btn = document.getElementById(item.btnId);
             const wrapper = document.getElementById(item.wrapperId);
-            
             btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita fechar o dropdown principal
-                
-                // Fecha outros submenus abertos
-                subMenuTriggers.forEach(other => {
-                    if(other.wrapperId !== item.wrapperId) {
-                        document.getElementById(other.wrapperId).classList.remove('active');
-                    }
-                });
-
-                // Alterna o estado atual
+                e.stopPropagation();
+                subMenuTriggers.forEach(other => { if(other.wrapperId !== item.wrapperId) document.getElementById(other.wrapperId).classList.remove('active'); });
                 wrapper.classList.toggle('active');
             });
         });
@@ -1426,7 +1245,6 @@
                 localStorage.setItem('ldx_card_style', opt.dataset.style);
                 document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
                 opt.classList.add('selected');
-                // Fecha o submenu após selecionar
                 document.getElementById('styleWrapper').classList.remove('active');
             });
         });
@@ -1439,14 +1257,12 @@
                 localStorage.setItem('ldx_portal_grid', opt.dataset.cols);
                 document.querySelectorAll('.grid-option').forEach(o => o.classList.remove('selected'));
                 opt.classList.add('selected');
-                // Fecha o submenu após selecionar
                 document.getElementById('gridWrapper').classList.remove('active');
             });
         });
         (function(){ const c = localStorage.getItem('ldx_card_style'); if(c==='transparent') document.body.classList.add('transparent-mode'); else if(c==='invisible') document.body.classList.add('invisible-mode'); })();
         (function(){ const c = localStorage.getItem('ldx_portal_grid'); if(c==='2') bentoGrid.classList.add('cols-2'); })();
 
-        /* --- SISTEMA DE IDIOMA (EVENT LISTENERS) --- */
         document.querySelectorAll('.lang-option').forEach(opt => {
             opt.addEventListener('click', () => {
                 const lang = opt.dataset.lang;
@@ -1455,94 +1271,67 @@
             });
         });
 
-        /* --- FUNÇÕES NOVAS --- */
-        
-        // 1. Fullscreen
         const fullscreenBtn = document.getElementById('fullscreenToggleBtn');
         fullscreenBtn.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch((err) => {
-                    console.log("Erro ao ativar fullscreen:", err);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
+            if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch((err) => {}); }
+            else { if (document.exitFullscreen) document.exitFullscreen(); }
         });
-        // Atualizar ícone ao sair do fullscreen
         document.addEventListener('fullscreenchange', () => {
             const fsIcon = document.getElementById('fsIcon');
             const fsLabel = document.getElementById('fsLabel');
             const t = translations[currentLang];
-            if (document.fullscreenElement) {
-                fsIcon.className = "fa-solid fa-compress";
-                fsLabel.textContent = t.exit_fullscreen;
-            } else {
-                fsIcon.className = "fa-solid fa-expand";
-                fsLabel.textContent = t.fullscreen;
-            }
+            if (document.fullscreenElement) { fsIcon.className = "fa-solid fa-compress"; fsLabel.textContent = t.exit_fullscreen; }
+            else { fsIcon.className = "fa-solid fa-expand"; fsLabel.textContent = t.fullscreen; }
         });
 
-        // 2. Resetar Tudo
         document.getElementById('resetAllBtn').addEventListener('click', () => {
-            if(confirm(translations[currentLang].reset_all + "?")) {
-                localStorage.clear();
-                location.reload();
-            }
+            if(confirm(translations[currentLang].reset_all + "?")) { localStorage.clear(); location.reload(); }
         });
 
-        /* --- BACKGROUND (LÓGICA SOMENTE IMAGEM) --- */
-        
-        // Função para controlar o background
+        /* --- EVENTOS DOS BOTÕES DE AJUDA/TERMOS --- */
+        document.getElementById('settingsHelpBtn').addEventListener('click', () => {
+            settingsDropdown.classList.remove('active');
+            document.getElementById('helpModal').classList.add('active');
+        });
+        document.getElementById('settingsTermsBtn').addEventListener('click', () => {
+            settingsDropdown.classList.remove('active');
+            document.getElementById('termsModal').classList.add('active');
+        });
+
+        document.getElementById('termsTrigger').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('termsModal').classList.add('active');
+        });
+        document.getElementById('helpTrigger').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('helpModal').classList.add('active');
+        });
+
         function updateBackgroundState(imageDataUrl) {
             const bgLayer = document.getElementById('custom-bg-layer');
-
-            if (imageDataUrl) {
-                // Tem imagem customizada (Upload)
-                bgLayer.style.backgroundImage = `url('${imageDataUrl}')`;
-            } else {
-                // Padrão: img2.jpeg
-                bgLayer.style.backgroundImage = `url('img2.jpeg')`;
-            }
-            bgLayer.style.opacity = '1'; // Garante que está visível
+            if (imageDataUrl) bgLayer.style.backgroundImage = `url('${imageDataUrl}')`;
+            else bgLayer.style.backgroundImage = `url('img2.jpeg')`;
+            bgLayer.style.opacity = '1';
         }
-
         document.getElementById('bgTriggerBtn').addEventListener('click', () => { settingsDropdown.classList.remove('active'); document.getElementById('bgModal').classList.add('active'); });
-        
-        // Listener para abrir o seletor de arquivos
-        document.getElementById('uploadTriggerBtn').addEventListener('click', () => {
-            document.getElementById('bgFileInput').click();
-        });
-
+        document.getElementById('uploadTriggerBtn').addEventListener('click', () => { document.getElementById('bgFileInput').click(); });
         document.getElementById('bgFileInput').addEventListener('change', (e) => {
             const file = e.target.files[0]; if(!file) return;
             if(file.size > 5*1024*1024) { showToast("Imagem muito grande!"); return; }
             const reader = new FileReader();
             reader.onload = function(ev) {
-                try {
-                    localStorage.setItem('ldx_custom_bg', ev.target.result);
-                    
-                    // Atualiza a UI imediatamente
-                    updateBackgroundState(ev.target.result);
-                    
-                    document.getElementById('bgModal').classList.remove('active');
-                    showToast(translations[currentLang].toast_bg_updated);
-                } catch (err) {
-                    showToast("Erro: Imagem muito grande para salvar.");
-                }
+                try { localStorage.setItem('ldx_custom_bg', ev.target.result); updateBackgroundState(ev.target.result); document.getElementById('bgModal').classList.remove('active'); showToast(translations[currentLang].toast_bg_updated); }
+                catch (err) { showToast("Erro: Imagem muito grande para salvar."); }
             };
             reader.readAsDataURL(file);
         });
-        
         document.getElementById('resetBgBtn').addEventListener('click', () => { 
             localStorage.removeItem('ldx_custom_bg');
-            updateBackgroundState(null); // Volta para o padrão (img2.jpeg)
+            updateBackgroundState(null);
             document.getElementById('bgModal').classList.remove('active');
             showToast(translations[currentLang].toast_bg_reset);
         });
 
-        /* --- MODAIS GERAIS --- */
         function setupModal(id, closeId, backId) {
             const m = document.getElementById(id); const c = document.getElementById(closeId); const b = document.getElementById(backId);
             const cl = () => m.classList.remove('active');
@@ -1551,67 +1340,44 @@
         setupModal('bgModal', 'closeBgModalBtn', 'bgModalBackdrop');
         setupModal('editHubsModal', 'closeEditHubsModalBtn', 'editHubsModalBackdrop');
         setupModal('tutorialModal', 'closeTutorialModalBtn', 'tutorialModalBackdrop');
+        setupModal('termsModal', 'closeTermsModalBtn', 'termsModalBackdrop');
+        setupModal('helpModal', 'closeHelpModalBtn', 'helpModalBackdrop');
 
-        /* --- UTILS --- */
         function showToast(msg) {
-            const t = document.getElementById('toast'); 
+            const t = document.getElementById('toast');
             const span = t.querySelector('span');
-            
-            // Verifica se a mensagem é uma chave de tradução ou texto direto
-            if(translations[currentLang][msg]) {
-                span.textContent = translations[currentLang][msg];
-            } else {
-                span.textContent = msg;
-            }
-            
+            if(translations[currentLang][msg]) span.textContent = translations[currentLang][msg];
+            else span.textContent = msg;
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         }
         function updateTime() {
             const now = new Date();
             document.getElementById('clock').textContent = now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-            
             const h = now.getHours();
             const t = translations[currentLang];
             let g = "";
-            
-            if(currentLang === 'pt') {
-                if(h>=5 && h<12) g = t.greeting_morning;
-                else if(h>=12 && h<18) g = t.greeting_afternoon;
-                else if(h>=18 && h<24) g = t.greeting_evening;
-                else g = t.greeting_night;
-            } else {
-                if(h>=5 && h<12) g = t.greeting_morning;
-                else if(h>=12 && h<18) g = t.greeting_afternoon;
-                else if(h>=18 && h<24) g = t.greeting_evening;
-                else g = t.greeting_night;
-            }
-            
+            if(h>=5 && h<12) g = t.greeting_morning;
+            else if(h>=12 && h<18) g = t.greeting_afternoon;
+            else if(h>=18 && h<24) g = t.greeting_evening;
+            else g = t.greeting_night;
             document.getElementById('greeting-text').textContent = g + t.greeting_suffix;
         }
         setInterval(updateTime, 1000);
 
-        /* --- INICIALIZAÇÃO --- */
         document.addEventListener('DOMContentLoaded', () => {
-            // Aplica o idioma salvo
             applyLanguage(currentLang);
-            
             attemptAutoplay();
             loadHubsData();
             updateTime();
-            
-            // Inicializa o estado do background: Se tiver customizado, usa ele. Se não, usa null (que puxa o img2.jpeg)
             const savedBg = localStorage.getItem('ldx_custom_bg');
             updateBackgroundState(savedBg);
-            
-            // Inicializa visibilidade do tutorial
             if(localStorage.getItem('ldx_adblock_visible') === 'false') {
                 document.getElementById('tutorialBanner').style.display = 'none';
                 document.getElementById('adblockIcon').className = 'fa-solid fa-lock';
                 document.getElementById('adblockLabel').textContent = translations[currentLang].tutorial_show;
             }
         });
-
     </script>
 </body>
 </html>

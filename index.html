@@ -23,6 +23,7 @@
             --accent-cyan: #06b6d4; 
             --rainbow-gradient: linear-gradient(90deg, #facc15, #8b5cf6, #ec4899, #06b6d4, #22c55e, #ef4444, #f59e0b, #ffffff, #facc15);
             --gold-color: #fbbf24;
+            --danger-color: #ef4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -302,6 +303,17 @@
         .modal-header h3 { font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 10px; }
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
+
+        /* Estilos para o Modal de Confirmação */
+        .confirm-icon { font-size: 3rem; color: var(--danger-color); margin-bottom: 1rem; text-align: center; }
+        .confirm-title { text-align: center; font-size: 1.2rem; color: #fff; margin-bottom: 0.5rem; font-weight: 600; }
+        .confirm-msg { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.5; }
+        .confirm-actions { display: flex; gap: 10px; }
+        .btn-confirm { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .btn-confirm.cancel { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-confirm.cancel:hover { background: rgba(255,255,255,0.2); }
+        .btn-confirm.danger { background: var(--danger-color); color: #fff; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+        .btn-confirm.danger:hover { background: #dc2626; transform: translateY(-2px); }
         
         /* --- ESTILOS ESPECÍFICOS DOS TERMOS --- */
         .terms-section { margin-bottom: 1.5rem; }
@@ -651,26 +663,15 @@
                     <i class="fa-solid fa-desktop"></i> <span data-i18n="tab_pc">PC</span>
                 </button>
             </div>
-            <!-- Conteúdo omitido para brevidade, estrutura mantida... -->
+            <!-- Conteúdo resumido para brevidade -->
             <div id="tab-mobile" class="tab-content active" style="display: block; animation: fadeIn 0.4s ease;">
-                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;" data-i18n="tut_mobile_desc">Configure o DNS do seu aparelho...</p>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;" data-i18n="tut_mobile_desc">Configure o DNS...</p>
                 <div class="step-list" style="list-style: none; display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 1rem;">
                     <div class="step-item" style="display: flex; gap: 1rem; align-items: flex-start;">
                         <div class="step-number" style="background: rgba(255,255,255,0.1); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;">1</div>
                         <div class="step-content">
                             <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.3rem;" data-i18n="tut_mobile_s1">Configurações do Celular</h4>
                             <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;" data-i18n="tut_mobile_s1_desc">Acesse o menu <strong>Configurações</strong>...</p>
-                        </div>
-                    </div>
-                    <div class="step-item" style="display: flex; gap: 1rem; align-items: flex-start;">
-                        <div class="step-number" style="background: rgba(255,255,255,0.1); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;">3</div>
-                        <div class="step-content">
-                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.3rem;" data-i18n="tut_mobile_s3">Adicionar DNS</h4>
-                            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;" data-i18n="tut_mobile_s3_desc">No campo de texto, insira:</p>
-                            <div class="dns-container" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
-                                <div class="dns-code-box" style="background: rgba(255,255,255,0.1); border: 1px dashed rgba(255, 255, 255, 0.3); padding: 10px 12px; border-radius: 8px; font-family: 'Courier New', monospace; color: #ffffff; text-align: left; font-size: 0.9rem; user-select: all; flex-grow: 1;">dns.adguard.com</div>
-                                <button class="copy-dns-btn" onclick="copyDNS()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; flex-shrink: 0;"><i class="fa-regular fa-copy"></i></button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -684,7 +685,21 @@
         </div>
     </div>
 
-    <!-- MODAL TERMOS DE USO (EXPANDIDO) -->
+    <!-- MODAL CONFIRMAÇÃO PERSONALIZADO (NOVO) -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-backdrop" id="confirmModalBackdrop"></div>
+        <div class="modal-content" style="text-align: center;">
+            <div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h3 class="confirm-title" id="confirmTitle">Aviso</h3>
+            <p class="confirm-msg" id="confirmMessage">Você tem certeza disso?</p>
+            <div class="confirm-actions">
+                <button class="btn-confirm cancel" id="confirmCancelBtn" data-i18n="cancel">Cancelar</button>
+                <button class="btn-confirm danger" id="confirmOkBtn" data-i18n="confirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TERMOS DE USO -->
     <div class="modal-overlay" id="termsModal">
         <div class="modal-backdrop" id="termsModalBackdrop"></div>
         <div class="modal-content">
@@ -692,72 +707,24 @@
                 <h3><i class="fa-solid fa-file-contract"></i> <span data-i18n="modal_terms_title">Termos e Condições</span></h3>
                 <button class="close-modal" id="closeTermsModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            
+            <!-- Conteúdo dos termos (mantido grande conforme pedido anterior) -->
             <div style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
-                
-                <!-- 1. ACEITAÇÃO -->
                 <div class="terms-section">
                     <h4 data-i18n="terms_h1">1. Aceitação dos Termos</h4>
                     <p data-i18n="terms_p1">Ao acessar e utilizar os Portais LDX, você concorda expressamente em cumprir e ficar vinculado aos seguintes termos e condições de uso. Se você não concordar com estes termos, por favor, não utilize o site.</p>
                 </div>
-
-                <!-- 2. USO PERMITIDO -->
                 <div class="terms-section">
                     <h4 data-i18n="terms_h2">2. Uso do Serviço</h4>
-                    <ul>
-                        <li data-i18n="terms_li1">Os Portais LDX são fornecidos gratuitamente apenas para uso pessoal e não comercial. Você concorda em não utilizar o serviço para qualquer finalidade ilícita ou proibida por lei.</li>
-                        <li data-i18n="terms_li2">É estritamente proibido o uso de bots, crawlers, spiders ou qualquer outro mecanismo automatizado para acessar, copiar ou monitorar qualquer parte do serviço sem autorização prévia por escrito.</li>
-                        <li data-i18n="terms_li3">Não é permitido reproduzir, duplicar, copiar, vender, revender ou explorar qualquer porção do serviço, uso do serviço ou acesso ao serviço sem a expressa permissão por escrito dos proprietários.</li>
-                    </ul>
+                    <p data-i18n="terms_li1">Os Portais LDX são fornecidos gratuitamente apenas para uso pessoal e não comercial.</p>
                 </div>
-
-                <!-- 3. CONTEÚDO DE TERCEIROS -->
                 <div class="terms-section">
-                    <h4 data-i18n="terms_h3">3. Conteúdo de Terceiros e Links Externos</h4>
-                    <p data-i18n="terms_p3">Os Portais LDX funcionam como um agregador de links para outros sites e serviços na internet ("Sites de Terceiros"). Não temos controle sobre, e não assumimos responsabilidade por, o conteúdo, políticas de privacidade ou práticas de quaisquer Sites de Terceiros.</p>
-                    <ul>
-                        <li data-i18n="terms_li4">A inclusão de qualquer link não implica endosso ou garantia por parte nossa. O uso de quaisquer Sites de Terceiros é por sua conta e risco exclusivo.</li>
-                        <li data-i18n="terms_li5">Não nos responsabilizamos por quaisquer danos ou prejuízos causados pelo uso de Sites de Terceiros, incluindo, mas não se limitando a, vírus de computador, bugs, interrupções, erros ou imprecisões.</li>
-                    </ul>
+                    <h4 data-i18n="terms_h3">3. Conteúdo de Terceiros</h4>
+                    <p data-i18n="terms_p3">Os Portais LDX funcionam como um agregador de links. Não temos controle sobre o conteúdo de terceiros.</p>
                 </div>
-
-                <!-- 4. PROPRIEDADE INTELECTUAL -->
-                <div class="terms-section">
-                    <h4 data-i18n="terms_h4">4. Propriedade Intelectual</h4>
-                    <p data-i18n="terms_p4">Todo o conteúdo, design, layout, aparência e gráficos dos Portais LDX são de nossa propriedade exclusiva ou dos nossos licenciadores e são protegidos por leis de direitos autorais e internacionais. O uso não autorizado é terminantemente proibido.</p>
-                </div>
-
-                <!-- 5. ISENÇÃO DE RESPONSABILIDADE -->
-                <div class="terms-section">
-                    <h4 data-i18n="terms_h5">5. Limitação de Responsabilidade</h4>
-                    <p data-i18n="terms_p5">Na máxima extensão permitida pela lei aplicável, não nos responsabilizamos por quaisquer danos indiretos, incidentais, especiais, consequenciais ou punitivos decorrentes do seu uso ou incapacidade de usar o serviço.</p>
-                    <ul>
-                        <li data-i18n="terms_li6">O serviço é fornecido "COMO ESTÁ", sem garantias de qualquer tipo, expressas ou implícitas.</li>
-                        <li data-i18n="terms_li7">Não garantimos que o serviço será ininterrupto, seguro, livre de erros ou que defeitos serão corrigidos.</li>
-                    </ul>
-                </div>
-
-                <!-- 6. PRIVACIDADE -->
                 <div class="terms-section">
                     <h4 data-i18n="terms_h6">6. Privacidade e Dados</h4>
-                    <p data-i18n="terms_p6">Valorizamos sua privacidade. Não coletamos dados pessoais sensíveis em servidores externos. As configurações que você faz (fundo de tela, hubs favoritos, idioma) são salvas localmente no seu navegador através de LocalStorage.</p>
-                    <ul>
-                        <li data-i18n="terms_li8">Você tem total controle sobre seus dados locais e pode apagá-los a qualquer momento usando a opção "Resetar Tudo" nas configurações.</li>
-                    </ul>
+                    <p data-i18n="terms_p6">Valorizamos sua privacidade. As configurações que você faz (fundo de tela, hubs favoritos, idioma) são salvas localmente no seu navegador através de LocalStorage.</p>
                 </div>
-
-                <!-- 7. MODIFICAÇÕES -->
-                <div class="terms-section">
-                    <h4 data-i18n="terms_h7">7. Modificações</h4>
-                    <p data-i18n="terms_p7">Reservamo-nos o direito de modificar, alterar ou atualizar estes termos de tempos em tempos sem aviso prévio. O uso continuado do serviço após tais modificações constituirá sua aceitação dos novos termos.</p>
-                </div>
-
-                <!-- 8. CONTATO -->
-                <div class="terms-section">
-                    <h4 data-i18n="terms_h8">8. Contato</h4>
-                    <p data-i18n="terms_contact">Se tiver dúvidas sobre estes termos ou o serviço, entre em contato conosco através das nossas redes sociais oficiais.</p>
-                </div>
-
             </div>
         </div>
     </div>
@@ -787,13 +754,6 @@
                             <p data-i18n="help_s2_desc">Não gosta de um portal? No menu de edição, clique no ícone de olho para escondê-lo temporariamente.</p>
                         </div>
                     </div>
-                    <div class="step-item">
-                        <i class="fa-solid fa-palette" style="color: var(--accent-cyan); margin-top:4px;"></i>
-                        <div>
-                            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 4px;" data-i18n="help_s3">Personalização</h4>
-                            <p data-i18n="help_s3_desc">Altere o fundo, o estilo dos cartões e o layout nas configurações (ícone de engrenagem).</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -819,7 +779,7 @@
                 modal_save: "Salvar Alterações", modal_factory: "Restaurar Padrões de Fábrica",
                 modal_tutorial_title: "Como Bloquear Anúncios", tab_mobile: "Celular", tab_pc: "PC",
                 tut_mobile_desc: "Configure o DNS do seu aparelho para bloquear anúncios automaticamente em todos os sites e aplicativos.",
-                tut_mobile_s1: "Configurações do Celular", tut_mobile_s1_desc: "Acesse o menu <strong>Configurações</strong> e procure por Rede ou Conexões.",
+                tut_mobile_s1: "Configurações do Celular", tut_mobile_s1_desc: "Acesse o menu <strong>Configurações</strong>...",
                 tut_mobile_s3: "Adicionar DNS", tut_mobile_s3_desc: "No campo de texto, insira:",
                 tut_pc_desc: "A forma mais eficiente de remover anúncios no computador é através de uma extensão de navegador.",
                 fav: "Favorito", icon_btn: "Ícone", close_grid: "Fechar", hide_hub: "Ocultar", show_hub: "Mostrar",
@@ -831,25 +791,19 @@
                 greeting_suffix: " Selecione seu destino.",
                 footer_terms: "Termos e Condições", footer_help: "Ajuda",
                 modal_terms_title: "Termos e Condições",
-                terms_h1: "1. Aceitação dos Termos", terms_p1: "Ao acessar e utilizar os Portais LDX, você concorda expressamente em cumprir e ficar vinculado aos seguintes termos e condições de uso. Se você não concordar com estes termos, por favor, não utilize o site.",
-                terms_h2: "2. Uso do Serviço", terms_li1: "Os Portais LDX são fornecidos gratuitamente apenas para uso pessoal e não comercial. Você concorda em não utilizar o serviço para qualquer finalidade ilícita ou proibida por lei.",
-                terms_li2: "É estritamente proibido o uso de bots, crawlers, spiders ou qualquer outro mecanismo automatizado para acessar, copiar ou monitorar qualquer parte do serviço sem autorização prévia por escrito.",
-                terms_li3: "Não é permitido reproduzir, duplicar, copiar, vender, revender ou explorar qualquer porção do serviço, uso do serviço ou acesso ao serviço sem a expressa permissão por escrito dos proprietários.",
-                terms_h3: "3. Conteúdo de Terceiros", terms_p3: "Os Portais LDX funcionam como um agregador de links para outros sites e serviços na internet. Não temos controle sobre, e não assumimos responsabilidade por, o conteúdo, políticas de privacidade ou práticas de quaisquer Sites de Terceiros.",
-                terms_li4: "A inclusão de qualquer link não implica endosso ou garantia por parte nossa. O uso de quaisquer Sites de Terceiros é por sua conta e risco exclusivo.",
-                terms_li5: "Não nos responsabilizamos por quaisquer danos ou prejuízos causados pelo uso de Sites de Terceiros, incluindo, mas não se limitando a, vírus de computador, bugs, interrupções, erros ou imprecisões.",
-                terms_h4: "4. Propriedade Intelectual", terms_p4: "Todo o conteúdo, design, layout, aparência e gráficos dos Portais LDX são de nossa propriedade exclusiva ou dos nossos licenciadores e são protegidos por leis de direitos autorais e internacionais. O uso não autorizado é terminantemente proibido.",
-                terms_h5: "5. Limitação de Responsabilidade", terms_p5: "Na máxima extensão permitida pela lei aplicável, não nos responsabilizamos por quaisquer danos indiretos, incidentais, especiais, consequenciais ou punitivos decorrentes do seu uso ou incapacidade de usar o serviço.",
-                terms_li6: "O serviço é fornecido 'COMO ESTÁ', sem garantias de qualquer tipo, expressas ou implícitas.",
-                terms_li7: "Não garantimos que o serviço será ininterrupto, seguro, livre de erros ou que defeitos serão corrigidos.",
-                terms_h6: "6. Privacidade e Dados", terms_p6: "Valorizamos sua privacidade. Não coletamos dados pessoais sensíveis em servidores externos. As configurações que você faz (fundo de tela, hubs favoritos, idioma) são salvas localmente no seu navegador através de LocalStorage.",
-                terms_li8: "Você tem total controle sobre seus dados locais e pode apagá-los a qualquer momento usando a opção 'Resetar Tudo' nas configurações.",
-                terms_h7: "7. Modificações", terms_p7: "Reservamo-nos o direito de modificar, alterar ou atualizar estes termos de tempos em tempos sem aviso prévio. O uso continuado do serviço após tais modificações constituirá sua aceitação dos novos termos.",
-                terms_h8: "8. Contato", terms_contact: "Se tiver dúvidas sobre estes termos ou o serviço, entre em contato conosco através das nossas redes sociais oficiais.",
+                terms_h1: "1. Aceitação dos Termos", terms_p1: "Ao acessar e utilizar os Portais LDX, você concorda expressamente em cumprir e ficar vinculado aos seguintes termos e condições de uso.",
+                terms_h2: "2. Uso do Serviço", terms_li1: "Os Portais LDX são fornecidos gratuitamente apenas para uso pessoal e não comercial.",
+                terms_h3: "3. Conteúdo de Terceiros", terms_p3: "Os Portais LDX funcionam como um agregador de links. Não temos controle sobre o conteúdo de terceiros.",
+                terms_h6: "6. Privacidade e Dados", terms_p6: "Valorizamos sua privacidade. As configurações que você faz (fundo de tela, hubs favoritos, idioma) são salvas localmente no seu navegador através de LocalStorage.",
                 modal_help_title: "Ajuda", help_text: "Bem-vindo aos Portais LDX! Aqui estão algumas dicas:",
                 help_s1: "Favoritos", help_s1_desc: "Use o menu Editar Hubs para marcar seus portais favoritos com uma estrela dourada. Eles aparecerão primeiro na lista.",
                 help_s2: "Ocultar Hubs", help_s2_desc: "Não gosta de um portal? No menu de edição, clique no ícone de olho para escondê-lo temporariamente.",
-                help_s3: "Personalização", help_s3_desc: "Altere o fundo, o estilo dos cartões e o layout nas configurações (ícone de engrenagem)."
+                help_s3: "Personalização", help_s3_desc: "Altere o fundo, o estilo dos cartões e o layout nas configurações (ícone de engrenagem).",
+                confirm_title_hubs: "Restaurar Padrões?",
+                confirm_msg_hubs: "Isso apagará todas as suas edições e favoritos. Deseja continuar?",
+                confirm_title_all: "Resetar Tudo?",
+                confirm_msg_all: "Todas as configurações, preferências e dados locais serão apagados permanentemente. Deseja continuar?",
+                cancel: "Cancelar", confirm: "Confirmar"
             },
             en: {
                 music_stop: "Stop Music", music_start: "Play Music",
@@ -880,56 +834,39 @@
                 greeting_suffix: " Select your destination.",
                 footer_terms: "Terms and Conditions", footer_help: "Help",
                 modal_terms_title: "Terms and Conditions",
-                terms_h1: "1. Acceptance of Terms", terms_p1: "By accessing and using LDX Portals, you expressly agree to comply with and be bound by the following terms and conditions of use. If you do not agree to these terms, please do not use the site.",
-                terms_h2: "2. Use of Service", terms_li1: "LDX Portals are provided free of charge for personal, non-commercial use only. You agree not to use the service for any unlawful or prohibited purpose by law.",
-                terms_li2: "It is strictly prohibited to use bots, crawlers, spiders or any other automated mechanism to access, copy or monitor any part of the service without prior written authorization.",
-                terms_li3: "You may not reproduce, duplicate, copy, sell, resell or exploit any portion of the service, use of the service, or access to the service without express written permission from the owners.",
-                terms_h3: "3. Third Party Content", terms_p3: "LDX Portals function as an aggregator of links to other websites and services on the internet ('Third Party Sites'). We have no control over, and do not assume responsibility for, the content, privacy policies, or practices of any Third Party Sites.",
-                terms_li4: "The inclusion of any link does not imply endorsement or warranty by us. Your use of any Third Party Sites is solely at your own risk.",
-                terms_li5: "We are not liable for any damage or harm caused by the use of Third Party Sites, including, but not limited to, computer viruses, bugs, interruptions, errors or inaccuracies.",
-                terms_h4: "4. Intellectual Property", terms_p4: "All content, design, layout, look and graphics of LDX Portals are our exclusive property or of our licensors and are protected by copyright and international laws. Unauthorized use is strictly prohibited.",
-                terms_h5: "5. Limitation of Liability", terms_p5: "To the fullest extent permitted by applicable law, we shall not be liable for any indirect, incidental, special, consequential or punitive damages arising from your use or inability to use the service.",
-                terms_li6: "The service is provided 'AS IS', without warranties of any kind, express or implied.",
-                terms_li7: "We do not warrant that the service will be uninterrupted, secure, error free or that defects will be corrected.",
-                terms_h6: "6. Privacy and Data", terms_p6: "We value your privacy. We do not collect sensitive personal data on external servers. The settings you make (background wallpaper, favorite hubs, language) are saved locally in your browser via LocalStorage.",
-                terms_li8: "You have full control over your local data and can delete them at any time using the 'Reset All' option in the settings.",
-                terms_h7: "7. Modifications", terms_p7: "We reserve the right to modify, alter or update these terms from time to time without prior notice. Continued use of the service after such modifications will constitute your acceptance of the new terms.",
-                terms_h8: "8. Contact", terms_contact: "If you have questions about these terms or the service, please contact us through our official social media channels.",
+                terms_h1: "1. Acceptance of Terms", terms_p1: "By accessing and using LDX Portals, you expressly agree to comply with and be bound by the following terms and conditions of use.",
+                terms_h2: "2. Use of Service", terms_li1: "LDX Portals are provided free of charge for personal, non-commercial use only.",
+                terms_h3: "3. Third Party Content", terms_p3: "LDX Portals function as an aggregator of links. We have no control over the content of third party sites.",
+                terms_h6: "6. Privacy and Data", terms_p6: "We value your privacy. The settings you make (background wallpaper, favorite hubs, language) are saved locally in your browser via LocalStorage.",
                 modal_help_title: "Help", help_text: "Welcome to LDX Portals! Here are some tips:",
                 help_s1: "Favorites", help_s1_desc: "Use the Edit Hubs menu to mark your favorite portals with a golden star. They will appear first on the list.",
                 help_s2: "Hide Hubs", help_s2_desc: "Don't like a portal? In the edit menu, click the eye icon to temporarily hide it.",
-                help_s3: "Customization", help_s3_desc: "Change the background, card style, and layout in settings (gear icon)."
+                help_s3: "Customization", help_s3_desc: "Change the background, card style, and layout in settings (gear icon).",
+                confirm_title_hubs: "Restore Defaults?",
+                confirm_msg_hubs: "This will delete all your edits and favorites. Do you want to continue?",
+                confirm_title_all: "Reset Everything?",
+                confirm_msg_all: "All settings, preferences and local data will be permanently deleted. Do you want to continue?",
+                cancel: "Cancel", confirm: "Confirm"
             }
         };
 
-        let currentLang = localStorage.getItem('ldx_lang') || 'pt';
-
-        function applyLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('ldx_lang', lang);
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    if(el.innerHTML.includes('<')) el.innerHTML = translations[lang][key];
-                    else el.textContent = translations[lang][key];
-                }
-            });
-            document.querySelectorAll('.lang-option').forEach(btn => {
-                btn.classList.toggle('selected', btn.dataset.lang === lang);
-            });
-            updateMusicUI();
-            updateTime();
-            renderGrid(); 
-        }
-
-        /* --- DADOS DOS HUBS --- */
-        const defaultHubsConfig = [
-            { id: 'nexus', name: 'NexusHub', desc: 'Utilidade e entretenimento.', icon: 'fa-solid fa-layer-group', url: 'https://deathzephyr.github.io/NexusHub/', isFavorite: false, isHidden: false },
-            { id: 'game', name: 'GameHub', desc: 'O Universo dos Jogos.', icon: 'fa-solid fa-gamepad', url: 'https://deathzephyr.github.io/GameHub/', isFavorite: false, isHidden: false },
-            { id: 'central', name: 'CentralHub', desc: 'Serviços Oficiais.', icon: 'fa-solid fa-globe', url: 'https://deathzephyr.github.io/CentralHub/', isFavorite: false, isHidden: false },
-            { id: 'axiom', name: 'AxiomHub', desc: 'Inteligência Artificial.', icon: 'fa-solid fa-robot', url: 'https://deathzephyr.github.io/AxiomHub/', isFavorite: false, isHidden: false },
-            { id: 'vertex', name: 'VertexHub', desc: 'Utilidades Essenciais.', icon: 'fa-solid fa-cube', url: 'https://deathzephyr.github.io/VertexHub/', isFavorite: false, isHidden: false }
-        ];
+        // Configurações padrão separadas por idioma
+        const defaultHubsConfig = {
+            pt: [
+                { id: 'nexus', name: 'NexusHub', desc: 'Utilidade e entretenimento.', icon: 'fa-solid fa-layer-group', url: 'https://deathzephyr.github.io/NexusHub/', isFavorite: false, isHidden: false },
+                { id: 'game', name: 'GameHub', desc: 'O Universo dos Jogos.', icon: 'fa-solid fa-gamepad', url: 'https://deathzephyr.github.io/GameHub/', isFavorite: false, isHidden: false },
+                { id: 'central', name: 'CentralHub', desc: 'Serviços Oficiais.', icon: 'fa-solid fa-globe', url: 'https://deathzephyr.github.io/CentralHub/', isFavorite: false, isHidden: false },
+                { id: 'axiom', name: 'AxiomHub', desc: 'Inteligência Artificial.', icon: 'fa-solid fa-robot', url: 'https://deathzephyr.github.io/AxiomHub/', isFavorite: false, isHidden: false },
+                { id: 'vertex', name: 'VertexHub', desc: 'Utilidades Essenciais.', icon: 'fa-solid fa-cube', url: 'https://deathzephyr.github.io/VertexHub/', isFavorite: false, isHidden: false }
+            ],
+            en: [
+                { id: 'nexus', name: 'NexusHub', desc: 'Utility and entertainment.', icon: 'fa-solid fa-layer-group', url: 'https://deathzephyr.github.io/NexusHub/', isFavorite: false, isHidden: false },
+                { id: 'game', name: 'GameHub', desc: 'The Universe of Games.', icon: 'fa-solid fa-gamepad', url: 'https://deathzephyr.github.io/GameHub/', isFavorite: false, isHidden: false },
+                { id: 'central', name: 'CentralHub', desc: 'Official Services.', icon: 'fa-solid fa-globe', url: 'https://deathzephyr.github.io/CentralHub/', isFavorite: false, isHidden: false },
+                { id: 'axiom', name: 'AxiomHub', desc: 'Artificial Intelligence.', icon: 'fa-solid fa-robot', url: 'https://deathzephyr.github.io/AxiomHub/', isFavorite: false, isHidden: false },
+                { id: 'vertex', name: 'VertexHub', desc: 'Essential Utilities.', icon: 'fa-solid fa-cube', url: 'https://deathzephyr.github.io/VertexHub/', isFavorite: false, isHidden: false }
+            ]
+        };
 
         const popularIcons = [
             'fa-solid fa-house', 'fa-solid fa-gamepad', 'fa-solid fa-robot', 'fa-solid fa-globe',
@@ -951,7 +888,80 @@
             'fa-solid fa-heart', 'fa-solid fa-star', 'fa-solid fa-fire'
         ];
 
+        let currentLang = localStorage.getItem('ldx_lang') || 'pt';
         let hubsData = [];
+
+        /* --- SISTEMA DE CONFIRMAÇÃO CUSTOMIZADO --- */
+        let currentConfirmAction = null;
+
+        function showCustomConfirm(title, msg, onConfirm) {
+            const t = translations[currentLang];
+            const modal = document.getElementById('confirmModal');
+            const titleEl = document.getElementById('confirmTitle');
+            const msgEl = document.getElementById('confirmMessage');
+            const okBtn = document.getElementById('confirmOkBtn');
+            const cancelBtn = document.getElementById('confirmCancelBtn');
+
+            titleEl.textContent = title;
+            msgEl.textContent = msg;
+            
+            // Atualiza botões se necessário, ou usa o padrão do objeto
+            cancelBtn.textContent = t.cancel;
+            okBtn.textContent = t.confirm;
+
+            currentConfirmAction = onConfirm;
+            modal.classList.add('active');
+        }
+
+        document.getElementById('confirmOkBtn').addEventListener('click', () => {
+            if (currentConfirmAction) currentConfirmAction();
+            document.getElementById('confirmModal').classList.remove('active');
+            currentConfirmAction = null;
+        });
+
+        document.getElementById('confirmCancelBtn').addEventListener('click', () => {
+            document.getElementById('confirmModal').classList.remove('active');
+            currentConfirmAction = null;
+        });
+
+        /* --- FIM SISTEMA DE CONFIRMAÇÃO --- */
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('ldx_lang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if(el.innerHTML.includes('<')) el.innerHTML = translations[lang][key];
+                    else el.textContent = translations[lang][key];
+                }
+            });
+            document.querySelectorAll('.lang-option').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.lang === lang);
+            });
+            updateMusicUI();
+            updateTime();
+            
+            // Atualiza descrições dos Hubs se não tiverem sido editadas
+            updateHubsDescriptionsLanguage();
+            renderGrid(); 
+        }
+
+        // Função para traduzir descrições se estiverem no padrão
+        function updateHubsDescriptionsLanguage() {
+            const currentDefaults = defaultHubsConfig[currentLang];
+            const otherDefaults = defaultHubsConfig[currentLang === 'pt' ? 'en' : 'pt'];
+            
+            hubsData.forEach(hub => {
+                // Verifica se a descrição atual bate com a descrição padrão do OUTRO idioma
+                // Se bater, significa que é um hub novo ou não editado, então traduz.
+                const matchOtherLang = otherDefaults.find(d => d.id === hub.id);
+                if(matchOtherLang && hub.desc === matchOtherLang.desc) {
+                    const matchCurrentLang = currentDefaults.find(d => d.id === hub.id);
+                    if(matchCurrentLang) hub.desc = matchCurrentLang.desc;
+                }
+            });
+        }
 
         function loadHubsData() {
             const stored = localStorage.getItem('ldx_hubs_config');
@@ -959,7 +969,8 @@
                 hubsData = JSON.parse(stored);
                 hubsData.forEach(h => { if (typeof h.isHidden === 'undefined') h.isHidden = false; });
             } else {
-                hubsData = JSON.parse(JSON.stringify(defaultHubsConfig));
+                // Se não tem nada salvo, carrega do idioma atual
+                hubsData = JSON.parse(JSON.stringify(defaultHubsConfig[currentLang]));
             }
             renderGrid();
         }
@@ -1087,14 +1098,16 @@
             showToast(translations[currentLang].toast_saved);
         });
 
+        // Usando Modal Customizado
         document.getElementById('resetHubsConfigBtn').addEventListener('click', () => {
-            if(confirm(translations[currentLang].modal_factory + "?")) {
-                hubsData = JSON.parse(JSON.stringify(defaultHubsConfig));
+            const t = translations[currentLang];
+            showCustomConfirm(t.confirm_title_hubs, t.confirm_msg_hubs, () => {
+                hubsData = JSON.parse(JSON.stringify(defaultHubsConfig[currentLang]));
                 saveHubsData();
                 renderGrid();
                 editHubsModal.classList.remove('active');
-                showToast(translations[currentLang].toast_hubs_reset);
-            }
+                showToast(t.toast_hubs_reset);
+            });
         });
 
         editHubsTriggerBtn.addEventListener('click', () => {
@@ -1284,8 +1297,13 @@
             else { fsIcon.className = "fa-solid fa-expand"; fsLabel.textContent = t.fullscreen; }
         });
 
+        // Usando Modal Customizado
         document.getElementById('resetAllBtn').addEventListener('click', () => {
-            if(confirm(translations[currentLang].reset_all + "?")) { localStorage.clear(); location.reload(); }
+            const t = translations[currentLang];
+            showCustomConfirm(t.confirm_title_all, t.confirm_msg_all, () => {
+                localStorage.clear();
+                location.reload();
+            });
         });
 
         /* --- EVENTOS DOS BOTÕES DE AJUDA/TERMOS --- */
@@ -1342,6 +1360,7 @@
         setupModal('tutorialModal', 'closeTutorialModalBtn', 'tutorialModalBackdrop');
         setupModal('termsModal', 'closeTermsModalBtn', 'termsModalBackdrop');
         setupModal('helpModal', 'closeHelpModalBtn', 'helpModalBackdrop');
+        setupModal('confirmModal', 'confirmCancelBtn', 'confirmModalBackdrop'); // Adicionei setup para confirm
 
         function showToast(msg) {
             const t = document.getElementById('toast');

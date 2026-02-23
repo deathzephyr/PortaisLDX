@@ -173,7 +173,7 @@
         .dropdown-item.danger-text:hover { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
 
         /* --- SUBMENUS --- */
-        .grid-submenu, .style-submenu {
+        .grid-submenu, .style-submenu, .lang-submenu {
             position: absolute; top: 0; right: 100%; margin-right: 10px; width: 180px; 
             background: rgba(15, 15, 20, 0.98); border: 1px solid var(--glass-border); border-radius: 12px; padding: 6px;
             backdrop-filter: blur(20px); box-shadow: 0 20px 40px rgba(0,0,0,0.5);
@@ -181,17 +181,18 @@
             z-index: 101; display: flex; flex-direction: column; gap: 2px;
         }
         .dropdown-item-wrapper.active .grid-submenu,
-        .dropdown-item-wrapper.active .style-submenu {
+        .dropdown-item-wrapper.active .style-submenu,
+        .dropdown-item-wrapper.active .lang-submenu {
             opacity: 1; visibility: visible; transform: translateX(0);
         }
-        .grid-option, .style-option {
+        .grid-option, .style-option, .lang-option {
             padding: 10px 14px; border-radius: 8px; background: transparent; border: none; color: var(--text-muted); font-family: 'Inter', sans-serif;
             font-size: 0.85rem; font-weight: 500; text-align: left; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px;
         }
-        .grid-option:hover, .style-option:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-        .grid-option.selected, .style-option.selected { background: rgba(255, 255, 255, 0.05); color: #fff; font-weight: 600; }
-        .grid-option i, .style-option i { font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
-        .grid-option.selected i, .style-option.selected i { color: #fff; }
+        .grid-option:hover, .style-option:hover, .lang-option:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .grid-option.selected, .style-option.selected, .lang-option.selected { background: rgba(255, 255, 255, 0.05); color: #fff; font-weight: 600; }
+        .grid-option i, .style-option i, .lang-option i { font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+        .grid-option.selected i, .style-option.selected i, .lang-option.selected i { color: #fff; }
         .music-indicator.playing i { animation: bounceIcon 1s infinite ease-in-out; }
         @keyframes bounceIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
@@ -396,7 +397,7 @@
         .step-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
         .dns-container { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
         .dns-code-box { background: rgba(255,255,255,0.1); border: 1px dashed rgba(255, 255, 255, 0.3); padding: 10px 12px; border-radius: 8px; font-family: 'Courier New', monospace; color: #ffffff; text-align: left; font-size: 0.9rem; user-select: all; flex-grow: 1; }
-        .copy-dns-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; flex-shrink: 0; }
+        .copy-dns-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; flex-shrink: 0; }
         .copy-dns-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
         .modal-btn { display: block; width: 100%; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; text-decoration: none; transition: all 0.3s ease; margin-top: 8px; cursor: pointer; border: none; font-size: 0.9rem; }
         .btn-primary { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; }
@@ -449,12 +450,13 @@
                 font-size: 1.2rem;
             }
 
-            .style-submenu {
+            .style-submenu, .lang-submenu {
                 top: 100% !important; left: 0 !important; right: auto !important; margin-right: 0 !important;
                 margin-top:5px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
                 transform: translateY(5px) !important;
             }
-            .dropdown-item-wrapper.active .style-submenu { transform: translateY(0) !important; }
+            .dropdown-item-wrapper.active .style-submenu, 
+            .dropdown-item-wrapper.active .lang-submenu { transform: translateY(0) !important; }
 
             /* Ajuste extra para telas MUITO pequenas (iPhone SE) */
             @media (max-width: 360px) {
@@ -506,7 +508,7 @@
                             <span class="music-indicator" id="musicIconContainer">
                                 <i class="fa-solid fa-music" id="musicStateIcon"></i>
                             </span>
-                            <span id="musicLabel">Parar Música</span>
+                            <span id="musicLabel" data-i18n="music_stop">Parar Música</span>
                         </span>
                     </button>
 
@@ -514,7 +516,7 @@
                     <button class="dropdown-item" id="adblockToggleBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-lock-open" id="adblockIcon"></i>
-                            <span id="adblockLabel">Ocultar Tutorial</span>
+                            <span id="adblockLabel" data-i18n="tutorial_hide">Ocultar Tutorial</span>
                         </span>
                     </button>
                     
@@ -522,14 +524,14 @@
                     <button class="dropdown-item" id="editHubsTriggerBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-pen-to-square"></i>
-                            <span>Editar Hubs</span>
+                            <span data-i18n="edit_hubs">Editar Hubs</span>
                         </span>
                     </button>
 
                     <button class="dropdown-item" id="bgTriggerBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-palette"></i>
-                            <span>Tema de Fundo</span>
+                            <span data-i18n="bg_theme">Tema de Fundo</span>
                         </span>
                     </button>
 
@@ -538,19 +540,19 @@
                         <button class="dropdown-item" id="styleTriggerBtn">
                             <span class="dropdown-item-content">
                                 <i class="fa-solid fa-swatchbook"></i>
-                                <span>Estilo dos Cartões</span>
+                                <span data-i18n="card_style">Estilo dos Cartões</span>
                             </span>
                             <i class="fa-solid fa-chevron-left chevron-sub"></i>
                         </button>
                         <div class="style-submenu" id="styleSubmenu">
                             <button class="style-option selected" data-style="default">
-                                <i class="fa-solid fa-square"></i> Padrão (Cinza)
+                                <i class="fa-solid fa-square"></i> <span data-i18n="style_default">Padrão (Cinza)</span>
                             </button>
                             <button class="style-option" data-style="transparent">
-                                <i class="fa-solid fa-ghost"></i> Vidro (Blur)
+                                <i class="fa-solid fa-ghost"></i> <span data-i18n="style_glass">Vidro (Blur)</span>
                             </button>
                             <button class="style-option" data-style="invisible">
-                                <i class="fa-solid fa-eye-slash"></i> Invisível (Nada)
+                                <i class="fa-solid fa-eye-slash"></i> <span data-i18n="style_invisible">Invisível (Nada)</span>
                             </button>
                         </div>
                     </div>
@@ -560,7 +562,7 @@
                         <button class="dropdown-item" id="gridTriggerBtn">
                             <span class="dropdown-item-content">
                                 <i class="fa-solid fa-border-all"></i>
-                                <span>Layout</span>
+                                <span data-i18n="layout">Layout</span>
                             </span>
                             <i class="fa-solid fa-chevron-left chevron-sub"></i>
                         </button>
@@ -574,6 +576,25 @@
                         </div>
                     </div>
                     
+                    <!-- IDIOMA (NOVO) -->
+                    <div class="dropdown-item-wrapper" id="langWrapper">
+                        <button class="dropdown-item" id="langTriggerBtn">
+                            <span class="dropdown-item-content">
+                                <i class="fa-solid fa-language"></i>
+                                <span data-i18n="language">Idioma</span>
+                            </span>
+                            <i class="fa-solid fa-chevron-left chevron-sub"></i>
+                        </button>
+                        <div class="lang-submenu" id="langSubmenu">
+                            <button class="lang-option selected" data-lang="pt">
+                                <i class="fa-solid fa-earth-americas"></i> Português
+                            </button>
+                            <button class="lang-option" data-lang="en">
+                                <i class="fa-solid fa-earth-europe"></i> English
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- NOVOS BOTÕES -->
                     <div style="width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0;"></div>
 
@@ -581,7 +602,7 @@
                     <button class="dropdown-item" id="fullscreenToggleBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-expand" id="fsIcon"></i>
-                            <span id="fsLabel">Tela Cheia</span>
+                            <span id="fsLabel" data-i18n="fullscreen">Tela Cheia</span>
                         </span>
                     </button>
 
@@ -589,7 +610,7 @@
                     <button class="dropdown-item danger-text" id="resetAllBtn">
                         <span class="dropdown-item-content">
                             <i class="fa-solid fa-bomb"></i>
-                            <span>Resetar Tudo</span>
+                            <span data-i18n="reset_all">Resetar Tudo</span>
                         </span>
                     </button>
 
@@ -612,44 +633,44 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div class="tutorial-text">
-                    <h3>Remover Anúncios</h3>
-                    <p>Tutoriais para PC e Celular.</p>
+                    <h3 data-i18n="banner_title">Remover Anúncios</h3>
+                    <p data-i18n="banner_desc">Tutoriais para PC e Celular.</p>
                 </div>
             </div>
-            <button class="tutorial-btn">Ver Tutorial</button>
+            <button class="tutorial-btn" data-i18n="banner_btn">Ver Tutorial</button>
         </div>
 
         <!-- GRID (VAI SER PREENCHIDO PELO JS) -->
         <div class="hubs-grid" id="bentoGrid"></div>
 
         <footer>
-            <p>DESIGN BY LDX ©2026</p>
+            <p data-i18n="footer">DESIGN BY LDX ©2026</p>
         </footer>
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast"><i class="fa-solid fa-check-circle"></i> <span>Ação realizada!</span></div>
+    <div id="toast"><i class="fa-solid fa-check-circle"></i> <span data-i18n="toast_action">Ação realizada!</span></div>
 
     <!-- MODAL FUNDO -->
     <div class="modal-overlay" id="bgModal">
         <div class="modal-backdrop" id="bgModalBackdrop"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-palette" style="color: #fff;"></i> Personalizar</h3>
+                <h3><i class="fa-solid fa-palette" style="color: #fff;"></i> <span data-i18n="modal_customize">Personalizar</span></h3>
                 <button class="close-modal" id="closeBgModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <span class="section-title">Arquivo do Dispositivo</span>
+            <span class="section-title" data-i18n="modal_device_file">Arquivo do Dispositivo</span>
             <div class="upload-container">
                 <input type="file" id="bgFileInput" accept="image/*">
                 <button type="button" class="upload-btn" id="uploadTriggerBtn">
                     <i class="fa-solid fa-upload"></i>
-                    <span>Carregar Foto</span>
+                    <span data-i18n="modal_upload">Carregar Foto</span>
                 </button>
             </div>
 
             <button class="reset-btn" id="resetBgBtn">
-                <i class="fa-solid fa-rotate-left"></i> Restaurar Fundo Padrão
+                <i class="fa-solid fa-rotate-left"></i> <span data-i18n="modal_restore_bg">Restaurar Fundo Padrão</span>
             </button>
         </div>
     </div>
@@ -659,7 +680,7 @@
         <div class="modal-backdrop" id="editHubsModalBackdrop"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-pen-to-square" style="color: #fff;"></i> Editar Portais</h3>
+                <h3><i class="fa-solid fa-pen-to-square" style="color: #fff;"></i> <span data-i18n="modal_edit_hubs">Editar Portais</span></h3>
                 <button class="close-modal" id="closeEditHubsModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
@@ -667,9 +688,9 @@
                 <!-- Itens de edição serão injetados aqui via JS -->
             </div>
 
-            <button class="modal-btn btn-primary" id="saveHubsBtn">Salvar Alterações</button>
+            <button class="modal-btn btn-primary" id="saveHubsBtn" data-i18n="modal_save">Salvar Alterações</button>
             <button class="reset-btn" id="resetHubsConfigBtn" style="margin-top: 10px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
-                <i class="fa-solid fa-trash-can"></i> Restaurar Padrões de Fábrica
+                <i class="fa-solid fa-trash-can"></i> <span data-i18n="modal_factory">Restaurar Padrões de Fábrica</span>
             </button>
         </div>
     </div>
@@ -679,23 +700,23 @@
         <div class="modal-backdrop" id="tutorialModalBackdrop"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-shield-halved" style="background: var(--rainbow-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> Como Bloquear Anúncios</h3>
+                <h3><i class="fa-solid fa-shield-halved" style="background: var(--rainbow-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> <span data-i18n="modal_tutorial_title">Como Bloquear Anúncios</span></h3>
                 <button class="close-modal" id="closeTutorialModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
             <!-- TABS -->
             <div class="tutorial-tabs">
                 <button class="tab-btn active" onclick="switchTab('mobile')">
-                    <i class="fa-solid fa-mobile-screen"></i> Celular
+                    <i class="fa-solid fa-mobile-screen"></i> <span data-i18n="tab_mobile">Celular</span>
                 </button>
                 <button class="tab-btn" onclick="switchTab('pc')">
-                    <i class="fa-solid fa-desktop"></i> PC
+                    <i class="fa-solid fa-desktop"></i> <span data-i18n="tab_pc">PC</span>
                 </button>
             </div>
 
             <!-- CONTEÚDO CELULAR -->
             <div id="tab-mobile" class="tab-content active">
-                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;">
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;" data-i18n="tut_mobile_desc">
                     Configure o DNS do seu aparelho para bloquear anúncios automaticamente em todos os sites e aplicativos.
                 </p>
 
@@ -703,24 +724,24 @@
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <div class="step-content">
-                            <h4>Configurações do Celular</h4>
-                            <p>Acesse o menu <strong>Configurações</strong> e procure por Rede ou Conexões.</p>
+                            <h4 data-i18n="tut_mobile_s1">Configurações do Celular</h4>
+                            <p data-i18n="tut_mobile_s1_desc">Acesse o menu <strong>Configurações</strong> e procure por Rede ou Conexões.</p>
                         </div>
                     </div>
 
                     <div class="step-item">
                         <div class="step-number">2</div>
                         <div class="step-content">
-                            <h4>DNS Privado</h4>
-                            <p>Encontre a opção <strong>DNS Privado</strong> e selecione "Nome do host do provedor de DNS".</p>
+                            <h4 data-i18n="tut_mobile_s2">DNS Privado</h4>
+                            <p data-i18n="tut_mobile_s2_desc">Encontre a opção <strong>DNS Privado</strong> e selecione "Nome do host do provedor de DNS".</p>
                         </div>
                     </div>
 
                     <div class="step-item">
                         <div class="step-number">3</div>
                         <div class="step-content">
-                            <h4>Adicionar DNS</h4>
-                            <p>No campo de texto, insira:</p>
+                            <h4 data-i18n="tut_mobile_s3">Adicionar DNS</h4>
+                            <p data-i18n="tut_mobile_s3_desc">No campo de texto, insira:</p>
                             <div class="dns-container">
                                 <div class="dns-code-box">dns.adguard.com</div>
                                 <button class="copy-dns-btn" onclick="copyDNS()">
@@ -733,8 +754,8 @@
                     <div class="step-item">
                         <div class="step-number">4</div>
                         <div class="step-content">
-                            <h4>Salvar</h4>
-                            <p>Clique em <strong>Salvar</strong>. O bloqueio será ativado imediatamente.</p>
+                            <h4 data-i18n="tut_mobile_s4">Salvar</h4>
+                            <p data-i18n="tut_mobile_s4_desc">Clique em <strong>Salvar</strong>. O bloqueio será ativado imediatamente.</p>
                         </div>
                     </div>
                 </div>
@@ -742,7 +763,7 @@
 
             <!-- CONTEÚDO PC -->
             <div id="tab-pc" class="tab-content">
-                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;">
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;" data-i18n="tut_pc_desc">
                     A forma mais eficiente de remover anúncios no computador é através de uma extensão de navegador.
                 </p>
 
@@ -750,8 +771,8 @@
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <div class="step-content">
-                            <h4>Instale a Extensão</h4>
-                            <p>Selecione o seu navegador e instale o AdGuard:</p>
+                            <h4 data-i18n="tut_pc_s1">Instale a Extensão</h4>
+                            <p data-i18n="tut_pc_s1_desc">Selecione o seu navegador e instale o AdGuard:</p>
                             <a href="https://chromewebstore.google.com/detail/bloqueador-adguard/bgnkhhnnamicmpeenaelnjfhikgbkllg" target="_blank" class="modal-btn btn-primary">
                                 <i class="fa-brands fa-chrome"></i> AdGuard (Chrome)
                             </a>
@@ -764,16 +785,16 @@
                     <div class="step-item">
                         <div class="step-number">2</div>
                         <div class="step-content">
-                            <h4>Ative o Filtro</h4>
-                            <p>Após instalar, clique no ícone do AdGuard na barra do navegador e ative-o.</p>
+                            <h4 data-i18n="tut_pc_s2">Ative o Filtro</h4>
+                            <p data-i18n="tut_pc_s2_desc">Após instalar, clique no ícone do AdGuard na barra do navegador e ative-o.</p>
                         </div>
                     </div>
 
                     <div class="step-item">
                         <div class="step-number">3</div>
                         <div class="step-content">
-                            <h4>Reinicie a Página</h4>
-                            <p>Recarregue qualquer Portal (F5). Os anúncios desaparecerão.</p>
+                            <h4 data-i18n="tut_pc_s3">Reinicie a Página</h4>
+                            <p data-i18n="tut_pc_s3_desc">Recarregue qualquer Portal (F5). Os anúncios desaparecerão.</p>
                         </div>
                     </div>
                 </div>
@@ -783,6 +804,190 @@
     </div>
 
     <script>
+        /* --- CONFIGURAÇÃO DE IDIOMAS (DICTIONARY) --- */
+        const translations = {
+            pt: {
+                music_stop: "Parar Música",
+                music_start: "Ligar Música",
+                tutorial_hide: "Ocultar Tutorial",
+                tutorial_show: "Exibir Tutorial",
+                edit_hubs: "Editar Hubs",
+                bg_theme: "Tema de Fundo",
+                card_style: "Estilo dos Cartões",
+                style_default: "Padrão (Cinza)",
+                style_glass: "Vidro (Blur)",
+                style_invisible: "Invisível (Nada)",
+                layout: "Layout",
+                language: "Idioma",
+                fullscreen: "Tela Cheia",
+                exit_fullscreen: "Sair da Cheia",
+                reset_all: "Resetar Tudo",
+                banner_title: "Remover Anúncios",
+                banner_desc: "Tutoriais para PC e Celular.",
+                banner_btn: "Ver Tutorial",
+                footer: "DESIGN BY LDX ©2026",
+                toast_action: "Ação realizada!",
+                modal_customize: "Personalizar",
+                modal_device_file: "Arquivo do Dispositivo",
+                modal_upload: "Carregar Foto",
+                modal_restore_bg: "Restaurar Fundo Padrão",
+                modal_edit_hubs: "Editar Portais",
+                modal_save: "Salvar Alterações",
+                modal_factory: "Restaurar Padrões de Fábrica",
+                modal_tutorial_title: "Como Bloquear Anúncios",
+                tab_mobile: "Celular",
+                tab_pc: "PC",
+                tut_mobile_desc: "Configure o DNS do seu aparelho para bloquear anúncios automaticamente em todos os sites e aplicativos.",
+                tut_mobile_s1: "Configurações do Celular",
+                tut_mobile_s1_desc: "Acesse o menu <strong>Configurações</strong> e procure por Rede ou Conexões.",
+                tut_mobile_s2: "DNS Privado",
+                tut_mobile_s2_desc: "Encontre a opção <strong>DNS Privado</strong> e selecione 'Nome do host do provedor de DNS'.",
+                tut_mobile_s3: "Adicionar DNS",
+                tut_mobile_s3_desc: "No campo de texto, insira:",
+                tut_mobile_s4: "Salvar",
+                tut_mobile_s4_desc: "Clique em <strong>Salvar</strong>. O bloqueio será ativado imediatamente.",
+                tut_pc_desc: "A forma mais eficiente de remover anúncios no computador é através de uma extensão de navegador.",
+                tut_pc_s1: "Instale a Extensão",
+                tut_pc_s1_desc: "Selecione o seu navegador e instale o AdGuard:",
+                tut_pc_s2: "Ative o Filtro",
+                tut_pc_s2_desc: "Após instalar, clique no ícone do AdGuard na barra do navegador e ative-o.",
+                tut_pc_s3: "Reinicie a Página",
+                tut_pc_s3_desc: "Recarregue qualquer Portal (F5). Os anúncios desaparecerão.",
+                fav: "Favorito",
+                icon_btn: "Ícone",
+                close_grid: "Fechar",
+                toast_saved: "Configurações salvas!",
+                toast_copied: "DNS copiado!",
+                toast_bg_updated: "Fundo atualizado!",
+                toast_bg_reset: "Fundo restaurado para o padrão.",
+                toast_link_copied: "Link copiado!",
+                toast_hubs_reset: "Hubs restaurados.",
+                greeting_morning: "Bom dia, viajante.",
+                greeting_afternoon: "Boa tarde, viajante.",
+                greeting_evening: "Boa noite, viajante.",
+                greeting_night: "Boa madrugada, insone.",
+                greeting_suffix: " Selecione seu destino."
+            },
+            en: {
+                music_stop: "Stop Music",
+                music_start: "Play Music",
+                tutorial_hide: "Hide Tutorial",
+                tutorial_show: "Show Tutorial",
+                edit_hubs: "Edit Hubs",
+                bg_theme: "Background Theme",
+                card_style: "Card Style",
+                style_default: "Default (Gray)",
+                style_glass: "Glass (Blur)",
+                style_invisible: "Invisible (None)",
+                layout: "Layout",
+                language: "Language",
+                fullscreen: "Fullscreen",
+                exit_fullscreen: "Exit Full",
+                reset_all: "Reset All",
+                banner_title: "Remove Ads",
+                banner_desc: "Tutorials for PC and Mobile.",
+                banner_btn: "View Tutorial",
+                footer: "DESIGN BY LDX ©2026",
+                toast_action: "Action done!",
+                modal_customize: "Customize",
+                modal_device_file: "Device File",
+                modal_upload: "Upload Photo",
+                modal_restore_bg: "Restore Default Background",
+                modal_edit_hubs: "Edit Portals",
+                modal_save: "Save Changes",
+                modal_factory: "Restore Factory Settings",
+                modal_tutorial_title: "How to Block Ads",
+                tab_mobile: "Mobile",
+                tab_pc: "PC",
+                tut_mobile_desc: "Configure your device's DNS to automatically block ads on all sites and apps.",
+                tut_mobile_s1: "Mobile Settings",
+                tut_mobile_s1_desc: "Go to <strong>Settings</strong> and look for Network or Connections.",
+                tut_mobile_s2: "Private DNS",
+                tut_mobile_s2_desc: "Find <strong>Private DNS</strong> and select 'Host name of the DNS provider'.",
+                tut_mobile_s3: "Add DNS",
+                tut_mobile_s3_desc: "In the text field, enter:",
+                tut_mobile_s4: "Save",
+                tut_mobile_s4_desc: "Click <strong>Save</strong>. The blocking will be activated immediately.",
+                tut_pc_desc: "The most efficient way to remove ads on PC is through a browser extension.",
+                tut_pc_s1: "Install Extension",
+                tut_pc_s1_desc: "Select your browser and install AdGuard:",
+                tut_pc_s2: "Activate Filter",
+                tut_pc_s2_desc: "After installing, click the AdGuard icon in the browser bar and activate it.",
+                tut_pc_s3: "Reload Page",
+                tut_pc_s3_desc: "Reload any Portal (F5). The ads will disappear.",
+                fav: "Favorite",
+                icon_btn: "Icon",
+                close_grid: "Close",
+                toast_saved: "Settings saved!",
+                toast_copied: "DNS copied!",
+                toast_bg_updated: "Background updated!",
+                toast_bg_reset: "Background restored to default.",
+                toast_link_copied: "Link copied!",
+                toast_hubs_reset: "Hubs restored.",
+                greeting_morning: "Good morning, traveler.",
+                greeting_afternoon: "Good afternoon, traveler.",
+                greeting_evening: "Good evening, traveler.",
+                greeting_night: "Good night, insomniac.",
+                greeting_suffix: " Select your destination."
+            }
+        };
+
+        let currentLang = localStorage.getItem('ldx_lang') || 'pt';
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('ldx_lang', lang);
+
+            // Atualizar textos genéricos com data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    // Se tiver tags HTML dentro (negrito), usa innerHTML, senão textContent
+                    if(el.innerHTML.includes('<')) {
+                        el.innerHTML = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // Atualizar estado dos botões de idioma no menu
+            document.querySelectorAll('.lang-option').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+
+            // Atualizar estado da label de música (que muda dinamicamente)
+            updateMusicUI(); 
+            
+            // Atualizar estado do Fullscreen
+            const fsLabel = document.getElementById('fsLabel');
+            if (document.fullscreenElement) {
+                fsLabel.textContent = translations[lang].exit_fullscreen;
+            } else {
+                fsLabel.textContent = translations[lang].fullscreen;
+            }
+            
+            // Atualizar estado do label do Tutorial
+            const tutorialBanner = document.getElementById('tutorialBanner');
+            const adblockLabel = document.getElementById('adblockLabel');
+            const adblockIcon = document.getElementById('adblockIcon');
+            if(tutorialBanner.style.display === 'none') {
+                adblockLabel.textContent = translations[lang].tutorial_show;
+                adblockIcon.className = 'fa-solid fa-lock';
+            } else {
+                adblockLabel.textContent = translations[lang].tutorial_hide;
+                adblockIcon.className = 'fa-solid fa-lock-open';
+            }
+
+            // Atualizar Saudação
+            updateTime();
+        }
+
+
         /* --- DADOS DOS HUBS (DEFAULT) --- */
         const defaultHubsConfig = [
             { id: 'nexus', name: 'NexusHub', desc: 'Utilidade e entretenimento.', icon: 'fa-solid fa-layer-group', url: 'https://deathzephyr.github.io/NexusHub/', isFavorite: false },
@@ -888,12 +1093,12 @@
             if (gridWrapper.classList.contains('open')) {
                 gridWrapper.classList.remove('open');
                 setTimeout(() => { if(!gridWrapper.classList.contains('open')) gridWrapper.style.display = 'none'; }, 300);
-                btn.innerHTML = `<i class="${document.getElementById(`icon-input-${index}`).value}"></i> Ícone`;
+                btn.innerHTML = `<i class="${document.getElementById(`icon-input-${index}`).value}"></i> ${translations[currentLang].icon_btn}`;
             } else {
                 gridWrapper.style.display = 'block';
                 void gridWrapper.offsetWidth;
                 gridWrapper.classList.add('open');
-                btn.innerHTML = `<i class="fa-solid fa-chevron-up"></i> Fechar`;
+                btn.innerHTML = `<i class="fa-solid fa-chevron-up"></i> ${translations[currentLang].close_grid}`;
                 
                 // Rola suavemente até a grade para facilitar no celular
                 gridWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -905,6 +1110,7 @@
             const btn = document.getElementById(`fav-btn-${index}`);
             const input = document.getElementById(`fav-input-${index}`);
             const icon = btn.querySelector('i');
+            const favLabel = btn.querySelector('span');
             
             if (input.value === 'true') {
                 // Desmarcar
@@ -917,6 +1123,8 @@
                 btn.classList.add('active');
                 icon.className = 'fa-solid fa-star';
             }
+            // Atualiza o texto do botão
+            if(favLabel) favLabel.textContent = translations[currentLang].fav;
         };
 
         function openEditModal() {
@@ -939,7 +1147,7 @@
                 const favIconClass = isFav ? 'fa-solid fa-star' : 'fa-regular fa-star';
 
                 item.innerHTML = `
-                    <div class="edit-section-title">Nome do Portal</div>
+                    <div class="edit-section-title" data-i18n="edit_section_title">Nome do Portal</div>
                     <div class="edit-row">
                         <input type="text" class="edit-input" name="name" value="${hub.name}" data-index="${index}" placeholder="Ex: Meu Hub">
                     </div>
@@ -955,12 +1163,12 @@
                         <!-- Botão Estrela -->
                         <button type="button" class="btn-fav-toggle btn-control-base ${favActiveClass}" id="fav-btn-${index}" onclick="toggleFavorite(${index})">
                             <i class="${favIconClass}"></i>
-                            <span>Favorito</span>
+                            <span>${translations[currentLang].fav}</span>
                         </button>
 
                         <!-- Botão Ícone -->
                         <button type="button" class="change-icon-btn btn-control-base" id="change-icon-btn-${index}" onclick="toggleIconGrid(${index})">
-                            <i class="${hub.icon}"></i> Ícone
+                            <i class="${hub.icon}"></i> ${translations[currentLang].icon_btn}
                         </button>
                     </div>
                     
@@ -984,7 +1192,7 @@
 
             // Atualiza botão "Ícone"
             const btn = document.getElementById(`change-icon-btn-${index}`);
-            btn.innerHTML = `<i class="${iconClass}"></i> Ícone`;
+            btn.innerHTML = `<i class="${iconClass}"></i> ${translations[currentLang].icon_btn}`;
 
             // Atualiza visual da grade (remove selected de todos, adiciona no clicado)
             const gridBtns = input.parentElement.nextElementSibling.querySelector('.icon-grid').querySelectorAll('.icon-btn');
@@ -1005,16 +1213,16 @@
             saveHubsData();
             renderGrid();
             editHubsModal.classList.remove('active');
-            showToast("Configurações dos Hubs salvas!");
+            showToast(translations[currentLang].toast_saved);
         });
 
         document.getElementById('resetHubsConfigBtn').addEventListener('click', () => {
-            if(confirm("Tem certeza que deseja restaurar os Hubs para o padrão?")) {
+            if(confirm(translations[currentLang].modal_factory + "?")) {
                 hubsData = JSON.parse(JSON.stringify(defaultHubsConfig));
                 saveHubsData();
                 renderGrid();
                 editHubsModal.classList.remove('active');
-                showToast("Hubs restaurados.");
+                showToast(translations[currentLang].toast_hubs_reset);
             }
         });
 
@@ -1097,7 +1305,7 @@
                 try { await navigator.share({ title: 'LDX Portais', text: 'Confira os Portais LDX!', url: shareUrl }); }
                 catch (err) { console.error('Erro ao compartilhar', err); }
             } else {
-                navigator.clipboard.writeText(shareUrl).then(() => showToast("Link copiado!"));
+                navigator.clipboard.writeText(shareUrl).then(() => showToast(translations[currentLang].toast_link_copied));
             }
         });
 
@@ -1109,10 +1317,10 @@
             document.getElementById('musicStateIcon').className = "fa-solid fa-music";
             if (!audio.paused) {
                 document.getElementById('musicIconContainer').classList.add('playing');
-                document.getElementById('musicLabel').textContent = "Parar Música";
+                document.getElementById('musicLabel').textContent = translations[currentLang].music_stop;
             } else {
                 document.getElementById('musicIconContainer').classList.remove('playing');
-                document.getElementById('musicLabel').textContent = "Ligar Música";
+                document.getElementById('musicLabel').textContent = translations[currentLang].music_start;
             }
         }
         function attemptAutoplay() {
@@ -1147,10 +1355,18 @@
             const banner = document.getElementById('tutorialBanner');
             const icon = document.getElementById('adblockIcon');
             const label = document.getElementById('adblockLabel');
+            
+            // Atualiza UI com tradução
+            const t = translations[currentLang];
+
             if (newState) {
-                banner.style.display = 'flex'; icon.className = 'fa-solid fa-lock-open'; label.textContent = "Ocultar Tutorial";
+                banner.style.display = 'flex'; 
+                icon.className = 'fa-solid fa-lock-open'; 
+                label.textContent = t.tutorial_hide;
             } else {
-                banner.style.display = 'none'; icon.className = 'fa-solid fa-lock'; label.textContent = "Exibir Tutorial";
+                banner.style.display = 'none'; 
+                icon.className = 'fa-solid fa-lock'; 
+                label.textContent = t.tutorial_show;
             }
         });
         document.getElementById('tutorialBanner').addEventListener('click', () => document.getElementById('tutorialModal').classList.add('active'));
@@ -1161,7 +1377,7 @@
             else { document.querySelectorAll('.tab-btn')[1].classList.add('active'); document.getElementById('tab-pc').classList.add('active'); }
         }
         function copyDNS() {
-            navigator.clipboard.writeText("dns.adguard.com").then(() => showToast("DNS copiado!"));
+            navigator.clipboard.writeText("dns.adguard.com").then(() => showToast(translations[currentLang].toast_copied));
         }
 
         /* --- ESTILOS E LAYOUT --- */
@@ -1176,10 +1392,11 @@
             }
         });
 
-        // Lógica de Toggle para Submenus (Estilo e Layout)
+        // Lógica de Toggle para Submenus (Estilo, Layout e Idioma)
         const subMenuTriggers = [
             { btnId: 'styleTriggerBtn', wrapperId: 'styleWrapper' },
-            { btnId: 'gridTriggerBtn', wrapperId: 'gridWrapper' }
+            { btnId: 'gridTriggerBtn', wrapperId: 'gridWrapper' },
+            { btnId: 'langTriggerBtn', wrapperId: 'langWrapper' } // Adicionado Idioma
         ];
 
         subMenuTriggers.forEach(item => {
@@ -1229,6 +1446,15 @@
         (function(){ const c = localStorage.getItem('ldx_card_style'); if(c==='transparent') document.body.classList.add('transparent-mode'); else if(c==='invisible') document.body.classList.add('invisible-mode'); })();
         (function(){ const c = localStorage.getItem('ldx_portal_grid'); if(c==='2') bentoGrid.classList.add('cols-2'); })();
 
+        /* --- SISTEMA DE IDIOMA (EVENT LISTENERS) --- */
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                const lang = opt.dataset.lang;
+                applyLanguage(lang);
+                document.getElementById('langWrapper').classList.remove('active');
+            });
+        });
+
         /* --- FUNÇÕES NOVAS --- */
         
         // 1. Fullscreen
@@ -1247,18 +1473,20 @@
         // Atualizar ícone ao sair do fullscreen
         document.addEventListener('fullscreenchange', () => {
             const fsIcon = document.getElementById('fsIcon');
+            const fsLabel = document.getElementById('fsLabel');
+            const t = translations[currentLang];
             if (document.fullscreenElement) {
                 fsIcon.className = "fa-solid fa-compress";
-                document.getElementById('fsLabel').textContent = "Sair da Cheia";
+                fsLabel.textContent = t.exit_fullscreen;
             } else {
                 fsIcon.className = "fa-solid fa-expand";
-                document.getElementById('fsLabel').textContent = "Tela Cheia";
+                fsLabel.textContent = t.fullscreen;
             }
         });
 
         // 2. Resetar Tudo
         document.getElementById('resetAllBtn').addEventListener('click', () => {
-            if(confirm("⚠️ ATENÇÃO: Isso apagará todas as suas configurações personalizadas (Hubs, Fundo, Música, etc.). Deseja continuar?")) {
+            if(confirm(translations[currentLang].reset_all + "?")) {
                 localStorage.clear();
                 location.reload();
             }
@@ -1299,7 +1527,7 @@
                     updateBackgroundState(ev.target.result);
                     
                     document.getElementById('bgModal').classList.remove('active');
-                    showToast("Fundo atualizado!");
+                    showToast(translations[currentLang].toast_bg_updated);
                 } catch (err) {
                     showToast("Erro: Imagem muito grande para salvar.");
                 }
@@ -1311,7 +1539,7 @@
             localStorage.removeItem('ldx_custom_bg');
             updateBackgroundState(null); // Volta para o padrão (img2.jpeg)
             document.getElementById('bgModal').classList.remove('active');
-            showToast("Fundo restaurado para o padrão.");
+            showToast(translations[currentLang].toast_bg_reset);
         });
 
         /* --- MODAIS GERAIS --- */
@@ -1326,24 +1554,48 @@
 
         /* --- UTILS --- */
         function showToast(msg) {
-            const t = document.getElementById('toast'); t.querySelector('span').textContent = msg; t.classList.add('show');
+            const t = document.getElementById('toast'); 
+            const span = t.querySelector('span');
+            
+            // Verifica se a mensagem é uma chave de tradução ou texto direto
+            if(translations[currentLang][msg]) {
+                span.textContent = translations[currentLang][msg];
+            } else {
+                span.textContent = msg;
+            }
+            
+            t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         }
         function updateTime() {
             const now = new Date();
             document.getElementById('clock').textContent = now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+            
             const h = now.getHours();
-            let g = "Seja bem-vindo.";
-            if(h>=5 && h<12) g="Bom dia, viajante.";
-            else if(h>=12 && h<18) g="Boa tarde, viajante.";
-            else if(h>=18 && h<24) g="Boa noite, viajante.";
-            else g="Boa madrugada, insone.";
-            document.getElementById('greeting-text').textContent = g + " Selecione seu destino.";
+            const t = translations[currentLang];
+            let g = "";
+            
+            if(currentLang === 'pt') {
+                if(h>=5 && h<12) g = t.greeting_morning;
+                else if(h>=12 && h<18) g = t.greeting_afternoon;
+                else if(h>=18 && h<24) g = t.greeting_evening;
+                else g = t.greeting_night;
+            } else {
+                if(h>=5 && h<12) g = t.greeting_morning;
+                else if(h>=12 && h<18) g = t.greeting_afternoon;
+                else if(h>=18 && h<24) g = t.greeting_evening;
+                else g = t.greeting_night;
+            }
+            
+            document.getElementById('greeting-text').textContent = g + t.greeting_suffix;
         }
         setInterval(updateTime, 1000);
 
         /* --- INICIALIZAÇÃO --- */
         document.addEventListener('DOMContentLoaded', () => {
+            // Aplica o idioma salvo
+            applyLanguage(currentLang);
+            
             attemptAutoplay();
             loadHubsData();
             updateTime();
@@ -1356,7 +1608,7 @@
             if(localStorage.getItem('ldx_adblock_visible') === 'false') {
                 document.getElementById('tutorialBanner').style.display = 'none';
                 document.getElementById('adblockIcon').className = 'fa-solid fa-lock';
-                document.getElementById('adblockLabel').textContent = "Exibir Tutorial";
+                document.getElementById('adblockLabel').textContent = translations[currentLang].tutorial_show;
             }
         });
 

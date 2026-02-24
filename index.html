@@ -38,6 +38,12 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            transition: filter 0.5s ease;
+        }
+
+        /* --- MODO ESCALA DE CINZA --- */
+        body.grayscale-mode {
+            filter: grayscale(100%);
         }
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
@@ -136,13 +142,13 @@
             border-radius: 100px; font-family: 'Space Grotesk', monospace; font-size: 1rem; color: #fff;
             backdrop-filter: blur(20px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); font-weight: 600; letter-spacing: 1px; user-select: none; cursor: default; flex-shrink: 0;
         }
-        .share-trigger-btn, .settings-trigger-btn {
+        .search-trigger-btn, .share-trigger-btn, .settings-trigger-btn {
             background: rgba(20, 20, 25, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 8px 12px; 
             border-radius: 100px; font-size: 1.1rem; color: #ffffff; backdrop-filter: blur(20px); 
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); cursor: pointer; transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex-shrink: 0;
         }
-        .share-trigger-btn:hover, .settings-trigger-btn:hover {
+        .search-trigger-btn:hover, .share-trigger-btn:hover, .settings-trigger-btn:hover {
             border-color: rgba(255,255,255,0.8); background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px); box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); color: #ffffff;
         }
@@ -196,14 +202,30 @@
         .music-indicator.playing i { animation: bounceIcon 1s infinite ease-in-out; }
         @keyframes bounceIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-        /* --- HERO --- */
+        /* --- HERO & SEARCH --- */
         .hero { text-align: center; margin: 4rem 0 3rem; position: relative; }
         .hero h1 { 
             font-size: 3.5rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
             background: var(--rainbow-gradient); background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: colorCycle 6s linear infinite; letter-spacing: -1px; filter: drop-shadow(0 0 30px rgba(0,0,0,0.5)); user-select: none;
         }
-        .hero p { color: var(--text-muted); font-size: 1rem; max-width: 600px; margin: 0 auto; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
+        .hero p { color: var(--text-muted); font-size: 1rem; max-width: 600px; margin: 0 auto 1.5rem; padding: 0 10px; font-weight: 400; min-height: 1.5em; }
+
+        /* SEARCH BAR */
+        .search-wrapper {
+            width: 100%; max-width: 400px; margin: 0 auto; position: relative;
+            opacity: 0; transform: translateY(-10px); transition: all 0.3s ease; pointer-events: none; height: 0; overflow: hidden;
+        }
+        .search-wrapper.active { opacity: 1; transform: translateY(0); pointer-events: all; height: auto; margin-bottom: 2rem; }
+        .search-input {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 12px 20px; padding-left: 45px; border-radius: 50px; font-size: 1rem; font-family: 'Inter', sans-serif;
+            backdrop-filter: blur(10px); transition: all 0.3s;
+        }
+        .search-input:focus { background: rgba(255,255,255,0.1); border-color: var(--accent-cyan); outline: none; }
+        .search-icon {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted);
+        }
 
         /* --- TUTORIAL BANNER --- */
         .tutorial-banner {
@@ -409,7 +431,7 @@
             .logo-icon-special { font-size: 1.5rem; }
             .header-right { gap: 6px; }
             .clock { font-size: 0.7rem; padding: 6px 8px; }
-            .share-trigger-btn, .settings-trigger-btn { width: 36px; height: 36px; font-size: 1rem; }
+            .search-trigger-btn, .share-trigger-btn, .settings-trigger-btn { width: 36px; height: 36px; font-size: 1rem; }
 
             .tutorial-banner { flex-direction: column; text-align: center; padding: 1.5rem; gap: 1rem; margin-bottom: 1rem; }
             .tutorial-content { flex-direction: column; text-align: center; }
@@ -466,6 +488,12 @@
         </div>
         <div class="header-right">
             <div class="clock" id="clock">00:00</div>
+            
+            <!-- BOTÃO DE BUSCA (MOVIDO PARA CÁ AQUI) -->
+            <button class="search-trigger-btn" id="searchTrigger" title="Barra de Busca">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
             <button class="share-trigger-btn" id="shareTrigger" title="Compartilhar">
                 <i class="fa-solid fa-share-nodes"></i>
             </button>
@@ -503,6 +531,27 @@
                             <span data-i18n="bg_theme">Tema de Fundo</span>
                         </span>
                     </button>
+                    
+                    <!-- --- FUNCIONALIDADES EXISTENTES (Menos Foco) --- -->
+                    
+                    <!-- RELÓGIO 12H -->
+                    <button class="dropdown-item" id="clockFormatBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-clock" id="clockFormatIcon"></i>
+                            <span id="clockFormatLabel">Relógio 12h</span>
+                        </span>
+                    </button>
+
+                    <!-- ESCALA DE CINZA -->
+                    <button class="dropdown-item" id="grayscaleBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-solid fa-filter"></i>
+                            <span data-i18n="grayscale">Preto e Branco</span>
+                        </span>
+                    </button>
+                    
+                    <!-- --- FIM FUNCIONALIDADES --- -->
+
                     <!-- ESTILO -->
                     <div class="dropdown-item-wrapper style-option-wrapper" id="styleWrapper">
                         <button class="dropdown-item" id="styleTriggerBtn">
@@ -569,6 +618,14 @@
                         </span>
                     </button>
 
+                    <!-- DISCORD (SEM COR AZUL) -->
+                    <button class="dropdown-item" id="discordBtn">
+                        <span class="dropdown-item-content">
+                            <i class="fa-brands fa-discord"></i>
+                            <span>Discord</span>
+                        </span>
+                    </button>
+
                     <!-- AJUDA (CONFIGURAÇÕES) -->
                     <button class="dropdown-item" id="settingsHelpBtn">
                         <span class="dropdown-item-content">
@@ -603,9 +660,14 @@
         <section class="hero">
             <h1>Portais LDX</h1>
             <p id="greeting-text">...</p>
+            <!-- BARRA DE BUSCA -->
+            <div class="search-wrapper" id="searchWrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar portais...">
+            </div>
         </section>
 
-        <!-- BANNER TUTORIAL (DO CÓDIGO ANTIGO) -->
+        <!-- BANNER TUTORIAL -->
         <div class="tutorial-banner" id="tutorialBanner">
             <div class="hub-bg-icon"><i class="fa-solid fa-shield-halved"></i></div>
             <div class="tutorial-content">
@@ -626,7 +688,6 @@
 
     <!-- FOOTER -->
     <footer>
-        <!-- Links removidos conforme solicitado -->
         <p data-i18n="footer">DESIGN BY LDX ©2026</p>
     </footer>
 
@@ -670,7 +731,7 @@
         </div>
     </div>
 
-    <!-- MODAL TUTORIAL (DO CÓDIGO ANTIGO) -->
+    <!-- MODAL TUTORIAL -->
     <div class="modal-overlay" id="tutorialModal">
         <div class="modal-backdrop" id="tutorialModalBackdrop"></div>
         <div class="modal-content">
@@ -748,7 +809,7 @@
                         <div class="step-content">
                             <h4>Instale a Extensão</h4>
                             <p>Selecione o seu navegador e instale o AdGuard:</p>
-                            <a href="https://chromewebstore.google.com/detail/bloqueador-adguard/bgnkhhnnamicmpeenaelnjfhikgbkllg" target="_blank" class="modal-btn btn-primary">
+                            <a href="https://chromewendow.google.com/detail/bloqueador-adguard/bgnkhhnnamicmpeenaelnjfhikgbkllg" target="_blank" class="modal-btn btn-primary">
                                 <i class="fa-brands fa-chrome"></i> AdGuard (Chrome)
                             </a>
                             <a href="https://addons.mozilla.org/firefox/addon/adguard-adblocker/" target="_blank" class="modal-btn btn-primary">
@@ -847,7 +908,6 @@
                             <p data-i18n="help_s2_desc">Não gosta de um portal? No menu de edição, clique no ícone de olho para escondê-lo temporariamente.</p>
                         </div>
                     </div>
-                    <!-- ITEM 3 RESTAURADO AQUI -->
                     <div class="step-item">
                         <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan); margin-top:4px;"></i>
                         <div>
@@ -904,7 +964,9 @@
                 confirm_msg_hubs: "Isso apagará todas as suas edições e favoritos. Deseja continuar?",
                 confirm_title_all: "Resetar Tudo?",
                 confirm_msg_all: "Todas as configurações, preferências e dados locais serão apagados permanentemente. Deseja continuar?",
-                cancel: "Cancelar", confirm: "Confirmar"
+                cancel: "Cancelar", confirm: "Confirmar",
+                // Traduções Novas
+                grayscale: "Preto e Branco"
             },
             en: {
                 music_stop: "Stop Music", music_start: "Play Music",
@@ -947,7 +1009,8 @@
                 confirm_msg_hubs: "This will delete all your edits and favorites. Do you want to continue?",
                 confirm_title_all: "Reset Everything?",
                 confirm_msg_all: "All settings, preferences and local data will be permanently deleted. Do you want to continue?",
-                cancel: "Cancel", confirm: "Confirm"
+                cancel: "Cancel", confirm: "Confirm",
+                grayscale: "Grayscale"
             }
         };
 
@@ -991,6 +1054,11 @@
 
         let currentLang = localStorage.getItem('ldx_lang') || 'pt';
         let hubsData = [];
+        
+        // Estados das funcionalidades
+        let searchQuery = "";
+        let is12HourFormat = localStorage.getItem('ldx_clock_12h') === 'true';
+        let isGrayscale = localStorage.getItem('ldx_grayscale') === 'true';
 
         /* --- SISTEMA DE CONFIRMAÇÃO CUSTOMIZADO --- */
         let currentConfirmAction = null;
@@ -1074,20 +1142,37 @@
             localStorage.setItem('ldx_hubs_config', JSON.stringify(hubsData));
         }
 
-        /* --- RENDERIZAR GRID --- */
+        /* --- RENDERIZAR GRID (COM BUSCA) --- */
         function renderGrid() {
             const grid = document.getElementById('bentoGrid');
             grid.innerHTML = '';
-            const sortedHubs = [...hubsData].filter(h => !h.isHidden).sort((a, b) => (a.isFavorite === b.isFavorite) ? 0 : a.isFavorite ? -1 : 1);
+            
+            // Filtro de busca primeiro
+            let displayData = hubsData.filter(h => !h.isHidden);
+            if (searchQuery.length > 0) {
+                const lowerQuery = searchQuery.toLowerCase();
+                displayData = displayData.filter(h => 
+                    h.name.toLowerCase().includes(lowerQuery) || 
+                    h.desc.toLowerCase().includes(lowerQuery)
+                );
+            }
+
+            // Ordenação: Favoritos primeiro
+            const sortedHubs = displayData.sort((a, b) => (a.isFavorite === b.isFavorite) ? 0 : a.isFavorite ? -1 : 1);
+            
             sortedHubs.forEach((hub, index) => {
                 const card = document.createElement('a');
                 card.href = hub.url; card.className = 'hub-card'; card.dataset.id = hub.id;
                 card.style.animation = `hubEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards`;
                 card.style.animationDelay = `${index * 50}ms`;
                 const favStarHtml = hub.isFavorite ? `<div class="hub-fav-indicator"><i class="fa-solid fa-star"></i></div>` : '';
-                card.innerHTML = `${favStarHtml}<div class="hub-bg-icon"><i class="${hub.icon}"></i></div><div class="hub-content"><div class="hub-icon"><i class="${hub.icon}"></i></div><div><h2>${hub.name}</h2><p>${hub.desc}</p></div></div>`;
+                card.innerHTML = `${favStarHtml}<div class="hub-bg-icon"><i class="${hub.icon}"></i></div><div class="hub-content"><div class="hub-icon"><i class="${hub.icon}"></i></div><div><h2>${hub.name}</h2><p>${hub.desc}</p></div></div></div>`;
                 grid.appendChild(card);
             });
+
+            if (sortedHubs.length === 0 && searchQuery.length > 0) {
+                 grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum portal encontrado.</div>';
+            }
         }
 
         /* --- SISTEMA DE EDIÇÃO --- */
@@ -1296,7 +1381,7 @@
         audio.onplay = () => { localStorage.setItem('ldx_music_playing', 'true'); updateMusicUI(); };
         audio.onpause = () => { localStorage.setItem('ldx_music_playing', 'false'); updateMusicUI(); };
 
-        /* --- LÓGICA DO TUTORIAL (DO CÓDIGO ANTIGO) --- */
+        /* --- LÓGICA DO TUTORIAL --- */
         document.getElementById('adblockToggleBtn').addEventListener('click', () => {
             const isVisible = localStorage.getItem('ldx_adblock_visible') !== 'false';
             const newState = !isVisible;
@@ -1321,6 +1406,75 @@
             else { document.querySelectorAll('.tab-btn')[1].classList.add('active'); document.getElementById('tab-pc').classList.add('active'); }
         }
         function copyDNS() { navigator.clipboard.writeText("dns.adguard.com").then(() => showToast(translations[currentLang].toast_copied)); }
+
+        /* --- LÓGICA DAS FUNCIONALIDADES --- */
+        
+        // 1. Busca (MOVIDO PARA O HEADER)
+        const searchInput = document.getElementById('searchInput');
+        const searchWrapper = document.getElementById('searchWrapper');
+        document.getElementById('searchTrigger').addEventListener('click', () => {
+            const isActive = searchWrapper.classList.toggle('active');
+            if(isActive) searchInput.focus();
+            else {
+                searchInput.value = '';
+                searchQuery = '';
+                renderGrid();
+            }
+        });
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderGrid();
+        });
+
+        // 2. Relógio 12h
+        function updateTime() {
+            const now = new Date();
+            const clockEl = document.getElementById('clock');
+            const options = { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: is12HourFormat 
+            };
+            clockEl.textContent = now.toLocaleTimeString('pt-BR', options);
+            
+            const h = now.getHours();
+            const t = translations[currentLang];
+            let g = "";
+            if(h>=5 && h<12) g = t.greeting_morning;
+            else if(h>=12 && h<18) g = t.greeting_afternoon;
+            else if(h>=18 && h<24) g = t.greeting_evening;
+            else g = t.greeting_night;
+            document.getElementById('greeting-text').textContent = g + t.greeting_suffix;
+        }
+        document.getElementById('clockFormatBtn').addEventListener('click', () => {
+            is12HourFormat = !is12HourFormat;
+            localStorage.setItem('ldx_clock_12h', is12HourFormat);
+            const label = document.getElementById('clockFormatLabel');
+            if(is12HourFormat) {
+                label.textContent = "12 Horas";
+            } else {
+                label.textContent = "24 Horas";
+            }
+            updateTime();
+        });
+
+        // 3. Escala de Cinza
+        function updateGrayscale() {
+            if(isGrayscale) document.body.classList.add('grayscale-mode');
+            else document.body.classList.remove('grayscale-mode');
+        }
+        document.getElementById('grayscaleBtn').addEventListener('click', () => {
+            isGrayscale = !isGrayscale;
+            localStorage.setItem('ldx_grayscale', isGrayscale);
+            updateGrayscale();
+        });
+
+        // 4. Discord Link
+        document.getElementById('discordBtn').addEventListener('click', () => {
+            window.open('https://discord.gg/SEUDISCORD', '_blank');
+        });
+
+        /* --- FIM DAS FUNCIONALIDADES --- */
 
         const settingsTrigger = document.getElementById('settingsTrigger');
         const settingsDropdown = document.getElementById('settingsDropdown');
@@ -1457,18 +1611,7 @@
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         }
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-            const h = now.getHours();
-            const t = translations[currentLang];
-            let g = "";
-            if(h>=5 && h<12) g = t.greeting_morning;
-            else if(h>=12 && h<18) g = t.greeting_afternoon;
-            else if(h>=18 && h<24) g = t.greeting_evening;
-            else g = t.greeting_night;
-            document.getElementById('greeting-text').textContent = g + t.greeting_suffix;
-        }
+        
         setInterval(updateTime, 1000);
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1478,6 +1621,10 @@
             updateTime();
             const savedBg = localStorage.getItem('ldx_custom_bg');
             updateBackgroundState(savedBg);
+            
+            // Inicializar estados novos
+            updateGrayscale();
+            
             if(localStorage.getItem('ldx_adblock_visible') === 'false') {
                 document.getElementById('tutorialBanner').style.display = 'none';
                 document.getElementById('adblockIcon').className = 'fa-solid fa-lock';

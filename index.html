@@ -41,8 +41,23 @@
             transition: filter 0.5s ease;
         }
 
-        /* --- MODO ESCALA DE CINZA --- */
-        body.grayscale-mode {
+        /* --- MODO ESCALA DE CINZA (SELETIVO) --- */
+        /* Antes era aplicado no body, agora apenas nos elementos coloridos */
+        body.grayscale-mode .logo-icon-special {
+            filter: grayscale(100%);
+        }
+        body.grayscale-mode .hero h1 {
+            filter: grayscale(100%);
+        }
+        body.grayscale-mode .hub-card:hover .hub-icon {
+            filter: grayscale(100%);
+        }
+        body.grayscale-mode .tutorial-banner:hover .tutorial-icon {
+            filter: grayscale(100%);
+        }
+        /* Opcional: Manter toasts e botões de perigo consistentes */
+        body.grayscale-mode #toast,
+        body.grayscale-mode .btn-confirm.danger {
             filter: grayscale(100%);
         }
 
@@ -965,7 +980,6 @@
                 confirm_title_all: "Resetar Tudo?",
                 confirm_msg_all: "Todas as configurações, preferências e dados locais serão apagados permanentemente. Deseja continuar?",
                 cancel: "Cancelar", confirm: "Confirmar",
-                // Traduções Novas
                 grayscale: "Preto e Branco"
             },
             en: {

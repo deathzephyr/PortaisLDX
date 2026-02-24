@@ -42,7 +42,7 @@
         }
 
         /* --- MODO ESCALA DE CINZA (SELETIVO) --- */
-        /* Antes era aplicado no body, agora apenas nos elementos coloridos */
+        /* Aplica grayscale apenas nos elementos coloridos */
         body.grayscale-mode .logo-icon-special {
             filter: grayscale(100%);
         }
@@ -980,7 +980,8 @@
                 confirm_title_all: "Resetar Tudo?",
                 confirm_msg_all: "Todas as configurações, preferências e dados locais serão apagados permanentemente. Deseja continuar?",
                 cancel: "Cancelar", confirm: "Confirmar",
-                grayscale: "Preto e Branco"
+                grayscale: "Preto e Branco",
+                grayscale_on: "Colorido" // NOVA TRADUÇÃO
             },
             en: {
                 music_stop: "Stop Music", music_start: "Play Music",
@@ -1024,7 +1025,8 @@
                 confirm_title_all: "Reset Everything?",
                 confirm_msg_all: "All settings, preferences and local data will be permanently deleted. Do you want to continue?",
                 cancel: "Cancel", confirm: "Confirm",
-                grayscale: "Grayscale"
+                grayscale: "Grayscale",
+                grayscale_on: "Colorful" // NOVA TRADUÇÃO
             }
         };
 
@@ -1126,6 +1128,9 @@
             
             updateHubsDescriptionsLanguage();
             renderGrid(); 
+            
+            // Atualiza o texto do botão de grayscale ao trocar idioma
+            updateGrayscale(); 
         }
 
         function updateHubsDescriptionsLanguage() {
@@ -1472,10 +1477,24 @@
             updateTime();
         });
 
-        // 3. Escala de Cinza
+        // 3. Escala de Cinza (Lógica Atualizada)
         function updateGrayscale() {
-            if(isGrayscale) document.body.classList.add('grayscale-mode');
-            else document.body.classList.remove('grayscale-mode');
+            const btn = document.getElementById('grayscaleBtn');
+            const labelSpan = btn.querySelector('span[data-i18n]'); // Pega o span dentro do botão
+            const icon = btn.querySelector('i');
+            const t = translations[currentLang];
+
+            if (isGrayscale) {
+                document.body.classList.add('grayscale-mode');
+                labelSpan.setAttribute('data-i18n', 'grayscale_on'); // Atualiza atributo para tradução futura
+                labelSpan.textContent = t.grayscale_on; // "Colorido"
+                icon.className = 'fa-solid fa-palette'; // Ícone de paleta
+            } else {
+                document.body.classList.remove('grayscale-mode');
+                labelSpan.setAttribute('data-i18n', 'grayscale'); // Reseta atributo
+                labelSpan.textContent = t.grayscale; // "Preto e Branco"
+                icon.className = 'fa-solid fa-filter'; // Ícone de filtro
+            }
         }
         document.getElementById('grayscaleBtn').addEventListener('click', () => {
             isGrayscale = !isGrayscale;
@@ -1485,7 +1504,7 @@
 
         // 4. Discord Link
         document.getElementById('discordBtn').addEventListener('click', () => {
-            window.open('https://discord.gg/QmwTMScd8', '_blank');
+            window.open('https://discord.gg/SEUDISCORD', '_blank');
         });
 
         /* --- FIM DAS FUNCIONALIDADES --- */
@@ -1636,8 +1655,8 @@
             const savedBg = localStorage.getItem('ldx_custom_bg');
             updateBackgroundState(savedBg);
             
-            // Inicializar estados novos
-            updateGrayscale();
+            // Inicializar estados
+            updateGrayscale(); // Aplica o estado salvo e atualiza o texto do botão
             
             if(localStorage.getItem('ldx_adblock_visible') === 'false') {
                 document.getElementById('tutorialBanner').style.display = 'none';

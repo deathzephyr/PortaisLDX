@@ -41,21 +41,24 @@
             transition: filter 0.5s ease;
         }
 
-        /* --- MODO ESCALA DE CINZA (SELETIVO) --- */
-        /* Aplica grayscale apenas nos elementos coloridos */
+        /* --- MODO ESCALA DE CINZA (CORREÇÃO) --- */
+        /* Aplica grayscale nos elementos base, ANTES do hover, para evitar flash de cor */
         body.grayscale-mode .logo-icon-special {
             filter: grayscale(100%);
         }
         body.grayscale-mode .hero h1 {
             filter: grayscale(100%);
         }
-        body.grayscale-mode .hub-card:hover .hub-icon {
+        /* CORREÇÃO AQUI: Aplica ao .hub-icon base, não só no hover */
+        body.grayscale-mode .hub-icon {
             filter: grayscale(100%);
         }
-        body.grayscale-mode .tutorial-banner:hover .tutorial-icon {
+        /* CORREÇÃO AQUI: Aplica ao .tutorial-icon base */
+        body.grayscale-mode .tutorial-icon {
             filter: grayscale(100%);
         }
-        /* Opcional: Manter toasts e botões de perigo consistentes */
+        
+        /* Mantém outros elementos consistentes */
         body.grayscale-mode #toast,
         body.grayscale-mode .btn-confirm.danger {
             filter: grayscale(100%);
